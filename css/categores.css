@@ -1,0 +1,355 @@
+/* Banner */
+body.page-categories .banner {
+  display: flex;
+  align-items: center;
+  background: rgba(30, 41, 82, 0.8);
+  border-radius: 20px;
+  padding: 30px;
+  gap: 30px;
+  margin: 40px 0;
+}
+
+body.page-categories .banner-left img {
+  width: 120px; /* kích thước tùy bạn chỉnh */
+  height: 120px;
+  border-radius: 50%; /* bo tròn 100% */
+  object-fit: cover; /* giữ tỉ lệ, không méo */
+  display: block;
+}
+
+body.page-categories .banner-right {
+  flex: 1;
+}
+
+body.page-categories .platforms {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+body.page-categories .platforms img {
+  width: 100px; /* kích thước tùy bạn chỉnh */
+  height: 40px;
+  border-radius: 10px; /* bo tròn 100% */
+  object-fit: cover; /* giữ tỉ lệ, không méo */
+  display: block;
+}
+
+/* Content Section */
+body.page-categories .content {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+}
+
+/* Right Content */
+body.page-categories .right_content {
+  flex: 3;
+  background: rgba(30, 41, 82, 0.8);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.page-categories .right_content h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  border-bottom: 2px solid #2f46b4;
+  padding-bottom: 8px;
+}
+
+body.page-categories .table-header,
+body.page-categories .table-row {
+  display: grid;
+  grid-template-columns: 50px 70px 1fr 150px;
+  align-items: center;
+  padding: 10px 0;
+  gap: 10px;
+  text-decoration: none;
+  font-weight: 500;
+  color: white;
+}
+
+body.page-categories .table-header {
+  font-weight: bold;
+  color: #a9b7f5;
+  border-bottom: 1px solid #314a9d;
+  margin-bottom: 10px;
+}
+
+body.page-categories .table-row {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  padding: 10px;
+}
+
+body.page-categories .table-row img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+body.page-categories .bar {
+  background: #2c3a80;
+  height: 10px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+body.page-categories .fill {
+  background: #3fa9ff;
+  height: 100%;
+  border-radius: 5px;
+}
+
+body.page-categories .ads {
+  text-align: center;
+  margin: 20px 0;
+}
+
+body.page-categories .ads img {
+  width: 100%;
+  border-radius: 15px;
+}
+
+/* Left Content */
+body.page-categories .left_content {
+  flex: 1.3;
+  background: rgba(30, 41, 82, 0.8);
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+body.page-categories .left_content h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  border-bottom: 2px solid #2f46b4;
+  padding-bottom: 8px;
+}
+
+body.page-categories .related-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 10px;
+}
+
+body.page-categories .related-item img {
+  width: 50px;
+  height: 49px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+}
+
+body.page-categories .related-item .info {
+  margin-left: 10px;
+}
+
+body.page-categories .related-item h3 {
+  font-size: 15px;
+  margin: 0 0 6px 0;
+}
+
+body.page-categories .mini-logos img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+body.page-categories .ads-side {
+  margin: 20px 0;
+}
+
+body.page-categories .ads-side img {
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* Slider section */
+body.page-categories .brand-section {
+  background: rgba(30, 41, 82, 0.8);
+  border-radius: 20px;
+  color: #fff;
+  padding: 60px 80px;
+  overflow: hidden;
+
+  margin-top: 50px;
+}
+
+body.page-categories .brand-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+body.page-categories .brand-header h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+body.page-categories .brand-header .show-all {
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+body.page-categories .brand-slider {
+  position: relative;
+}
+
+body.page-categories .brand-container {
+  display: flex;
+  gap: 25px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scrollbar-width: none; /* Firefox */
+}
+
+body.page-categories .brand-container::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+body.page-categories .brand-item {
+  background-color: #124e89;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: center;
+  min-width: 180px;
+  transition: transform 0.3s ease;
+}
+
+body.page-categories .brand-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+body.page-categories .brand-item p {
+  font-size: 1rem;
+  margin: 0;
+}
+
+body.page-categories .brand-item:hover {
+  transform: scale(1.08);
+}
+
+body.page-categories .slide-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 10px 20px;
+  border-radius: 50%;
+}
+
+body.page-categories .prev-btn {
+  left: -10px;
+  z-index: 1;
+}
+
+body.page-categories .next-btn {
+  right: -10px;
+}
+
+body.page-categories .slide-btn:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* ========== RESPONSIVE ========== */
+
+/* Tablet (dưới 1200px) */
+@media (max-width: 1200px) {
+  body.page-categories .container {
+    padding: 0 60px;
+  }
+
+  body.page-categories main {
+    margin: 60px 60px;
+    grid-template-columns: 1fr;
+  }
+
+  body.page-categories .brand-section {
+    margin: 50px 60px;
+    padding: 40px 50px;
+  }
+}
+
+/* Mobile lớn (dưới 900px) */
+@media (max-width: 900px) {
+  body.page-categories header {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  body.page-categories .top-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin: 0 20px;
+  }
+
+  body.page-categories .top-content img {
+    margin-bottom: 15px;
+  }
+
+  body.page-categories main {
+    display: flex;
+    flex-direction: column;
+    margin: 40px 20px;
+  }
+
+  body.page-categories .left-content,
+  body.page-categories .right-content {
+    width: 100%;
+  }
+
+  body.page-categories .brand-section {
+    margin: 40px 20px;
+    padding: 30px;
+  }
+
+  body.page-categories .brand-container {
+    gap: 15px;
+  }
+}
+
+/* Mobile nhỏ (dưới 600px) */
+@media (max-width: 600px) {
+  body.page-categories header input {
+    width: 100%;
+  }
+
+  body.page-categories .hero-wrapper {
+    padding-bottom: 60px;
+  }
+
+  body.page-categories .brand-item {
+    min-width: 140px;
+    padding: 15px;
+  }
+
+  body.page-categories .comment-box {
+    flex-direction: column;
+  }
+
+  body.page-categories .comment-box button {
+    width: 100%;
+  }
+
+  body.page-categories footer {
+    font-size: 12px;
+    padding: 15px;
+  }
+}

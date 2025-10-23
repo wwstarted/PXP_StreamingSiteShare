@@ -21,9 +21,30 @@ body.page-categories .banner-right {
   flex: 1;
 }
 
+body.page-categories .right_content:hover{
+  transform: translateY(-10px);
+}
+
+body.page-categories .left_content:hover{
+  transform: translateY(-10px);
+}
+/* 
+body.page-categories .left_content div img{
+  overflow: hidden;
+} */
+
+/* body.page-categories .left_content div img{
+  width: 100%;
+  transition: transform 0.5s ease;
+} */
+/* 
+body.page-categories .left_content:hover div img{
+  transform: scale(1.1);
+} */
+
 body.page-categories .platforms {
   display: flex;
-  gap: 10px;
+  gap: 20px;
   margin-top: 10px;
 }
 
@@ -75,6 +96,17 @@ body.page-categories .table-header {
   color: #a9b7f5;
   border-bottom: 1px solid #314a9d;
   margin-bottom: 10px;
+}
+
+.banner:hover{
+  transform:translateY(-10px) ;
+}
+
+.banner:hover .banner-left img{
+  transform: scale(1.1);
+}
+.banner:hover .banner-right img{
+  transform: scale(1.05);
 }
 
 body.page-categories .table-row {

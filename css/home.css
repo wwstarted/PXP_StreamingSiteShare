@@ -422,7 +422,7 @@ i.banner-section-icon.banner-section-back.fa-solid.fa-chevron-right {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5));
+  /* background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)); */
   z-index: 2;
   transition: opacity 0.3s ease;
 }
@@ -432,7 +432,6 @@ i.banner-section-icon.banner-section-back.fa-solid.fa-chevron-right {
 }
 
 .banner-card::before {
-  content: "YouTube";
   position: absolute;
   top: 15px;
   font-weight: bold;
@@ -476,21 +475,6 @@ i.banner-section-icon.banner-section-back.fa-solid.fa-chevron-right {
   transform: translateX(-50%) scale(1.05);
 }
 
-.banner-card:nth-child(2)::before {
-  content: "Instagram";
-}
-
-.banner-card:nth-child(3)::before {
-  content: "TikTok";
-}
-
-.banner-card:nth-child(4)::before {
-  content: "Twitter";
-}
-
-.banner-card:nth-child(5)::before {
-  content: "LinkedIn";
-}
 
 @keyframes pulse {
   0%,

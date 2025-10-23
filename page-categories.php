@@ -2,45 +2,47 @@
 
     <div class="container">
       <!-- Banner Section -->
-      <section class="banner">
-        <div class="banner-left">
-          <img
-            src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bG9nb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600"
-            alt="Movie Icon"
-          />
-        </div>
-        <div class="banner-right">
-          <h1>Best Movie Streaming Sites</h1>
-          <p>
-            What is the best paid movie streaming site?<br />
-            This is actually not quite as straightforward a question as it may
-            seem. First of all, there is the issue of how subjective the word
-            “best” is. In other words, I may not be looking for exactly the same
-            thing as you in a premium movie streaming site. Some people, to
-            elaborate, value a movie streaming service that has a large
-            selection of classic movies to choose from; others might want one
-            that has a large selection of the newest movies available.
-          </p>
-          <div class="platforms">
+      <div id="banner-box">
+        <section class="banner">
+          <div class="banner-left">
             <img
               src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bG9nb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600"
-              alt="Netflix"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bG9nb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600"
-              alt="Prime Video"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bG9nb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600"
-              alt="Hulu"
-            />
-            <img
-              src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bG9nb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600"
-              alt="Disney+"
+              alt="Movie Icon"
             />
           </div>
-        </div>
-      </section>
+          <div class="banner-right">
+            <h1>Best Movie Streaming Sites</h1>
+            <p>
+              What is the best paid movie streaming site?<br />
+              This is actually not quite as straightforward a question as it may
+              seem. First of all, there is the issue of how subjective the word
+              “best” is. In other words, I may not be looking for exactly the same
+              thing as you in a premium movie streaming site. Some people, to
+              elaborate, value a movie streaming service that has a large
+              selection of classic movies to choose from; others might want one
+              that has a large selection of the newest movies available.
+            </p>
+            <div class="platforms">
+              <img
+                src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bG9nb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600"
+                alt="Netflix"
+              />
+              <img
+                src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bG9nb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600"
+                alt="Prime Video"
+              />
+              <img
+                src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bG9nb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600"
+                alt="Hulu"
+              />
+              <img
+                src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8bG9nb3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&q=60&w=600"
+                alt="Disney+"
+              />
+            </div>
+          </div>
+        </section>
+      </div>
 
       <!--  Main Content Section -->
       <section class="content">

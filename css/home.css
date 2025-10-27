@@ -442,11 +442,11 @@ i.banner-section-icon.banner-section-back.fa-solid.fa-chevron-right {
 }
 
 .banner-card:hover {
-  transform: translateY(-10px);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
 }
 
 .banner-card-btn {
+  text-decoration: none; /* bỏ gạch chân */
   position: absolute;
   bottom: -50px;
   left: 50%;

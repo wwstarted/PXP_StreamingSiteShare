@@ -3,156 +3,20 @@
     <!-- Breadcrumb -->
     <div class="container">
       <div class="breadcrumb">
-        <a href="#"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-        <a href="#">Blog</a>
+        <a href="http://localhost/PXP_SSW/wordpress/"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
+        <a href="http://localhost/PXP_SSW/wordpress/blog/">Blog</a>
       </div>
     </div>
 
     <main class="container">
       <!-- Hero Section -->
       <section class="hero-section">
-        <div class="hero-content">
-          <h1>Power your business with Square.</h1>
-          <p>
-            Metronome on Landbook - get inspired by landing design and more
-            Metronome on Landbook - get inspired by landing design and more
-          </p>
-          <div class="hero-buttons">
-            <button class="btn btn-primary">Get started</button>
-            <button class="btn btn-secondary">Contacts</button>
-          </div>
-        </div>
-        <div class="hero-image">
-          <img
-            src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=600&h=400&fit=crop"
-            alt="Hero Image"
-          />
-        </div>
+        <!-- fetch data here  -->
       </section>
 
       <!-- Blog Section -->
       <section class="blog-section">
-        <div class="section-header">
-          <h2 class="section-title">
-            <span class="code-icon">
-              <span>&lt;/&gt;</span>
-            </span>
-            Bài viết chủ đề công nghệ
-          </h2>
-          <button class="view-all-btn">
-            <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
-          </button>
-        </div>
-
-        <div class="blog-grid">
-          <!-- Card 1 -->
-          <article class="blog-card">
-            <div class="card-header-blog">
-              <h3 class="text-line card-title">
-                Best movie & music themed slot in online casino for real money
-              </h3>
-              <p class="text-line card-description-blog">
-                great selection of games as online casino Austria real money -
-                top slots de sloated to famous film, music and famous bands.
-              </p>
-              <div class="card-meta">
-                <div class="author-info">
-                  <div class="author-avatar">👤</div>
-                  <div class="author-details">
-                    <span class="author-name">Nate Wick</span>
-                    <span class="post-date">2 jul 2025</span>
-                  </div>
-                </div>
-                <a href="/blog_detail.html" class="view-post-link">
-                  View Post →
-                </a>
-              </div>
-            </div>
-            <div class="card-image">
-              <div class="image-badge">LIVE SLOT</div>
-              <img
-                src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=500&h=300&fit=crop"
-                alt="Casino Gaming"
-              />
-              <div class="brand-logo">
-                <div class="brand-icon">▶</div>
-                <span>Streamingsites</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 2 -->
-          <article class="blog-card">
-            <div class="card-header-blog">
-              <h3 class="text-line card-title">
-                Best movie & music themed slot in online casino for real money
-              </h3>
-              <p class="text-line card-description-blog">
-                great selection of games as online casino Austria real money -
-                top slots de sloated to famous film, music and famous bands.
-              </p>
-              <div class="card-meta">
-                <div class="author-info">
-                  <div class="author-avatar">👤</div>
-                  <div class="author-details">
-                    <span class="author-name">Nate Wick</span>
-                    <span class="post-date">2 jul 2025</span>
-                  </div>
-                </div>
-                <a href="/blog_detail.html" class="view-post-link">
-                  View Post →
-                </a>
-              </div>
-            </div>
-            <div class="card-image">
-              <div class="image-badge">LIVE SLOT</div>
-              <img
-                src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&h=300&fit=crop"
-                alt="Casino Gaming"
-              />
-              <div class="brand-logo">
-                <div class="brand-icon">▶</div>
-                <span>Streamingsites</span>
-              </div>
-            </div>
-          </article>
-
-          <!-- Card 3 -->
-          <article class="blog-card">
-            <div class="card-header-blog">
-              <h3 class="text-line card-title">
-                Best movie & music themed slot in online casino for real money
-              </h3>
-              <p class="text-line card-description-blog">
-                great selection of games as online casino Austria real money -
-                top slots de sloated to famous film, music and famous bands.
-              </p>
-              <div class="card-meta">
-                <div class="author-info">
-                  <div class="author-avatar">👤</div>
-                  <div class="author-details">
-                    <span class="author-name">Nate Wick</span>
-                    <span class="post-date">2 jul 2025</span>
-                  </div>
-                </div>
-                <a href="/blog_detail.html" class="view-post-link">
-                  View Post →
-                </a>
-              </div>
-            </div>
-            <div class="card-image">
-              <div class="image-badge">LIVE SLOT</div>
-              <img
-                src="https://images.unsplash.com/photo-1596838132731-3301c3fd4317?w=500&h=300&fit=crop"
-                alt="Casino Gaming"
-              />
-              <div class="brand-logo">
-                <div class="brand-icon">▶</div>
-                <span>Streamingsites</span>
-              </div>
-            </div>
-          </article>
-        </div>
+          <!-- fetch data here-->
       </section>
 
       <!-- CTA Section -->

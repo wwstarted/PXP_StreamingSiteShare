@@ -121,6 +121,7 @@ function renderCategories(cates, posts) {
 
   cates.forEach(cate => {
 
+    const cate_id = cate.id;
     const meta = cate.meta || {};
     const cateThumbnail = meta.thumbnail || "";
     const shortDesc = meta.short_desc || "";
@@ -170,7 +171,7 @@ function renderCategories(cates, posts) {
         </ul>
 
         <div class="card-footer">
-          <a href="#" class="visit-btn">
+          <a href="categories?cate_id=${cate.id}" class="visit-btn">
             View all <i class="fa-solid fa-chevron-right"></i>
           </a>
         </div>
@@ -191,14 +192,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   const bannerContainer = document.querySelector("#banner-slide");
 
   try {
-    const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/banner");
-    const banners = await res.json();
+    const cateRes = await fetch(`${API_BASE}/post_item?per_page=5`);
+    const cate = await cateRes.json();
 
-    banners.forEach((banner) => {
+    cate.forEach((banner) => {
         const meta = banner.meta || {};
         const image = meta.image || "";
-        const link = meta.link || "#";
-        const title = meta.title || banner.title.rendered || "Banner";
+        const title = banner?.title?.rendered || "No Title";
 
         const bannerHTML = `
           <div class="banner-card">
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               alt="${title}"
               class="banner-card-image"
             />
-            <div class="banner-card-btn">${title}</div>
+            <a href="http://localhost/PXP_SSW/wordpress/detailscate/?post_id=${banner.id}"  class="banner-card-btn">${title}</a>
           </div>
         `;
         bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
@@ -310,7 +310,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   />
                   <span>${author} | ${date}</span>
                 </div>
-                <a href="#" class="read-more"
+                <a href="http://localhost/PXP_SSW/wordpress/detailscate/?post_id=${banner.id}" class="read-more"
                   ><span>Read more</span>
                   <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i
                 ></a>
@@ -324,5 +324,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Lỗi khi tải banner:", error);
   }
 });
+
+
+
 
 

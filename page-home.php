@@ -95,7 +95,7 @@
                <!-- fetch data here -->
         </div>
         <div style="text-align: right; margin-top: 30px">
-          <a href="./blog.html" class="visit-btn"
+          <a href="http://localhost/PXP_SSW/wordpress/blog/" class="visit-btn"
             ><span>Go to Blog</span>
             <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i
           ></a>

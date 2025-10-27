@@ -20,9 +20,9 @@
           <h1>404</h1>
           <p>Oops. The page you are looking<br />for can’t be found!</p>
 
-          <form class="search-form">
-            <input type="text" placeholder="Search..." />
-            <button type="submit"><i class="fa fa-search"></i></button>
+          <form class="search-form" id="google-search-form">
+            <input type="text" id="search-input" placeholder="Search..." />
+            <button type="button" id="search-btn"><i class="fa fa-search"></i></button>
           </form>
 
           <a href="<?php echo site_url(); ?>" class="back-home-btn">Home</a>

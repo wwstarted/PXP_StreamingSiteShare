@@ -6,15 +6,19 @@
     <title>Details Page</title>
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/style.css" />
     <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/detail_cate.css" />
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/categories.css" />
+    <link rel="stylesheet" href="<?php echo get_template_directory_uri(); ?>/css/home.css" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
   </head>
   </head>
+  
   <body class="page-details">
+    
     <!-- Header -->
-    <div class="hero-wrapper" style="background: url('<?php echo get_template_directory_uri(); ?>/images/image_bgr.jpeg') center/cover no-repeat;">
+    <div class="hero-wrapper" >
       <header>
         <div class="container">
           <div class="header-content">
@@ -54,8 +58,8 @@
         </div>
       </header>
 
-      <section class="top-content">
-        <div class="top-content-logo">
+      <section class="top-content" id="top-content-section">
+        <!-- <div class="top-content-logo">
           <img
             class="top-content-logo-img"
             src="https://web.archive.org/web/20250730004137/https://static.streamingsites.com/4c004542-3820-4fe8-aa1c-9846aaeee0e8_nowm_64.png"
@@ -66,101 +70,44 @@
           <h2>FX Networks</h2>
           <a href="#">https://www.fxnetworks.com</a>
           <div class="stars">★★★★★</div>
-        </div>
+        </div> -->
       </section>
     </div>
-    <!-- Breadcrumb -->
     <div class="container">
       <div class="breadcrumb">
-        <a href="#"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-        <a href="#">Categores</a> 
+        
       </div>
+    <!-- Breadcrumb -->
     </div>
 
     <div class="container">
       <main>
-        <div class="left-content">
-          <h3>Overview</h3>
-          <p>
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-            FX Networks là nền tảng truyền hình trực tuyến mang đến nhiều nội
-            dung chất lượng cao, bao gồm phim bộ, phim tài liệu và các chương
-            trình giải trí nổi tiếng. Với giao diện dễ sử dụng và tốc độ truyền
-            tải nhanh, FX Networks mang lại trải nghiệm xem phim tuyệt vời cho
-            người dùng toàn cầu.<br />
-          </p>
+        <div class="left-content" id="content-left">
+                  <!-- fetch data-->
         </div>
 
         <div class="right-content">
           <div class="rating-box">
             <h3>Ratings & Reviews</h3>
-
-            <div class="likes">
-              <h4>Likes</h4>
-              <div class="comment">
-                <span class="icon">✔</span>
-                <p>Nội dung đa dạng và hấp dẫn!</p>
+            <div id="goodabad">
+              <div class="likes">
+                <h4>Likes</h4>
+                <div class="comment">
+                  <span class="icon">✔</span>
+                  <p>Nội dung đa dạng và hấp dẫn!</p>
+                </div>
+                <div class="comment">
+                  <span class="icon">✔</span>
+                  <p>Tốc độ load nhanh, hình ảnh đẹp.</p>
+                </div>
               </div>
-              <div class="comment">
-                <span class="icon">✔</span>
-                <p>Tốc độ load nhanh, hình ảnh đẹp.</p>
-              </div>
-            </div>
-
-            <div class="hates">
-              <h4>Hates</h4>
-              <div class="comment">
-                <span class="icon">✖</span>
-                <p>Có quá nhiều quảng cáo xen giữa video.</p>
+            
+              <div class="hates">
+                <h4>Hates</h4>
+                <div class="comment">
+                  <span class="icon">✖</span>
+                  <p>Có quá nhiều quảng cáo xen giữa video.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -171,7 +118,7 @@
 
           <div class="comment-box">
             <input type="text" placeholder="Để lại bình luận..." />
-            <button>Gửi</button>
+            <a href="http://localhost/PXP_SSW/wordpress/404notfound/"><button>Gửi</button></a>
           </div>
         </div>
       </main>
@@ -185,124 +132,8 @@
         <div class="brand-slider">
           <button class="slide-btn prev-btn">&#10094;</button>
 
-          <div class="brand-container">
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
-                alt="Netflix"
-              />
-              <p>Netflix</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/1/1b/Warner_Bros_logo.svg"
-                alt="Warner Bros"
-              />
-              <p>Warner Bros</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/d/d4/Walt_Disney_Pictures_2011_logo.svg"
-                alt="Disney"
-              />
-              <p>Disney</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/6/6c/Sony_Pictures_logo.svg"
-                alt="Sony"
-              />
-              <p>Sony</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/4f/Paramount_Pictures_logo.svg"
-                alt="Paramount"
-              />
-              <p>Paramount</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/0/0d/Universal_Pictures_logo.svg"
-                alt="Universal"
-              />
-              <p>Universal</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/2/2d/DreamWorks_Logo.svg"
-                alt="DreamWorks"
-              />
-              <p>DreamWorks</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/4/45/20th_Century_Fox_logo.svg"
-                alt="20th Century Fox"
-              />
-              <p>20th Century Fox</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/9/9b/HBO_Logo.svg"
-                alt="HBO"
-              />
-              <p>HBO</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/9/9b/HBO_Logo.svg"
-                alt="HBO"
-              />
-              <p>HBO</p>
-            </div>
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/9/9b/HBO_Logo.svg"
-                alt="HBO"
-              />
-              <p>HBO</p>
-            </div>
-
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/9/9b/HBO_Logo.svg"
-                alt="HBO"
-              />
-              <p>HBO</p>
-            </div>
-
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
-                alt="Netflix"
-              />
-              <p>Netflix</p>
-            </div>
-
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
-                alt="Netflix"
-              />
-              <p>Netflix</p>
-            </div>
-
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
-                alt="Netflix"
-              />
-              <p>Netflix</p>
-            </div>
-
-            <div class="brand-item">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/7/7a/Logonetflix.png"
-                alt="Netflix"
-              />
-              <p>Netflix</p>
-            </div>
+          <div class="brand-container" id="details-container">
+              <!-- fetch data here -->          
           </div>
 
           <button class="slide-btn next-btn">&#10095;</button>

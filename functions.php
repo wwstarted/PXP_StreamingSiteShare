@@ -64,15 +64,38 @@ function load_assets() {
         'streamingsite-main',
         get_theme_file_uri('/js/categores.js'),
         array('jquery'),
-        '1.02',
+        filemtime(get_template_directory() . '/js/categores.js'),
         true
     );
 
     wp_enqueue_script(
-        'streamingsite-main',
+        'streamingsite-main1',
         get_theme_file_uri('/js/home.js'),
         array('jquery'),
-        '1.02',
+        filemtime(get_template_directory() . '/js/home.js'),
+        true
+    );
+     wp_enqueue_script(
+        'streamingsite-main2',
+        get_theme_file_uri('/js/blogs.js'),
+        array('jquery'),
+        filemtime(get_template_directory() . '/js/blogs.js'),
+        true
+    );
+
+    wp_enqueue_script(
+        'streamingsite-main3',
+        get_theme_file_uri('/js/details_blog.js'),
+        array('jquery'),
+        filemtime(get_template_directory() . '/js/details_blog.js'),
+        true
+    );
+
+    wp_enqueue_script(
+        'streamingsite-main3',
+        get_theme_file_uri('/js/404.js'),
+        array('jquery'),
+        filemtime(get_template_directory() . '/js/404.js'),
         true
     );
 }
@@ -130,7 +153,145 @@ function create_banner_cpt() {
 }
 add_action('init', 'create_banner_cpt');
 
- /** CPT Categories */
+
+/** CPT BLOGS */
+
+function create_blogs_cpt() {
+    $labels = array(
+        'name' => 'Blogs',
+        'singular_name' => 'Blog',
+        'menu_name' => 'Blogs',
+        'all_items' => 'All Blogs',
+        'add_new_item' => 'Add New Blog',
+        'edit_item' => 'Edit Blog'
+    );
+
+    $args = array(
+        'labels' => $labels,
+        'public' => true,
+        'has_archive' => false,
+        'menu_position' => 20,
+        'menu_icon' => 'dashicons-images-alt2',
+        'supports' => array('title', 'thumbnail', 'custom-fields'),
+        'show_in_rest' => true // quan trọng: enable REST API
+    );
+    register_post_type('blogs', $args);
+}
+add_action('init', 'create_blogs_cpt');
+
+
+/** Metabox DESC BLOG */
+function add_blog_desc_metabox() {
+  add_meta_box(
+    'blog_desc_box',             // ID
+    'Blog Description',          // Tiêu đề box
+    'render_blog_desc_metabox',  // Callback render nội dung
+    'blogs',                     // CPT bạn muốn thêm
+    'normal',                    // Vị trí
+    'high'                       // Ưu tiên
+  );
+}
+add_action('add_meta_boxes', 'add_blog_desc_metabox');
+
+
+// Hàm hiển thị trình soạn thảo
+function render_blog_desc_metabox($post) {
+  // Lấy dữ liệu đã lưu (nếu có)
+  $desc = get_post_meta($post->ID, '_blog_desc', true);
+
+  // Sử dụng trình soạn thảo TinyMCE có toolbar đầy đủ
+  wp_editor(
+    $desc, // nội dung đã lưu
+    'blog_desc', // tên field
+    array(
+      'textarea_name' => 'blog_desc',
+      'media_buttons' => true, // cho phép chèn ảnh
+      'textarea_rows' => 10,
+      'teeny' => false, // false = hiển thị đầy đủ toolbar
+      'quicktags' => true, // cho phép dùng HTML nhanh
+    )
+  );
+}
+
+
+// Lưu dữ liệu khi update/publish bài viết
+function save_blog_desc_metabox($post_id) {
+  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+  if (isset($_POST['blog_desc'])) {
+    update_post_meta($post_id, '_blog_desc', wp_kses_post($_POST['blog_desc']));
+  }
+}
+add_action('save_post', 'save_blog_desc_metabox');
+
+
+ /** CPT Categories Blog */
+
+
+// Đăng ký taxonomy cho Blogs
+function create_blog_category_taxonomy() {
+    $labels = array(
+        'name' => 'Blog Categories',
+        'singular_name' => 'Blog Category',
+        'menu_name' => 'Categories',
+        'all_items' => 'All Categories',
+        'edit_item' => 'Edit Category',
+        'update_item' => 'Update Category',
+        'add_new_item' => 'Add New Category',
+        'new_item_name' => 'New Category Name',
+        'search_items' => 'Search Categories',
+        'popular_items' => 'Popular Categories',
+        'separate_items_with_commas' => 'Separate categories with commas',
+        'add_or_remove_items' => 'Add or remove categories',
+        'choose_from_most_used' => 'Choose from the most used categories',
+        'not_found' => 'No categories found.'
+    );
+
+    $args = array(
+        'labels' => $labels,
+        'hierarchical' => true, // true = dạng checkbox tree như Category
+        'show_ui' => true,
+        'show_admin_column' => true,
+        'show_in_rest' => true, // quan trọng: để REST API hoạt động
+        'rewrite' => array('slug' => 'blog-category'),
+    );
+
+    register_taxonomy('blog_category', array('blogs'), $args);
+}
+add_action('init', 'create_blog_category_taxonomy');
+
+// Register taxonomy Blog Tags cho CPT blogs
+function create_blog_tags_taxonomy() {
+    $labels = array(
+        'name' => 'Blog Tags',
+        'singular_name' => 'Blog Tag',
+        'search_items' => 'Search Blog Tags',
+        'popular_items' => 'Popular Blog Tags',
+        'all_items' => 'All Blog Tags',
+        'edit_item' => 'Edit Blog Tag',
+        'update_item' => 'Update Blog Tag',
+        'add_new_item' => 'Add New Blog Tag',
+        'new_item_name' => 'New Blog Tag Name',
+        'separate_items_with_commas' => 'Separate tags with commas',
+        'add_or_remove_items' => 'Add or remove tags',
+        'choose_from_most_used' => 'Choose from the most used tags',
+        'menu_name' => 'Tags',
+    );
+
+    $args = array(
+        'hierarchical' => false, // false = kiểu tag, true = kiểu category
+        'labels' => $labels,
+        'show_ui' => true,
+        'show_admin_column' => true,
+        'update_count_callback' => '_update_post_term_count',
+        'show_in_rest' => true, // Quan trọng để hiển thị trong Gutenberg + REST API
+        'rewrite' => array('slug' => 'blog-tag'),
+    );
+
+    register_taxonomy('blog_tag', 'blogs', $args);
+}
+add_action('init', 'create_blog_tags_taxonomy');
+
+
 function create_cate_post_type() {
   register_post_type('cate_post', [
     'labels' => [
@@ -186,22 +347,6 @@ function create_cars_blogs_item_type() {
 add_action('init', 'create_cars_blogs_item_type');
 
 /** CPT Categories Banner */
-function create_cate_banner_post_type() {
-  register_post_type('cate_banner', [
-    'labels' => [
-      'name' => 'Categories Banners',
-      'singular_name' => 'Categories Banner',
-      'menu_name' => 'Categories Banners',
-      'all_items' => 'All Categories Banners',
-      'add_new_item' => 'Add New Categories Banners',
-      'edit_item' => 'Edit Categories Banners'
-    ],
-    'public' => true,
-    'show_in_rest' => true,
-    'supports' => ['title', 'thumbnail', 'custom-fields'],
-  ]);
-}
-add_action('init', 'create_cate_banner_post_type');
 
 function create_small_banners_post_type() {
   register_post_type('small_banners', [
@@ -224,6 +369,38 @@ add_action('init', 'create_small_banners_post_type');
 /** ================== CUSTOM FIELD===================== */
 
 /** CF Banner */
+function register_small_banner_meta_fields() {
+    // Ảnh
+    register_post_meta('small_banners', 'sbanner_image', [
+        'type' => 'string',
+        'single' => true,
+        'show_in_rest' => true,
+    ]);
+
+    // Link
+    register_post_meta('small_banners', 'sbanner_link', [
+        'type' => 'string',
+        'single' => true,
+        'show_in_rest' => true,
+    ]);
+
+    // ID category (array)
+    register_post_meta('small_banners', 'id_cate_post', [
+        'type' => 'array',
+        'single' => true,
+        'show_in_rest' => [
+            'schema' => [
+                'type'  => 'array',
+                'items' => [
+                    'type' => 'integer',
+                ],
+            ],
+        ],
+    ]);
+}
+add_action('init', 'register_small_banner_meta_fields');
+
+
 function register_banner_meta_fields() {
     register_post_meta('banner', 'image', [
         'type' => 'string',
@@ -258,6 +435,50 @@ function register_cate_item_meta_fields() {
   ]);
 }
 add_action('init', 'register_cate_item_meta_fields');
+
+
+/** CF Blogs */
+function register_blogs_meta_fields() {
+  register_post_meta('blogs', 'bg_short_desc', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+
+   register_post_meta('blogs', '_blog_desc', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+
+  register_post_meta('blogs', 'bg_thumbnail', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+  register_post_meta('blogs', 'bg_author', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+  register_post_meta('blogs', 'bg_date', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+  register_post_meta('blogs', 'bg_avatar', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+  register_post_meta('blogs', 'bg_author_logo', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+}
+add_action('init', 'register_blogs_meta_fields');
+
 
 
 /** CF Car Blog */
@@ -315,6 +536,31 @@ function register_post_item_meta_fields() {
     'single' => true,
     'show_in_rest' => true,
   ]);
+  register_post_meta('post_item', 'popularity', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+   register_post_meta('post_item', 'post_link', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+   register_post_meta('post_item', 'likes', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+   register_post_meta('post_item', 'hates', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
+     register_post_meta('post_item', 'bgr_image', [
+    'type' => 'string',
+    'single' => true,
+    'show_in_rest' => true,
+  ]);
 }
 add_action('init', 'register_post_item_meta_fields');
 
@@ -362,55 +608,71 @@ add_action('save_post_post_item', 'save_post_item_cate_meta');
 
 
 /** BOX selected Cate Banner */
-
-
-// 1️⃣ Tạo metabox để chọn Banner cho CPT small_banners
-function add_banner_select_metabox_for_small_banners() {
+function add_multi_category_metabox_for_small_banners() {
     add_meta_box(
-        'small_banner_box',           // ID duy nhất
-        'Select Category Banner',     // Tiêu đề hiển thị
-        'render_small_banner_box',    // Callback render
-        'small_banners',              // Áp dụng cho CPT này
-        'side',                       // Vị trí (sidebar)
-        'default'                     // Mức ưu tiên
+        'small_banner_multi_cate_box',
+        'Select Categories',
+        'render_small_banner_multi_cate_box',
+        'small_banners',
+        'side',
+        'default'
     );
 }
-add_action('add_meta_boxes', 'add_banner_select_metabox_for_small_banners');
+add_action('add_meta_boxes', 'add_multi_category_metabox_for_small_banners');
 
+function render_small_banner_multi_cate_box($post) {
+    // Lấy danh sách category hiện tại (array hoặc rỗng)
+    $current_cates = get_post_meta($post->ID, 'id_cate_post', true);
+    if (!is_array($current_cates)) {
+        $current_cates = [];
+    }
 
-// 2️⃣ Hàm render giao diện dropdown trong admin
-function render_small_banner_box($post) {
-    // Lấy giá trị banner hiện tại (nếu có)
-    $current_banner = get_post_meta($post->ID, 'id_cate_banner', true);
-
-    // Lấy tất cả banner từ CPT cate_banner
-    $banners = get_posts([
-        'post_type' => 'cate_banner',
+    // Lấy tất cả category từ CPT cate_post
+    $categories = get_posts([
+        'post_type' => 'cate_post',
         'numberposts' => -1,
         'post_status' => 'publish'
     ]);
 
-    // Hiển thị dropdown
-    echo '<label for="id_cate_banner">Choose a Category Banner:</label>';
-    echo '<select name="id_cate_banner" id="id_cate_banner" style="width:100%;">';
-    echo '<option value="">-- Select Banner --</option>';
+    echo '<p><strong>Assign this banner to categories:</strong></p>';
+    echo '<div style="max-height:180px; overflow-y:auto; border:1px solid #ccc; padding:8px; border-radius:6px;">';
 
-    foreach ($banners as $banner) {
-        $selected = ($banner->ID == $current_banner) ? 'selected' : '';
-        echo "<option value='{$banner->ID}' {$selected}>{$banner->post_title}</option>";
+    foreach ($categories as $cate) {
+        $checked = in_array($cate->ID, $current_cates) ? 'checked' : '';
+        echo '
+            <label style="display:block; margin-bottom:4px;">
+                <input type="checkbox" name="id_cate_post[]" value="' . esc_attr($cate->ID) . '" ' . $checked . '>
+                ' . esc_html($cate->post_title) . '
+            </label>
+        ';
     }
 
-    echo '</select>';
+    echo '</div>';
 }
 
 
-// 3️⃣ Lưu giá trị khi nhấn “Update”
-function save_small_banner_meta($post_id) {
-    if (isset($_POST['id_cate_banner'])) {
-        update_post_meta($post_id, 'id_cate_banner', sanitize_text_field($_POST['id_cate_banner']));
+// 3️⃣ Lưu danh sách category khi update post
+function save_small_banner_multi_cate_meta($post_id) {
+    // Bảo vệ tránh autosave
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) return;
+
+    // Kiểm tra quyền người dùng
+    if (!current_user_can('edit_post', $post_id)) return;
+
+    // Xử lý checkbox
+    if (isset($_POST['id_cate_post'])) {
+        $selected_cates = array_map('intval', (array) $_POST['id_cate_post']); 
+        update_post_meta($post_id, 'id_cate_post', $selected_cates);
+    } else {
+        delete_post_meta($post_id, 'id_cate_post');
     }
 }
-add_action('save_post_small_banners', 'save_small_banner_meta');
+add_action('save_post_small_banners', 'save_small_banner_multi_cate_meta');
+
+
+
+
+
 
 
 

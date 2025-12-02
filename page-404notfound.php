@@ -25,7 +25,7 @@
             <button type="button" id="search-btn"><i class="fa fa-search"></i></button>
           </form>
 
-          <a href="<?php echo site_url(); ?>" class="back-home-btn">Home</a>
+          <a href="<?php echo home_url(); ?>" class="back-home-btn">Home</a>
         </div>
       </div>
     </div>

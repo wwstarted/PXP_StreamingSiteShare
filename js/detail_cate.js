@@ -163,7 +163,7 @@ prevBtn.addEventListener("click", () => {
               alt="${title}"
               class="banner-card-image"
             />
-            <a href="http://localhost/PXP_SSW/wordpress/detailscate/?post_id=${banner.id}"  class="banner-card-btn">${title}</a>
+            <a href="${WP_HOME}/detailscate/?post_id=${banner.id}"  class="banner-card-btn">${title}</a>
           </div>
         `;
         detailsContainer.insertAdjacentHTML("beforeend", bannerHTML);
@@ -180,8 +180,8 @@ prevBtn.addEventListener("click", () => {
             const title = blog?.title?.rendered || "Banner";
 
             const bannerHTML = `
-                <a href="http://localhost/PXP_SSW/wordpress/"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-                <a href="http://localhost/PXP_SSW/wordpress/categories/">Category</a> /
+                <a href="${WP_HOME}"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
+                <a href="${WP_HOME}/categories/">Category</a> /
                 <span>${title}</span>
             `;
 

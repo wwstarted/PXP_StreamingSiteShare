@@ -171,7 +171,7 @@ function renderCategories(cates, posts) {
         </ul>
 
         <div class="card-footer">
-          <a href="categories?cate_id=${cate.id}" class="visit-btn">
+          <a href="${WP_HOME}/categories?cate_id=${cate.id}" class="visit-btn">
             View all <i class="fa-solid fa-chevron-right"></i>
           </a>
         </div>
@@ -207,7 +207,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               alt="${title}"
               class="banner-card-image"
             />
-            <a href="http://localhost/PXP_SSW/wordpress/detailscate/?post_id=${banner.id}"  class="banner-card-btn">${title}</a>
+            <a href="${WP_HOME}/detailscate/?post_id=${banner.id}"  class="banner-card-btn">${title}</a>
           </div>
         `;
         bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
@@ -310,7 +310,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                   />
                   <span>${author} | ${date}</span>
                 </div>
-                <a href="http://localhost/PXP_SSW/wordpress/detailscate/?post_id=${banner.id}" class="read-more"
+                <a href="${WP_HOME}/detailscate/?post_id=${banner.id}" class="read-more"
                   ><span>Read more</span>
                   <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i
                 ></a>

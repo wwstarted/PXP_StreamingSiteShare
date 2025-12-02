@@ -18,8 +18,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         <h1>${title}</h1>
         <p>${bg_short_desc}</p>
         <div class="hero-buttons">
-          <a href="http://localhost/PXP_SSW/wordpress/blog_detail/?id=${randomBlog.id}" class="btn btn-primary">Get started</a>
-          <a href="http://localhost/PXP_SSW/wordpress/404notfound/" class="btn btn-secondary">Contacts</a>
+          <a href="${WP_HOME}/blog_detail/?id=${randomBlog.id}" class="btn btn-primary">Get started</a>
+          <a href="${WP_HOME}/404notfound/" class="btn btn-secondary">Contacts</a>
         </div>
       </div>
       <div class="hero-image">
@@ -35,6 +35,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 
   /** render Bai Viet theo chu de */
+ 
+});
+
+
+document.addEventListener("DOMContentLoaded", async()=>{
+
 
   const rootContainer = document.querySelector(".blog-section"); 
 
@@ -76,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                       <span class="post-date">${date}</span>
                     </div>
                   </div>
-                  <a href="http://localhost/PXP_SSW/wordpress/blog_detail/?id=${blog.id}" class="view-post-link">View Post →</a>
+                  <a href="${WP_HOME}/blog_detail/?id=${blog.id}" class="view-post-link">View Post →</a>
                 </div>
               </div>
               <div class="card-image">
@@ -91,7 +97,6 @@ document.addEventListener("DOMContentLoaded", async () => {
           `;
         })
         .join("");
-
       //Render section đầy đủ
       const sectionHTML = `
         <section class="blog-section">
@@ -100,7 +105,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               <span class="code-icon"><span>&lt;/&gt;</span></span>
               Bài viết chủ đề ${cateName}
             </h2>
-            <a href="http://localhost/PXP_SSW/wordpress/404notfound/" class="view-all-btn">
+            <a href="${WP_HOME}/404notfound" class="view-all-btn">
               <span class="arrow"><i class="fa-solid fa-arrow-right"></i></span>
             </a>
           </div>
@@ -116,5 +121,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     rootContainer.innerHTML = "<p>Lỗi tải dữ liệu từ API.</p>";
   }
 
- 
-});
+
+})
+

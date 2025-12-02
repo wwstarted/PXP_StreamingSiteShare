@@ -33,14 +33,11 @@
           <div class="ad-banner">
             <h3>SEO</h3>
             <p>YOU CAN BE HERE!</p>
-            <a href="http://localhost/PXP_SSW/wordpress/404notfound/" class="primary-button">Contact Us</a>
+            <a href="<?php echo home_url("/404notfound") ?>" class="primary-button">Contact Us</a> 
           </div>
-          
         </aside>
       </div>
-
       <!-- Related Posts -->
-
       <section class="related-posts">
         <div style="text-align: center">
           <h2
@@ -49,7 +46,7 @@
               border-bottom: 2px solid #fff;
               width: 360px;
               padding-bottom: 4px;
-            "
+           "
           >
             Các bài viết liên quan
           </h2>

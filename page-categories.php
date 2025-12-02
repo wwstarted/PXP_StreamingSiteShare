@@ -1,14 +1,13 @@
 <?php get_header(); ?>
   <div class="container">
       <div class="breadcrumb">
-        <a href="http://localhost/PXP_SSW/wordpress/"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-        <a href="http://localhost/PXP_SSW/wordpress/categories/">Category</a>
+        <a href="<?php echo home_url() ?>"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
+        <a href="<?php echo home_url("/categories") ?>">Category</a>
       </div>
     </div>
 
     <div class="container">
       <!-- Banner Section -->
-      
         <section class="banner" id="banner-section">
            <!-- fetch data here -->
         </section>

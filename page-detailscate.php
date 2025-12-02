@@ -12,6 +12,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
+    <script>
+  const WP_HOME = "<?= home_url(); ?>";
+</script>
   </head>
   </head>
   
@@ -118,7 +121,7 @@
 
           <div class="comment-box">
             <input type="text" placeholder="Để lại bình luận..." />
-            <a href="http://localhost/PXP_SSW/wordpress/404notfound/"><button>Gửi</button></a>
+            <a href="<?php echo home_url("/404notfound") ?>"><button>Gửi</button></a>
           </div>
         </div>
       </main>

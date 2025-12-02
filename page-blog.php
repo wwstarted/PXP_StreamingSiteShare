@@ -3,10 +3,12 @@
     <!-- Breadcrumb -->
     <div class="container">
       <div class="breadcrumb">
-        <a href="http://localhost/PXP_SSW/wordpress/"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-        <a href="http://localhost/PXP_SSW/wordpress/blog/">Blog</a>
+        <a href="<?php echo home_url() ?>"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
+        <a href="<?php echo home_url("/blog") ?>">Blog</a>
       </div>
     </div>
+
+    
 
     <main class="container">
       <!-- Hero Section -->

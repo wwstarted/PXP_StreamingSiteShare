@@ -33,6 +33,9 @@
       </div>
     </footer>
     <?php wp_footer(); ?>
+    <script>
+  const WP_HOME = "<?= home_url(); ?>";
+</script>
   </body>
   <!-- <script src="./categores.js"></script> -->
 </html>

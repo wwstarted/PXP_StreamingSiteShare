@@ -12,6 +12,9 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
+    <script>
+        const WP_HOME = "<?= home_url(); ?>";
+    </script>
   </head>
   <body>
     <!-- Header -->
@@ -95,7 +98,7 @@
                <!-- fetch data here -->
         </div>
         <div style="text-align: right; margin-top: 30px">
-          <a href="http://localhost/PXP_SSW/wordpress/blog/" class="visit-btn"
+          <a href="<?php echo home_url("/blog") ?>" class="visit-btn"
             ><span>Go to Blog</span>
             <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i
           ></a>

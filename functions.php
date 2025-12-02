@@ -669,6 +669,22 @@ function save_small_banner_multi_cate_meta($post_id) {
 }
 add_action('save_post_small_banners', 'save_small_banner_multi_cate_meta');
 
+function filter_features_group_rest_query( $args, $request ) {
+
+    if ( isset( $request['meta_key'] ) && isset( $request['meta_value'] ) ) {
+        $args['meta_query'] = [
+            [
+                'key'   => sanitize_text_field($request['meta_key']),
+                'value' => sanitize_text_field($request['meta_value']),
+            ]
+        ];
+    }
+
+    return $args;
+}
+add_filter( 'rest_features_group_query', 'filter_features_group_rest_query', 10, 2 );
+
+
 
 
 

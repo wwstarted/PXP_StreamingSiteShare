@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     />
                     <span>${bg_author} | ${bg_date}</span>
                 </div>
-                <a href="http://localhost/PXP_SSW/wordpress/blog_detail/?id=${blog.id}" class="read-more"
+                <a href="${WP_HOME}/blog_detail/?id=${blog.id}" class="read-more"
                     ><span>Read more</span>
                     <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i
                 ></a>
@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     </div>
                     <div class="post-info">
                         <h4>
-                        <a class="text-line text-blog-tilte" href="http://localhost/PXP_SSW/wordpress/blog_detail/?id=${blog.id}"
+                        <a class="text-line text-blog-tilte" href="${WP_HOME}/blog_detail/?id=${blog.id}"
                             >${title}</a
                         >
                         </h4>
@@ -202,8 +202,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             const title = blog?.title?.rendered || "Banner";
 
             const bannerHTML = `
-                <a href="http://localhost/PXP_SSW/wordpress/"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-                <a href="http://localhost/PXP_SSW/wordpress/blog/">Blog</a> /
+                <a href="${WP_HOME}"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
+                <a href="${WP_HOME}/blog/">Blog</a> /
                 <span>${title}</span>
             `;
 

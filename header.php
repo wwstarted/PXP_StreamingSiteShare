@@ -5,14 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Movie Streaming Page</title>
-
     <?php wp_head(); ?>
-    <!-- <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="categores.css" /> -->
-    <!-- <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-    /> -->
 </head>
 
 <body class="page-categories">
@@ -20,22 +13,26 @@
     <header>
         <div class="container">
             <div class="header-content">
+                <!-- Logo -->
                 <div class="logo">
                     <div class="logo-icon">▶</div>
                     <span>Streaming Sites</span>
                 </div>
-                <nav>
-                    <ul id="footerMenu">
+
+                <!-- Desktop Navigation -->
+                <nav class="desktop-nav">
+                    <ul id="desktopMenu">
                         <?php
             wp_nav_menu(array(
               'theme_location' => 'primary-menu',
               'container' => false,
-              'menu_class' => 'main-menu',
-              'items_wrap' => '<ul id="mainMenu">%3$s</ul>'
+              'items_wrap' => '%3$s'
             ));
             ?>
                     </ul>
                 </nav>
+
+                <!-- Search Box (Desktop & iPad) -->
                 <div class="search-box">
                     <div class="input-search-icon">
                         <input type="text" placeholder="Stream your next favorite thing..." />
@@ -47,6 +44,41 @@
                         <span><i class="fa-brands fa-x-twitter"></i></span>
                     </div>
                 </div>
+
+                <!-- Hamburger Menu Button (Mobile Only) -->
+                <button class="hamburger-menu" id="hamburgerBtn" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </header>
+
+    <!-- Mobile Menu Drawer -->
+    <div class="mobile-menu-drawer" id="mobileDrawer">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <div class="logo-icon">▶</div>
+                <span>Streaming Sites</span>
+            </div>
+            <button class="close-menu" id="closeMenuBtn" aria-label="Close menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <nav class="mobile-nav">
+            <ul id="mobileMenu">
+                <?php
+        wp_nav_menu(array(
+          'theme_location' => 'primary-menu',
+          'container' => false,
+          'items_wrap' => '%3$s'
+        ));
+        ?>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>

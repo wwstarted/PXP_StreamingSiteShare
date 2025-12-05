@@ -82,8 +82,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   /* =========================================================
    *   B. FETCH & RENDER PARALLEL
    * ========================================================= */
-
-  // ---- SECTION 1: Banner
   async function renderBannerSection() {
     try {
       const cateId = await getSharedCateId();

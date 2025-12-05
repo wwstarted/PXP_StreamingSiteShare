@@ -4,6 +4,59 @@
   box-sizing: border-box;
 }
 
+/* --- MOBILE MENU DROPDOWN --- */
+
+/* 1. Ẩn menu con mặc định trên mobile */
+.mobile-nav .sub-menu {
+    display: none; /* Ẩn đi */
+    background: rgba(0, 0, 0, 0.2); /* Nền tối hơn chút để phân biệt */
+    padding-left: 0;
+}
+
+/* 2. Style cho các link trong menu con */
+.mobile-nav .sub-menu li a {
+    padding-left: 30px !important; /* Thụt đầu dòng sâu hơn menu cha */
+    font-size: 15px;
+    color: #e0e0e0;
+}
+
+/* 3. Style cho item cha (để định vị nút mũi tên) */
+.mobile-nav li.menu-item-has-children {
+    position: relative;
+}
+
+/* 4. Tạo nút mũi tên (Toggle Button) bằng JS sẽ chèn vào đây */
+.dropdown-toggle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 50px; /* Vùng bấm rộng cho dễ bấm */
+    height: 46px; /* Bằng chiều cao link */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+    color: #fff;
+    transition: transform 0.3s ease;
+}
+
+/* Xoay mũi tên khi menu đang mở */
+.dropdown-toggle.active {
+    transform: rotate(180deg);
+}
+
+/* Class để hiện menu con (JS sẽ thêm class này) */
+.sub-menu.open {
+    display: block;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
 body {
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   background: linear-gradient(180deg, #0D1444 0%, #185173 100%);
@@ -19,8 +72,19 @@ body {
 
 /* Header */
 header {
-  padding: 20px 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 100;
+}
+.input-search-icon {
+    position: relative;
+}
+
+.search-box {
+    display: flex; /* Hiện trên PC/iPad */
+    align-items: center;
+    gap: 15px;
 }
 
 .input-search-icon {
@@ -36,26 +100,57 @@ header {
 
 .header-content {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+    justify-content: space-between; /* Đẩy Logo sang trái, phần còn lại sang phải */
+    align-items: center;
+    height: 50px; /* Cố định chiều cao để không bị nhảy layout */
 }
 
 .logo {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 20px;
-  font-weight: bold;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 101; /* Luôn nổi lên trên */
+}
+
+/* Desktop Navigation */
+.desktop-nav {
+    display: block; /* Hiện trên PC/iPad */
+}
+
+.desktop-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.desktop-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: opacity 0.3s;
+}
+
+.desktop-nav a:hover {
+    opacity: 0.7;
 }
 
 .logo-icon {
-  width: 30px;
+  /* width: 30px;
   height: 30px;
   background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
   border-radius: 5px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
+  width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 nav {
@@ -209,6 +304,8 @@ nav > ul > li:hover .icon-down-menu {
     box-shadow: 0 3px #666;
     transform: translateY(2px);
 }
+
+
 /* Responsive */
 @media (max-width: 768px) {
   nav ul {
@@ -464,4 +561,270 @@ footer {
   align-items: center;
   justify-content: center;
   position: relative;
+}
+
+/* --- RESET & GLOBAL --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(180deg, #0D1444 0%, #185173 100%);
+    color: #fff;
+    min-height: 100vh;
+}
+  
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* --- HEADER --- */
+header {
+    padding: 15px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+    z-index: 100;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between; /* Đẩy Logo sang trái, phần còn lại sang phải */
+    align-items: center;
+    height: 50px; /* Cố định chiều cao để không bị nhảy layout */
+}
+
+/* Logo */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    z-index: 101; /* Luôn nổi lên trên */
+}
+
+.logo-icon {
+    width: 30px;
+    height: 30px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Desktop Navigation */
+.desktop-nav {
+    display: block; /* Hiện trên PC/iPad */
+}
+
+.desktop-nav ul {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.desktop-nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: opacity 0.3s;
+}
+
+.desktop-nav a:hover {
+    opacity: 0.7;
+}
+
+/* Search Box & Social */
+.search-box {
+    display: flex; /* Hiện trên PC/iPad */
+    align-items: center;
+    gap: 15px;
+}
+
+.input-search-icon {
+    position: relative;
+}
+
+.search-box input {
+    padding: 8px 35px 8px 15px;
+    border-radius: 20px;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    width: 250px;
+    outline: none;
+}
+
+.icon-search {
+    color: #000;
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.social-icons span {
+    width: 32px;
+    height: 32px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.social-icons span:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* --- HAMBURGER MENU BUTTON (MOBILE) --- */
+/* Mặc định ẩn trên Desktop/iPad */
+.hamburger-menu {
+    display: none; 
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 200;
+}
+
+.hamburger-menu span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #fff;
+    margin: 5px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+/* Hiệu ứng xoay thành dấu X khi active */
+.hamburger-menu.active span:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+.hamburger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger-menu.active span:nth-child(3) {
+    transform: rotate(-45deg) translate(5px, -6px);
+}
+
+/* --- MOBILE DRAWER (MENU TRƯỢT) --- */
+.mobile-menu-drawer {
+    position: fixed;
+    top: 0;
+    left: -100%; /* Giấu sang bên trái */
+    width: 280px;
+    height: 100vh;
+    background: #0f172a; /* Màu nền tối */
+    z-index: 300;
+    transition: 0.3s ease-in-out;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.5);
+}
+
+.mobile-menu-drawer.active {
+    left: 0; /* Trượt ra */
+}
+
+.mobile-menu-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 15px;
+}
+
+.close-menu {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.mobile-nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.mobile-nav ul li a {
+    display: block;
+    padding: 12px 0;
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* Overlay làm tối nền khi mở menu */
+.mobile-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+    z-index: 299;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+}
+
+.mobile-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+
+/* --- RESPONSIVE LOGIC (QUAN TRỌNG) --- */
+
+/* 1. Màn hình iPad Pro (và Desktop) - Giữ nguyên layout cũ */
+@media (min-width: 992px) {
+    /* Đảm bảo Hamburger ẩn */
+    .hamburger-menu { display: none !important; }
+}
+
+/* 2. Màn hình Mobile (iPhone 12 Pro - dưới 992px hoặc 768px tuỳ ý bạn) */
+/* Mình để 991px để cover cả tablet nhỏ, nếu chỉ muốn iPhone thì đổi thành 768px */
+@media (max-width: 991px) {
+    
+    /* Ẩn Menu ngang của Desktop */
+    .desktop-nav {
+        display: none;
+    }
+
+    /* Ẩn Search Box theo yêu cầu */
+    .search-box {
+        display: none;
+    }
+
+    /* Hiện nút Hamburger */
+    .hamburger-menu {
+        display: block;
+    }
+
+    /* Căn chỉnh header: Logo trái, Hamburger phải */
+    /* Quan trọng: KHÔNG dùng flex-direction: column */
+    .header-content {
+        flex-direction: row; 
+        justify-content: space-between;
+        width: 100%;
+    }
 }

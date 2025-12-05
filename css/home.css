@@ -169,6 +169,7 @@ img.carousel-image {
     display: block;
   }
 }
+/* ======================================================================================= */
 
 /* Cards Grid */
 .cards-grid {
@@ -320,6 +321,8 @@ img.carousel-image {
   object-fit: cover;
   object-position: center;
 }
+
+/* ==================================================================================================== */
 
 /* Banner Section */
 .banner-section {
@@ -731,3 +734,145 @@ img.blog-meta-avatar {
   text-decoration: none;
   font-weight: bold;
 }
+
+/* =====================================================
+   SAFE RESPONSIVE & UX IMPROVEMENT
+   Không ảnh hưởng logic / animation cũ
+===================================================== */
+
+/* ===== FIX HERO CAROUSEL CLS ===== */
+.carousel-item {
+  will-change: transform;
+}
+
+/* ===== IMPROVE TOUCH SCROLL (MOBILE) ===== */
+.carousel-wrapper,
+.banner-section-slide {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* =====================================================
+   iPAD PRO (>=768 & <=1024)
+===================================================== */
+@media (max-width: 1024px) {
+  /* HERO */
+  .carousel-wrapper {
+    justify-content: flex-start;
+  }
+
+  /* CARDS */
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* CARD FOOTER */
+  .card-footer {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .visit-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* BANNER */
+  .banner-section-slide {
+    padding: 20px 40px;
+    gap: 30px;
+  }
+
+  .banner-section-icon {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* BLOG */
+  .blog-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =====================================================
+   MOBILE (<=480px)
+===================================================== */
+@media (max-width: 480px) {
+  /* GLOBAL */
+  body {
+    padding: 0;
+  }
+
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* HERO */
+  .carousel-item {
+    min-width: 200px;
+  }
+
+  /* CARDS */
+  .cards-grid {
+    grid-template-columns: 1fr;
+    margin: 30px 0;
+  }
+
+  .card-title-link {
+    font-size: 16px;
+  }
+
+  /* BANNER */
+  .banner-section-slide {
+    padding: 15px;
+  }
+
+  .banner-card {
+    min-width: 240px;
+    height: 160px;
+  }
+
+  .banner-section-icon {
+    display: none;
+  }
+
+  /* INFO */
+  .info-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+
+  .info-content {
+    max-height: 260px;
+  }
+
+  /* BLOG */
+  .blog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .blog-image {
+    height: 160px;
+  }
+}
+
+/* =====================================================
+   VERY SMALL SCREEN (<=360px)
+===================================================== */
+@media (max-width: 360px) {
+  .carousel-item {
+    min-width: 180px;
+  }
+
+  .banner-card {
+    min-width: 220px;
+  }
+
+  .info-header h2 {
+    font-size: 20px;
+  }
+}
+
+
+
+

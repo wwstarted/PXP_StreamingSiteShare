@@ -1,3 +1,7 @@
+/* ========================================
+   PROVIDER DETAIL PAGE - BASE STYLES (DESKTOP)
+======================================== */
+
 :root {
   --main-bg: #051c38;
   --text-color: #fff;
@@ -7,6 +11,7 @@
   --hate: #ff4444;
 }
 
+/* Hero Wrapper */
 .hero-wrapper {
   position: relative;
   background-size: cover;
@@ -15,27 +20,16 @@
   padding-bottom: 40px;
 }
 
-/* overlay mờ */
 .hero-wrapper::before {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5); 
-  z-index: 0;
-}
-
-/* Đảm bảo header trong wrapper không có nền riêng */
-header {
-  background: transparent;
-}
-
-/* Nếu cần bo padding hoặc làm overlay mờ */
-.hero-wrapper::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4); /* lớp mờ đen 40% */
-  z-index: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 28, 56, 0.1),
+    rgba(5, 28, 56, 0.95)
+  );
+  z-index: 1;
 }
 
 .hero-wrapper,
@@ -45,62 +39,18 @@ header,
   z-index: 1;
 }
 
-/* top content */
-.top-content {
-    position: relative;
-    z-index: 2;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    padding: 60px 200px 40px 200px;
+header {
+  background: transparent;
 }
 
-.hero-wrapper, header, .top-content {
-    position: relative;
-    z-index: 1;
-}
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-user agent stylesheet
-section {
-    display: block;
-    unicode-bidi: isolate;
-}
-.hero-wrapper {
-    position: relative;
-    background-image: url(images/image_bgr.jpeg);
-    background-size: cover;
-    background-position: center;
-    color: #fff;
-    padding-bottom: 40px;
-}
-body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(180deg, #0D1444 0%, #185173 100%);
-    color: #fff;
-    min-height: 100vh;
-}
-:host, :root {
-    --fa-style-family-classic: "Font Awesome 6 Free";
-    --fa-font-solid: normal 900 1em / 1 "Font Awesome 6 Free";
-}
-:host, :root {
-    --fa-font-regular: normal 400 1em / 1 "Font Awesome 6 Free";
-}
-:host, :root {
-    --fa-style-family-brands: "Font Awesome 6 Brands";
-    --fa-font-brands: normal 400 1em / 1 "Font Awesome 6 Brands";
-}
-:root {
-    --main-bg: #051c38;
-    --text-color: #fff;
-    --accent: #2a71f5;
-    --card-bg: rgba(30, 41, 82, 0.8);
-    --like: #00c851;
-    --hate: #ff4444;
+/* Top Content */
+.top-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 60px 200px 40px 200px;
 }
 
 .top-content-logo-img {
@@ -122,32 +72,17 @@ body {
   text-decoration: none;
   display: block;
   margin-top: 5px;
+  transition: color 0.3s;
+}
+
+.site-info a:hover {
+  color: #fff;
 }
 
 .stars {
   margin-top: 8px;
   color: #ffcd3c;
   font-size: 20px;
-}
-
-/* Cac the chinh nam trong 10 cot trung tam */
-body.page-details main,
-body.page-details .brand-section,
-body.page-details footer {
-  grid-column: 2 / span 10;
-}
-
-/* === WRAPPER === */
-body.page-details .hero-wrapper::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(5, 28, 56, 0.1),
-    rgba(5, 28, 56, 0.95)
-  );
-  z-index: 1;
 }
 
 /* Breadcrumb */
@@ -160,37 +95,82 @@ body.page-details .hero-wrapper::before {
 .breadcrumb a {
   color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
+  transition: color 0.3s;
 }
 
 .breadcrumb a:hover {
   color: #fff;
 }
 
-/* ========== MAIN CONTENT ========== */
+/* Main Content */
 body.page-details main {
   display: grid;
   grid-template-columns: 70% 30%;
   gap: 30px;
 }
 
+/* Left Content */
 body.page-details .left-content {
-  flex: 1 1 60%;
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.05);
   padding: 20px;
+  border-radius: 16px;
+  line-height: 1.8;
+  font-size: 15px;
+  color: #e0e0e0;
+  max-height: 700px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #0a0a1a;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+body.page-details .left-content h3,
+body.page-details .left-content h2 {
+  color: #fff;
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+body.page-details .left-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+body.page-details .left-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
 
-body.page-details .left-content h3 {
-  margin-top: 0;
+body.page-details .left-content::-webkit-scrollbar-thumb {
+  background-color: #666;
+  border-radius: 10px;
 }
 
+body.page-details .left-content::-webkit-scrollbar-thumb:hover {
+  background-color: #aaa;
+}
+
+.review-box ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.review-box li {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Right Content */
 body.page-details .right-content {
-  flex: 1 1 35%;
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
+/* Rating Box */
 body.page-details .rating-box {
   background: var(--card-bg);
   padding: 20px;
@@ -200,27 +180,30 @@ body.page-details .rating-box {
 body.page-details .rating-box h3 {
   margin-top: 0;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 body.page-details .likes,
 body.page-details .hates {
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 body.page-details .likes h4,
 body.page-details .hates h4 {
-  margin-bottom: 5px;
+  margin-bottom: 10px;
+  font-size: 16px;
 }
 
 body.page-details .comment {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 body.page-details .comment .icon {
   font-size: 18px;
+  flex-shrink: 0;
 }
 
 body.page-details .likes .icon {
@@ -231,11 +214,19 @@ body.page-details .hates .icon {
   color: var(--hate);
 }
 
+body.page-details .comment p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Ad Banner */
 body.page-details .ad-banner img {
   width: 100%;
   border-radius: 10px;
+  display: block;
 }
 
+/* Comment Box */
 body.page-details .comment-box {
   background: var(--card-bg);
   padding: 15px;
@@ -250,6 +241,7 @@ body.page-details .comment-box input {
   border-radius: 5px;
   border: none;
   outline: none;
+  font-size: 14px;
 }
 
 body.page-details .container main .comment-box button {
@@ -259,16 +251,21 @@ body.page-details .container main .comment-box button {
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  font-weight: 600;
+  transition: background 0.3s;
 }
 
-/* Slider section */
+body.page-details .container main .comment-box button:hover {
+  background: #1e5dd4;
+}
+
+/* Brand Section */
 body.page-details .brand-section {
   background: var(--card-bg);
   border-radius: 20px;
   color: #fff;
   padding: 60px 80px;
   overflow: hidden;
-
   margin-top: 50px;
 }
 
@@ -289,10 +286,19 @@ body.page-details .brand-header .show-all {
   text-decoration: none;
   font-weight: bold;
   letter-spacing: 1px;
+  transition: color 0.3s;
+}
+
+body.page-details .brand-header .show-all:hover {
+  color: #667eea;
 }
 
 body.page-details .brand-slider {
   position: relative;
+}
+
+.brand-slider:hover .slide-btn {
+  opacity: 1;
 }
 
 body.page-details .brand-container {
@@ -300,11 +306,11 @@ body.page-details .brand-container {
   gap: 25px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scrollbar-width: none; /* Firefox */
+  scrollbar-width: none;
 }
 
 body.page-details .brand-container::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
+  display: none;
 }
 
 body.page-details .brand-item {
@@ -314,6 +320,7 @@ body.page-details .brand-item {
   text-align: center;
   min-width: 180px;
   transition: transform 0.3s ease;
+  flex-shrink: 0;
 }
 
 body.page-details .brand-item img {
@@ -343,11 +350,13 @@ body.page-details .slide-btn {
   cursor: pointer;
   padding: 10px 20px;
   border-radius: 50%;
+  z-index: 10;
+  opacity: 0;
+  transition: all 0.3s ease;
 }
 
 body.page-details .prev-btn {
   left: -10px;
-  z-index: 10;
 }
 
 body.page-details .next-btn {
@@ -355,151 +364,470 @@ body.page-details .next-btn {
 }
 
 body.page-details .slide-btn:hover {
-  background-color: rgba(255, 255, 255, 0.4);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.review-box ul {
-  list-style: none; /* bỏ dấu chấm */
-  padding-left: 0;  /* bỏ khoảng trống bên trái */
-  margin: 0;
-}
-
-.review-box li {
-  margin: 5px 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-#content-left {
-  background: rgba(255, 255, 255, 0.05); /* nền mờ nhẹ */
-  padding: 20px;
-  border-radius: 16px;
-  line-height: 1.8;
-  font-size: 15px;
-  color: #e0e0e0;
-  max-height: 700px;
-  overflow-y: auto; 
-  scrollbar-width: thin; /* cho Firefox */
-  scrollbar-color: #888 #0a0a1a; /* màu thanh cuộn */
-  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
-  transition: all 0.3s ease;
-}
-
-/* Nếu bạn có tiêu đề (title) trong phần này */
-#content-left h3,
-#content-left h2 {
-  color: #fff;
-  font-size: 22px;
-  margin-bottom: 10px;
-}
-
-/* Tuỳ chỉnh thanh cuộn (Webkit - Chrome, Edge) */
-#content-left::-webkit-scrollbar {
-  width: 6px;
-}
-#content-left::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-#content-left::-webkit-scrollbar-thumb {
-  background-color: #666;
-  border-radius: 10px;
-}
-#content-left::-webkit-scrollbar-thumb:hover {
-  background-color: #aaa;
-}
-
-
-
-
-
-
-
-
-/* ========== RESPONSIVE ========== */
-
-/* Tablet (dưới 1200px) */
-@media (max-width: 1200px) {
+/* ========================================
+   RESPONSIVE - IPAD PRO (1024px)
+======================================== */
+@media (max-width: 1024px) {
+  /* Container */
   body.page-details .container {
-    padding: 0 60px;
+    padding: 0 30px;
   }
 
+  /* Top Content */
+  .top-content {
+    padding: 50px 30px 30px 30px;
+    gap: 18px;
+  }
+
+  .top-content-logo-img {
+    width: 65px;
+    height: 65px;
+  }
+
+  .site-info h2 {
+    font-size: 22px;
+  }
+
+  .stars {
+    font-size: 18px;
+  }
+
+  /* Main Content */
   body.page-details main {
-    margin: 60px 60px;
+    grid-template-columns: 65% 35%;
+    gap: 25px;
+  }
+
+  /* Left Content */
+  body.page-details .left-content {
+    padding: 18px;
+    font-size: 14px;
+    max-height: 600px;
+  }
+
+  body.page-details .left-content h3,
+  body.page-details .left-content h2 {
+    font-size: 20px;
+  }
+
+  /* Rating Box */
+  body.page-details .rating-box {
+    padding: 18px;
+  }
+
+  body.page-details .rating-box h3 {
+    font-size: 18px;
+  }
+
+  body.page-details .likes h4,
+  body.page-details .hates h4 {
+    font-size: 15px;
+  }
+
+  body.page-details .comment {
+    font-size: 14px;
+  }
+
+  /* Comment Box */
+  body.page-details .comment-box {
+    padding: 14px;
+  }
+
+  body.page-details .comment-box input {
+    padding: 9px;
+    font-size: 13px;
+  }
+
+  /* Brand Section */
+  body.page-details .brand-section {
+    padding: 45px 50px;
+    margin-top: 40px;
+  }
+
+  body.page-details .brand-header h2 {
+    font-size: 1.3rem;
+  }
+
+  body.page-details .brand-item {
+    min-width: 160px;
+    padding: 18px;
+  }
+
+  body.page-details .brand-item img {
+    width: 90px;
+    height: 90px;
+  }
+
+  body.page-details .brand-container {
+    gap: 20px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - TABLETS (769px - 1024px)
+======================================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  /* Stack content on tablet portrait */
+  body.page-details main {
     grid-template-columns: 1fr;
   }
 
-  body.page-details .brand-section {
-    margin: 50px 60px;
-    padding: 40px 50px;
+  body.page-details .left-content {
+    max-height: 500px;
+  }
+
+  body.page-details .right-content {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  body.page-details .comment-box {
+    grid-column: 1 / -1;
   }
 }
 
-/* Mobile lớn (dưới 900px) */
-@media (max-width: 900px) {
-  body.page-details header {
-    flex-direction: column;
-    gap: 10px;
+/* ========================================
+   RESPONSIVE - IPHONE 12 PRO (390px)
+======================================== */
+@media (max-width: 768px) {
+  /* Container */
+  body.page-details .container {
+    padding: 0 16px;
   }
 
-  body.page-details .top-content {
+  /* Hero Wrapper */
+  body.page-details .hero-wrapper {
+    padding-bottom: 30px;
+  }
+
+  /* Top Content */
+  .top-content {
     flex-direction: column;
     align-items: center;
     text-align: center;
-    margin: 0 20px;
+    padding: 30px 16px 25px 16px;
+    gap: 15px;
   }
 
-  body.page-details .top-content img {
-    margin-bottom: 15px;
+  .top-content-logo-img {
+    width: 60px;
+    height: 60px;
   }
 
+  .site-info h2 {
+    font-size: 20px;
+  }
+
+  .site-info a {
+    font-size: 14px;
+    margin-top: 4px;
+  }
+
+  .stars {
+    font-size: 16px;
+    margin-top: 6px;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    padding: 12px 0;
+    font-size: 12px;
+  }
+
+  /* Main Content - Stack vertically */
   body.page-details main {
-    display: flex;
-    flex-direction: column;
-    margin: 40px 20px;
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 
-  body.page-details .left-content,
+  /* Left Content */
+  body.page-details .left-content {
+    padding: 16px;
+    font-size: 14px;
+    line-height: 1.7;
+    max-height: 400px;
+    border-radius: 12px;
+  }
+
+  body.page-details .left-content h3,
+  body.page-details .left-content h2 {
+    font-size: 18px;
+    margin-bottom: 8px;
+  }
+
+  body.page-details .left-content::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  /* Right Content */
   body.page-details .right-content {
-    width: 100%;
+    gap: 16px;
   }
 
+  /* Rating Box */
+  body.page-details .rating-box {
+    padding: 16px;
+    border-radius: 10px;
+  }
+
+  body.page-details .rating-box h3 {
+    font-size: 17px;
+    margin-bottom: 16px;
+  }
+
+  body.page-details .likes,
+  body.page-details .hates {
+    margin-top: 12px;
+  }
+
+  body.page-details .likes h4,
+  body.page-details .hates h4 {
+    font-size: 15px;
+    margin-bottom: 8px;
+  }
+
+  body.page-details .comment {
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 13px;
+  }
+
+  body.page-details .comment .icon {
+    font-size: 16px;
+  }
+
+  /* Ad Banner */
+  body.page-details .ad-banner {
+    order: -1; /* Move ad banner before rating box on mobile */
+  }
+
+  body.page-details .ad-banner img {
+    border-radius: 8px;
+  }
+
+  /* Comment Box */
+  body.page-details .comment-box {
+    padding: 14px;
+    border-radius: 8px;
+    gap: 8px;
+  }
+
+  body.page-details .comment-box input {
+    padding: 10px;
+    font-size: 13px;
+  }
+
+  body.page-details .container main .comment-box button {
+    padding: 10px 16px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  /* Brand Section */
   body.page-details .brand-section {
-    margin: 40px 20px;
-    padding: 30px;
+    padding: 30px 20px;
+    margin-top: 30px;
+    border-radius: 16px;
+  }
+
+  body.page-details .brand-header {
+    margin-bottom: 20px;
+  }
+
+  body.page-details .brand-header h2 {
+    font-size: 1.1rem;
+  }
+
+  body.page-details .brand-header .show-all {
+    font-size: 13px;
   }
 
   body.page-details .brand-container {
     gap: 15px;
-  }
-}
-
-/* Mobile nhỏ (dưới 600px) */
-@media (max-width: 600px) {
-  body.page-details header input {
-    width: 100%;
-  }
-
-  body.page-details .hero-wrapper {
-    padding-bottom: 60px;
+    padding: 0 5px;
   }
 
   body.page-details .brand-item {
     min-width: 140px;
-    padding: 15px;
+    padding: 16px 12px;
+  }
+
+  body.page-details .brand-item img {
+    width: 75px;
+    height: 75px;
+    margin-bottom: 8px;
+  }
+
+  body.page-details .brand-item p {
+    font-size: 0.9rem;
+  }
+
+  /* Hide slider buttons on mobile */
+  body.page-details .slide-btn {
+    display: none;
+  }
+
+  /* Show thin scrollbar on mobile */
+  body.page-details .brand-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+  }
+
+  body.page-details .brand-container::-webkit-scrollbar {
+    display: block;
+    height: 4px;
+  }
+
+  body.page-details .brand-container::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
+
+  body.page-details .brand-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+  }
+}
+
+/* ========================================
+   EXTRA SMALL DEVICES (< 390px)
+======================================== */
+@media (max-width: 389px) {
+  body.page-details .container {
+    padding: 0 14px;
+  }
+
+  .top-content {
+    padding: 25px 14px 20px 14px;
+  }
+
+  .top-content-logo-img {
+    width: 55px;
+    height: 55px;
+  }
+
+  .site-info h2 {
+    font-size: 18px;
+  }
+
+  .site-info a {
+    font-size: 13px;
+  }
+
+  .stars {
+    font-size: 15px;
+  }
+
+  body.page-details .left-content {
+    padding: 14px;
+    font-size: 13px;
+    max-height: 350px;
+  }
+
+  body.page-details .left-content h3,
+  body.page-details .left-content h2 {
+    font-size: 17px;
+  }
+
+  body.page-details .rating-box {
+    padding: 14px;
+  }
+
+  body.page-details .rating-box h3 {
+    font-size: 16px;
+  }
+
+  body.page-details .comment {
+    font-size: 12px;
   }
 
   body.page-details .comment-box {
     flex-direction: column;
+    padding: 12px;
   }
 
-  body.page-details .comment-box button {
+  body.page-details .container main .comment-box button {
     width: 100%;
+    padding: 10px;
   }
 
-  body.page-details footer {
-    font-size: 12px;
-    padding: 15px;
+  body.page-details .brand-section {
+    padding: 25px 16px;
+  }
+
+  body.page-details .brand-header h2 {
+    font-size: 1rem;
+  }
+
+  body.page-details .brand-item {
+    min-width: 120px;
+    padding: 14px 10px;
+  }
+
+  body.page-details .brand-item img {
+    width: 65px;
+    height: 65px;
+  }
+
+  body.page-details .brand-item p {
+    font-size: 0.85rem;
+  }
+}
+
+/* ========================================
+   UTILITY CLASSES
+======================================== */
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Touch targets for mobile */
+@media (max-width: 768px) {
+  body.page-details .comment-box button,
+  body.page-details .brand-item {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Focus states */
+body.page-details .comment-box input:focus,
+body.page-details .comment-box button:focus,
+body.page-details .brand-item:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Loading state */
+body.page-details .left-content.loading,
+body.page-details .rating-box.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* Print styles */
+@media print {
+  .breadcrumb,
+  .hero-wrapper,
+  body.page-details .right-content,
+  body.page-details .brand-section {
+    display: none;
+  }
+
+  body.page-details main {
+    grid-template-columns: 1fr;
+  }
+
+  body.page-details .left-content {
+    max-height: none;
+    overflow: visible;
   }
 }

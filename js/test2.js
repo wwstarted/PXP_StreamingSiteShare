@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
+    const API_BASE = "https://nano4me.org/wp-json/wp/v2";
 
     // let sharedBlogId = null;
     // async function getSharedBlogId() {
@@ -29,7 +29,7 @@ function getSlugFromPath() {
 /** =================================================== */
     const relatedBlogs = document.querySelector(".blog-grid");
     try {
-        const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/blogs?per_page=100");
+        const res = await fetch("https://nano4me.org/wp-json/wp/v2/blogs?per_page=100");
         const blogs = await res.json();
 
         blogs.forEach((blog) => {
@@ -85,7 +85,7 @@ function getSlugFromPath() {
 /**===================================================== */
     const sidebar = document.querySelector(".sidebar-widget");
     try {
-        const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/blogs?per_page=100");
+        const res = await fetch("https://nano4me.org/wp-json/wp/v2/blogs?per_page=100");
         const blogs = await res.json();
 
         blogs.forEach((blog) => {
@@ -145,7 +145,7 @@ function getSlugFromPath() {
         let tagsHTML = "";
         if (tagIds.length > 0) {
         const tagPromises = tagIds.map(async (id) => {
-            const tagRes = await fetch(`http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/blog_tag/${id}`);
+            const tagRes = await fetch(`https://nano4me.org/wp-json/wp/v2/blog_tag/${id}`);
             const tagData = await tagRes.json();
             return `<span class="tag">${tagData.name}</span>`;
         });

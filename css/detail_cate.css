@@ -3,7 +3,7 @@
 ======================================== */
 
 :root {
-  --main-bg: #051c38;
+  --outline-bg: #051c38;
   --text-color: #fff;
   --accent: #2a71f5;
   --card-bg: rgba(30, 41, 82, 0.8);
@@ -102,15 +102,15 @@ header {
   color: #fff;
 }
 
-/* Main Content */
-body.page-details main {
+/*  .outline Content */
+   .outline {
   display: grid;
   grid-template-columns: 70% 30%;
   gap: 30px;
 }
 
 /* Left Content */
-body.page-details .left-content {
+  .left-content {
   background: rgba(255, 255, 255, 0.05);
   padding: 20px;
   border-radius: 16px;
@@ -125,28 +125,28 @@ body.page-details .left-content {
   transition: all 0.3s ease;
 }
 
-body.page-details .left-content h3,
-body.page-details .left-content h2 {
+  .left-content h3,
+  .left-content h2 {
   color: #fff;
   font-size: 22px;
   margin-bottom: 10px;
 }
 
-body.page-details .left-content::-webkit-scrollbar {
+  .left-content::-webkit-scrollbar {
   width: 6px;
 }
 
-body.page-details .left-content::-webkit-scrollbar-track {
+  .left-content::-webkit-scrollbar-track {
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
 }
 
-body.page-details .left-content::-webkit-scrollbar-thumb {
+  .left-content::-webkit-scrollbar-thumb {
   background-color: #666;
   border-radius: 10px;
 }
 
-body.page-details .left-content::-webkit-scrollbar-thumb:hover {
+  .left-content::-webkit-scrollbar-thumb:hover {
   background-color: #aaa;
 }
 
@@ -164,70 +164,70 @@ body.page-details .left-content::-webkit-scrollbar-thumb:hover {
 }
 
 /* Right Content */
-body.page-details .right-content {
+  .right-content {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
 /* Rating Box */
-body.page-details .rating-box {
+  .rating-box {
   background: var(--card-bg);
   padding: 20px;
   border-radius: 10px;
 }
 
-body.page-details .rating-box h3 {
+  .rating-box h3 {
   margin-top: 0;
   text-align: center;
   margin-bottom: 20px;
 }
 
-body.page-details .likes,
-body.page-details .hates {
+  .likes,
+  .hates {
   margin-top: 15px;
 }
 
-body.page-details .likes h4,
-body.page-details .hates h4 {
+  .likes h4,
+  .hates h4 {
   margin-bottom: 10px;
   font-size: 16px;
 }
 
-body.page-details .comment {
+  .comment {
   display: flex;
   align-items: flex-start;
   gap: 10px;
   margin-bottom: 12px;
 }
 
-body.page-details .comment .icon {
+  .comment .icon {
   font-size: 18px;
   flex-shrink: 0;
 }
 
-body.page-details .likes .icon {
+  .likes .icon {
   color: var(--like);
 }
 
-body.page-details .hates .icon {
+  .hates .icon {
   color: var(--hate);
 }
 
-body.page-details .comment p {
+  .comment p {
   margin: 0;
   line-height: 1.5;
 }
 
 /* Ad Banner */
-body.page-details .ad-banner img {
+  .ad-banner img {
   width: 100%;
   border-radius: 10px;
   display: block;
 }
 
 /* Comment Box */
-body.page-details .comment-box {
+  .comment-box {
   background: var(--card-bg);
   padding: 15px;
   border-radius: 10px;
@@ -235,7 +235,7 @@ body.page-details .comment-box {
   gap: 10px;
 }
 
-body.page-details .comment-box input {
+  .comment-box input {
   flex: 1;
   padding: 10px;
   border-radius: 5px;
@@ -244,7 +244,7 @@ body.page-details .comment-box input {
   font-size: 14px;
 }
 
-body.page-details .container main .comment-box button {
+  .de-container  .outline .comment-box button {
   padding: 10px 15px;
   border: none;
   background: var(--accent);
@@ -255,12 +255,12 @@ body.page-details .container main .comment-box button {
   transition: background 0.3s;
 }
 
-body.page-details .container main .comment-box button:hover {
+  .de-container  .outline .comment-box button:hover {
   background: #1e5dd4;
 }
 
 /* Brand Section */
-body.page-details .brand-section {
+  .brand-section {
   background: var(--card-bg);
   border-radius: 20px;
   color: #fff;
@@ -269,19 +269,19 @@ body.page-details .brand-section {
   margin-top: 50px;
 }
 
-body.page-details .brand-header {
+  .brand-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
 }
 
-body.page-details .brand-header h2 {
+  .brand-header h2 {
   font-size: 1.5rem;
   font-weight: 600;
 }
 
-body.page-details .brand-header .show-all {
+  .brand-header .show-all {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
@@ -289,11 +289,11 @@ body.page-details .brand-header .show-all {
   transition: color 0.3s;
 }
 
-body.page-details .brand-header .show-all:hover {
+  .brand-header .show-all:hover {
   color: #667eea;
 }
 
-body.page-details .brand-slider {
+  .brand-slider {
   position: relative;
 }
 
@@ -301,7 +301,7 @@ body.page-details .brand-slider {
   opacity: 1;
 }
 
-body.page-details .brand-container {
+  .brand-container {
   display: flex;
   gap: 25px;
   overflow-x: auto;
@@ -309,11 +309,11 @@ body.page-details .brand-container {
   scrollbar-width: none;
 }
 
-body.page-details .brand-container::-webkit-scrollbar {
+  .brand-container::-webkit-scrollbar {
   display: none;
 }
 
-body.page-details .brand-item {
+  .brand-item {
   background-color: #124e89;
   border-radius: 12px;
   padding: 20px;
@@ -323,23 +323,23 @@ body.page-details .brand-item {
   flex-shrink: 0;
 }
 
-body.page-details .brand-item img {
+  .brand-item img {
   width: 100px;
   height: 100px;
   object-fit: contain;
   margin-bottom: 10px;
 }
 
-body.page-details .brand-item p {
+  .brand-item p {
   font-size: 1rem;
   margin: 0;
 }
 
-body.page-details .brand-item:hover {
+  .brand-item:hover {
   transform: scale(1.08);
 }
 
-body.page-details .slide-btn {
+  .slide-btn {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -355,15 +355,15 @@ body.page-details .slide-btn {
   transition: all 0.3s ease;
 }
 
-body.page-details .prev-btn {
+  .prev-btn {
   left: -10px;
 }
 
-body.page-details .next-btn {
+  .next-btn {
   right: -10px;
 }
 
-body.page-details .slide-btn:hover {
+  .slide-btn:hover {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
@@ -372,7 +372,7 @@ body.page-details .slide-btn:hover {
 ======================================== */
 @media (max-width: 1024px) {
   /* Container */
-  body.page-details .container {
+    .de-container {
     padding: 0 30px;
   }
 
@@ -395,73 +395,73 @@ body.page-details .slide-btn:hover {
     font-size: 18px;
   }
 
-  /* Main Content */
-  body.page-details main {
+  /*  .outline Content */
+     .outline {
     grid-template-columns: 65% 35%;
     gap: 25px;
   }
 
   /* Left Content */
-  body.page-details .left-content {
+    .left-content {
     padding: 18px;
     font-size: 14px;
     max-height: 600px;
   }
 
-  body.page-details .left-content h3,
-  body.page-details .left-content h2 {
+    .left-content h3,
+    .left-content h2 {
     font-size: 20px;
   }
 
   /* Rating Box */
-  body.page-details .rating-box {
+    .rating-box {
     padding: 18px;
   }
 
-  body.page-details .rating-box h3 {
+    .rating-box h3 {
     font-size: 18px;
   }
 
-  body.page-details .likes h4,
-  body.page-details .hates h4 {
+    .likes h4,
+    .hates h4 {
     font-size: 15px;
   }
 
-  body.page-details .comment {
+    .comment {
     font-size: 14px;
   }
 
   /* Comment Box */
-  body.page-details .comment-box {
+    .comment-box {
     padding: 14px;
   }
 
-  body.page-details .comment-box input {
+    .comment-box input {
     padding: 9px;
     font-size: 13px;
   }
 
   /* Brand Section */
-  body.page-details .brand-section {
+    .brand-section {
     padding: 45px 50px;
     margin-top: 40px;
   }
 
-  body.page-details .brand-header h2 {
+    .brand-header h2 {
     font-size: 1.3rem;
   }
 
-  body.page-details .brand-item {
+    .brand-item {
     min-width: 160px;
     padding: 18px;
   }
 
-  body.page-details .brand-item img {
+    .brand-item img {
     width: 90px;
     height: 90px;
   }
 
-  body.page-details .brand-container {
+    .brand-container {
     gap: 20px;
   }
 }
@@ -471,21 +471,21 @@ body.page-details .slide-btn:hover {
 ======================================== */
 @media (min-width: 769px) and (max-width: 1024px) {
   /* Stack content on tablet portrait */
-  body.page-details main {
+     .outline {
     grid-template-columns: 1fr;
   }
 
-  body.page-details .left-content {
+    .left-content {
     max-height: 500px;
   }
 
-  body.page-details .right-content {
+    .right-content {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
 
-  body.page-details .comment-box {
+    .comment-box {
     grid-column: 1 / -1;
   }
 }
@@ -495,12 +495,12 @@ body.page-details .slide-btn:hover {
 ======================================== */
 @media (max-width: 768px) {
   /* Container */
-  body.page-details .container {
+    .de-container {
     padding: 0 16px;
   }
 
   /* Hero Wrapper */
-  body.page-details .hero-wrapper {
+    .hero-wrapper {
     padding-bottom: 30px;
   }
 
@@ -538,14 +538,14 @@ body.page-details .slide-btn:hover {
     font-size: 12px;
   }
 
-  /* Main Content - Stack vertically */
-  body.page-details main {
+  /*  .outline Content - Stack vertically */
+     .outline {
     grid-template-columns: 1fr;
     gap: 18px;
   }
 
   /* Left Content */
-  body.page-details .left-content {
+    .left-content {
     padding: 16px;
     font-size: 14px;
     line-height: 1.7;
@@ -553,141 +553,141 @@ body.page-details .slide-btn:hover {
     border-radius: 12px;
   }
 
-  body.page-details .left-content h3,
-  body.page-details .left-content h2 {
+    .left-content h3,
+    .left-content h2 {
     font-size: 18px;
     margin-bottom: 8px;
   }
 
-  body.page-details .left-content::-webkit-scrollbar {
+    .left-content::-webkit-scrollbar {
     width: 4px;
   }
 
   /* Right Content */
-  body.page-details .right-content {
+    .right-content {
     gap: 16px;
   }
 
   /* Rating Box */
-  body.page-details .rating-box {
+    .rating-box {
     padding: 16px;
     border-radius: 10px;
   }
 
-  body.page-details .rating-box h3 {
+    .rating-box h3 {
     font-size: 17px;
     margin-bottom: 16px;
   }
 
-  body.page-details .likes,
-  body.page-details .hates {
+    .likes,
+    .hates {
     margin-top: 12px;
   }
 
-  body.page-details .likes h4,
-  body.page-details .hates h4 {
+    .likes h4,
+    .hates h4 {
     font-size: 15px;
     margin-bottom: 8px;
   }
 
-  body.page-details .comment {
+    .comment {
     gap: 8px;
     margin-bottom: 10px;
     font-size: 13px;
   }
 
-  body.page-details .comment .icon {
+    .comment .icon {
     font-size: 16px;
   }
 
   /* Ad Banner */
-  body.page-details .ad-banner {
+    .ad-banner {
     order: -1; /* Move ad banner before rating box on mobile */
   }
 
-  body.page-details .ad-banner img {
+    .ad-banner img {
     border-radius: 8px;
   }
 
   /* Comment Box */
-  body.page-details .comment-box {
+    .comment-box {
     padding: 14px;
     border-radius: 8px;
     gap: 8px;
   }
 
-  body.page-details .comment-box input {
+    .comment-box input {
     padding: 10px;
     font-size: 13px;
   }
 
-  body.page-details .container main .comment-box button {
+    .de-container  .outline .comment-box button {
     padding: 10px 16px;
     font-size: 13px;
     white-space: nowrap;
   }
 
   /* Brand Section */
-  body.page-details .brand-section {
+    .brand-section {
     padding: 30px 20px;
     margin-top: 30px;
     border-radius: 16px;
   }
 
-  body.page-details .brand-header {
+    .brand-header {
     margin-bottom: 20px;
   }
 
-  body.page-details .brand-header h2 {
+    .brand-header h2 {
     font-size: 1.1rem;
   }
 
-  body.page-details .brand-header .show-all {
+    .brand-header .show-all {
     font-size: 13px;
   }
 
-  body.page-details .brand-container {
+    .brand-container {
     gap: 15px;
     padding: 0 5px;
   }
 
-  body.page-details .brand-item {
+    .brand-item {
     min-width: 140px;
     padding: 16px 12px;
   }
 
-  body.page-details .brand-item img {
+    .brand-item img {
     width: 75px;
     height: 75px;
     margin-bottom: 8px;
   }
 
-  body.page-details .brand-item p {
+    .brand-item p {
     font-size: 0.9rem;
   }
 
   /* Hide slider buttons on mobile */
-  body.page-details .slide-btn {
+    .slide-btn {
     display: none;
   }
 
   /* Show thin scrollbar on mobile */
-  body.page-details .brand-container {
+    .brand-container {
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
   }
 
-  body.page-details .brand-container::-webkit-scrollbar {
+    .brand-container::-webkit-scrollbar {
     display: block;
     height: 4px;
   }
 
-  body.page-details .brand-container::-webkit-scrollbar-track {
+    .brand-container::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
   }
 
-  body.page-details .brand-container::-webkit-scrollbar-thumb {
+    .brand-container::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
   }
@@ -697,7 +697,7 @@ body.page-details .slide-btn:hover {
    EXTRA SMALL DEVICES (< 390px)
 ======================================== */
 @media (max-width: 389px) {
-  body.page-details .container {
+    .de-container {
     padding: 0 14px;
   }
 
@@ -722,58 +722,58 @@ body.page-details .slide-btn:hover {
     font-size: 15px;
   }
 
-  body.page-details .left-content {
+    .left-content {
     padding: 14px;
     font-size: 13px;
     max-height: 350px;
   }
 
-  body.page-details .left-content h3,
-  body.page-details .left-content h2 {
+    .left-content h3,
+    .left-content h2 {
     font-size: 17px;
   }
 
-  body.page-details .rating-box {
+    .rating-box {
     padding: 14px;
   }
 
-  body.page-details .rating-box h3 {
+    .rating-box h3 {
     font-size: 16px;
   }
 
-  body.page-details .comment {
+    .comment {
     font-size: 12px;
   }
 
-  body.page-details .comment-box {
+    .comment-box {
     flex-direction: column;
     padding: 12px;
   }
 
-  body.page-details .container main .comment-box button {
+    .de-container  .outline .comment-box button {
     width: 100%;
     padding: 10px;
   }
 
-  body.page-details .brand-section {
+    .brand-section {
     padding: 25px 16px;
   }
 
-  body.page-details .brand-header h2 {
+    .brand-header h2 {
     font-size: 1rem;
   }
 
-  body.page-details .brand-item {
+    .brand-item {
     min-width: 120px;
     padding: 14px 10px;
   }
 
-  body.page-details .brand-item img {
+    .brand-item img {
     width: 65px;
     height: 65px;
   }
 
-  body.page-details .brand-item p {
+    .brand-item p {
     font-size: 0.85rem;
   }
 }
@@ -789,8 +789,8 @@ html {
 
 /* Touch targets for mobile */
 @media (max-width: 768px) {
-  body.page-details .comment-box button,
-  body.page-details .brand-item {
+    .comment-box button,
+    .brand-item {
     min-height: 44px;
     display: flex;
     align-items: center;
@@ -799,16 +799,16 @@ html {
 }
 
 /* Focus states */
-body.page-details .comment-box input:focus,
-body.page-details .comment-box button:focus,
-body.page-details .brand-item:focus {
+  .comment-box input:focus,
+  .comment-box button:focus,
+  .brand-item:focus {
   outline: 2px solid #667eea;
   outline-offset: 2px;
 }
 
 /* Loading state */
-body.page-details .left-content.loading,
-body.page-details .rating-box.loading {
+  .left-content.loading,
+  .rating-box.loading {
   opacity: 0.6;
   pointer-events: none;
 }
@@ -817,16 +817,16 @@ body.page-details .rating-box.loading {
 @media print {
   .breadcrumb,
   .hero-wrapper,
-  body.page-details .right-content,
-  body.page-details .brand-section {
+    .right-content,
+    .brand-section {
     display: none;
   }
 
-  body.page-details main {
+     .outline {
     grid-template-columns: 1fr;
   }
 
-  body.page-details .left-content {
+    .left-content {
     max-height: none;
     overflow: visible;
   }

@@ -1,133 +1,42 @@
 <?php
 /**=================== Load ASSETS ====================== */
+
 function load_assets()
 {
-  // Font Awesome CSS
-  wp_enqueue_style(
-    'fontawesome',
-    '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css',
-    array(),
-    '6.5.0'
-  );
+  // Gọi Link CDN Font awesome
+  wp_enqueue_style('font-icon', '//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css', array(), '1.0', 'all');
 
-  // CSS chính
-  wp_enqueue_style(
-    'maincss',
-    get_theme_file_uri('/css/style.css'),
-    array(),
-    '1.0.1',
-    'all'
-  );
+  // Gọi Link URL Font text
+  wp_enqueue_style('font-text', '///fonts.googleapis.com', array(), '1.0', 'all');
 
-  wp_enqueue_style(
-    'maincss1',
-    get_theme_file_uri('/css/blog_detail.css'),
-    array(),
-    '1.0.1',
-    'all'
-  );
+  // Gọi thêm các file CSS con trong thư mục /css/
+  wp_enqueue_style('proxyflow-blog', get_template_directory_uri() . '/css/404_notfound.css', array(), filemtime(get_stylesheet_directory() . '/css/404_notfound.css'));
+  wp_enqueue_style('proxyflow-searc', get_template_directory_uri() . '/css/search.css', array(), filemtime(get_stylesheet_directory() . '/css/search.css'));
+  wp_enqueue_style('proxyflow-post', get_template_directory_uri() . '/css/blog_detail.css', array(), filemtime(get_stylesheet_directory() . '/css/blog_detail.css'));
+  wp_enqueue_style('proxyflow-reviews', get_template_directory_uri() . '/css/blog.css', array(), filemtime(get_stylesheet_directory() . '/css/blog.css'));
+  wp_enqueue_style('proxyflow-home', get_template_directory_uri() . '/css/home.css', array(), filemtime(get_stylesheet_directory() . '/css/home.css'));
+  wp_enqueue_style('proxyflow-style', get_template_directory_uri() . '/css/categories.css', array(), filemtime(get_stylesheet_directory() . '/css/categories.css'));
+  wp_enqueue_style('wpadmin-style', get_template_directory_uri() . '/css/detail_cate.css', array(), filemtime(get_stylesheet_directory() . '/css/detail_cate.css'));
+  wp_enqueue_style('wpadmin-style1', get_template_directory_uri() . '/css/style.css', array(), filemtime(get_stylesheet_directory() . '/css/style.css'));
+  // Gọi file JS trong thư mục /js/
+  wp_enqueue_script('proxyflow-blog', get_template_directory_uri() . '/js/404.js', array('jquery'), filemtime(get_template_directory() . '/js/404.js'), true);
+  wp_enqueue_script('proxyflow-post', get_template_directory_uri() . '/js/blogs.js', array('jquery'), filemtime(get_template_directory() . '/js/blogs.js'), true);
+  wp_enqueue_script('proxyflow-home', get_template_directory_uri() . '/js/categores.js', array('jquery'), filemtime(get_template_directory() . '/js/categores.js'), true);
+  wp_enqueue_script('proxyflow-oxylabs', get_template_directory_uri() . '/js/detail_cate.js', array('jquery'), filemtime(get_template_directory() . '/js/detail_cate.js'), true);
+  wp_enqueue_script('proxyflow-blog1', get_template_directory_uri() . '/js/details_blog.js', array('jquery'), filemtime(get_template_directory() . '/js/details_blog.js'), true);
+  wp_enqueue_script('proxyflow-blog2', get_template_directory_uri() . '/js/header.js', array('jquery'), filemtime(get_template_directory() . '/js/header.js'), true);
+  wp_enqueue_script('proxyflow-blog3', get_template_directory_uri() . '/js/home.js', array('jquery'), filemtime(get_template_directory() . '/js/home.js'), true);
+  wp_enqueue_script('proxyflow-search', get_template_directory_uri() . '/js/search.js', array(), filemtime(get_template_directory() . '/js/search.js'), true);
 
-  wp_enqueue_style(
-    'maincss2',
-    get_theme_file_uri('/css/blog.css'),
-    array(),
-    '1.0.1',
-    'all'
-  );
-
-  wp_enqueue_style(
-    'maincss3',
-    get_theme_file_uri('/css/home.css'),
-    array(),
-    '1.0.1',
-    'all'
-  );
-
-  wp_enqueue_style(
-    'maincss4',
-    get_theme_file_uri('/css/categories.css'),
-    array(),
-    '1.0.1',
-    'all'
-  );
-
-  // Font Awesome Kit JS
-  // wp_enqueue_script(
-  //     'fontawesome-kit',
-  //     'https://kit.fontawesome.com/a076d05399.js',
-  //     array(),
-  //     null,
-  //     true
-  // );
-
-  // JS chính
-  wp_enqueue_script(
-    'streamingsite-main',
-    get_theme_file_uri('/js/categores.js'),
-    array('jquery'),
-    filemtime(get_template_directory() . '/js/categores.js'),
-    true
-  );
-
-  wp_enqueue_script(
-    'streamingsite-main1',
-    get_theme_file_uri('/js/home.js'),
-    array('jquery'),
-    filemtime(get_template_directory() . '/js/home.js'),
-    true
-  );
-  wp_enqueue_script(
-    'streamingsite-main2',
-    get_theme_file_uri('/js/blogs.js'),
-    array('jquery'),
-    filemtime(get_template_directory() . '/js/blogs.js'),
-    true
-  );
-
-  wp_enqueue_script(
-    'streamingsite-main3',
-    get_theme_file_uri('/js/details_blog.js'),
-    array('jquery'),
-    filemtime(get_template_directory() . '/js/details_blog.js'),
-    true
-  );
-
-  wp_enqueue_script(
-    'streamingsite-main3',
-    get_theme_file_uri('/js/404.js'),
-    array('jquery'),
-    filemtime(get_template_directory() . '/js/404.js'),
-    true
-  );
 }
-
 add_action('wp_enqueue_scripts', 'load_assets');
 
-
-/**=================== REGISTER MENU ====================== */
-function register_my_menus()
-{
-  register_nav_menus(array(
-    'primary-menu' => __('Primary Menu')
-  ));
-}
-add_action('init', 'register_my_menus');
-
-
-function register_my_footer_menus()
-{
-  register_nav_menus(array(
-    'footer-menu' => __('Footer Menu')
-  ));
-}
-add_action('init', 'register_my_footer_menus');
+require_once get_theme_file_path('/inc/uploads.php');
+require_once get_theme_file_path('/inc/logo.php');
+require_once get_theme_file_path('/inc/reviews.php');
 
 
 
-
-
-
-/*================ REST API & fetch DATA =======================*/
 
 /** ============= Register CPT ============== */
 
@@ -178,7 +87,7 @@ function create_blogs_cpt()
     'menu_position' => 20,
     'menu_icon' => 'dashicons-images-alt2',
     'supports' => array('title', 'thumbnail', 'custom-fields'),
-    'show_in_rest' => true // quan trọng: enable REST API
+    'show_in_rest' => true
   );
   register_post_type('blogs', $args);
 }
@@ -317,6 +226,11 @@ function create_cate_post_type()
     'public' => true,
     'show_in_rest' => true,
     'supports' => ['title', 'thumbnail', 'custom-fields'],
+    'has_archive' => true,
+    'rewrite' => [
+      'slug' => 'reviews',
+      'with_front' => false
+    ],
   ]);
 }
 add_action('init', 'create_cate_post_type');
@@ -336,6 +250,10 @@ function create_post_item_type()
     'public' => true,
     'show_in_rest' => true,
     'supports' => ['title', 'custom-fields'],
+    'rewrite' => [
+      'slug' => 'info',
+      'with_front' => false
+    ],
   ]);
 }
 add_action('init', 'create_post_item_type');

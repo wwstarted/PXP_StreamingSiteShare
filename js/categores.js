@@ -1,36 +1,44 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
-  const WP_HOME = window.WP_HOME;   // từ footer.php
+  const WP_HOME = window.WP_HOME;
   let sharedCateId = null;
 
   /* =========================================================
    *   A. CORE FUNC
    * ========================================================= */
 
+  async function getSlugFromPath() {
+    const parts = location.pathname.split('/').filter(Boolean);
+    return parts[parts.length - 1] || null;
+  }
+
   async function getSharedCateId() {
     if (sharedCateId) return sharedCateId;
 
-    const params = new URLSearchParams(window.location.search);
-    let cateId = params.get("cate_id");
-
-    if (!cateId) {
-      const allCateRes = await fetch(`${API_BASE}/cate_post?per_page=100`);
+    const slug = await getSlugFromPath();
+    
+    if (!slug) {
+      console.warn("Không tìm thấy slug trong URL");
+      const allCateRes = await fetch(`${API_BASE}/cate_post?per_page=1`);
       const allCategories = await allCateRes.json();
-      if (!allCategories.length) throw new Error("Không có category nào trong API");
-
-      const randomCate = allCategories[Math.floor(Math.random() * allCategories.length)];
-      cateId = randomCate.id;
+      if (allCategories.length > 0) {
+        sharedCateId = allCategories[0].id;
+      }
+    } else {
+      // Fetch category by slug
+      const res = await fetch(`${API_BASE}/cate_post?slug=${slug}`);
+      const data = await res.json();
+      
+      if (data && data.length > 0) {
+        sharedCateId = data[0].id;
+      }
     }
 
-    sharedCateId = cateId;
-    console.log("Cate ID dùng chung:", sharedCateId);
+    console.log("Cate ID dùng chung:", sharedCateId, "từ slug:", slug);
     return sharedCateId;
   }
 
-
-  /* =========================================================
-   *   UI BASIC EVENTS
-   * ========================================================= */
+// ============================
   (function initUI() {
     const container = document.querySelector(".brand-container");
     const nextBtn = document.querySelector(".next-btn");
@@ -79,9 +87,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   };
 
 
-  /* =========================================================
-   *   B. FETCH & RENDER PARALLEL
-   * ========================================================= */
+  //  ========================================================= */
   async function renderBannerSection() {
     try {
       const cateId = await getSharedCateId();
@@ -186,7 +192,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const title = post.title?.rendered || "Không có tiêu đề";
 
         return `
-          <a href="${WP_HOME}/detailscate/?post_id=${post.id}" class="table-row">
+          <a href="${post.link}" class="table-row">
             <span>${index + 1}</span>
             <img src="${logo}" alt="Logo" />
             <span>${title}</span>
@@ -245,6 +251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         const cateMeta = cate.meta || {};
         const cateLogo = cateMeta.thumbnail || "https://via.placeholder.com/80";
         const cateTitle = cate.title?.rendered || "No Title";
+        const cateLink = cate.link || "#"; 
 
         const posts = allPosts
           .filter(p => String(p.meta?.id_cate) === String(cate.id))
@@ -260,7 +267,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         const remainHTML =
           remains > 0
-            ? `<a href="${WP_HOME}/categories?cate_id=${cate.id}" class="visit-btn-cate">+${remains}</a>`
+            ? `<a href="${cateLink}" class="visit-btn-cate">+${remains}</a>` // SỬA: Dùng cateLink
             : "";
 
         const html = `
@@ -307,6 +314,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
+  // Gọi các hàm render
   renderBannerSection();
   renderContentTop();
   renderContentBottom();

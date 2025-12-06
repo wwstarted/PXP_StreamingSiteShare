@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <h1>${title}</h1>
         <p>${bg_short_desc}</p>
         <div class="hero-buttons">
-          <a href="${WP_HOME}/blog_detail/?id=${randomBlog.id}" class="btn btn-primary">Get started</a>
+          <a href="${randomBlog.link || '#'}" class="btn btn-primary">Get started</a>
           <a href="${WP_HOME}/404notfound/" class="btn btn-secondary">Contacts</a>
         </div>
       </div>
@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", async()=>{
                       <span class="post-date">${date}</span>
                     </div>
                   </div>
-                  <a href="${WP_HOME}/blog_detail/?id=${blog.id}" class="view-post-link">View Post →</a>
+                  <a href="${blog.link || '#'}" class="view-post-link">View Post →</a>
                 </div>
               </div>
               <div class="card-image">
@@ -123,4 +123,3 @@ document.addEventListener("DOMContentLoaded", async()=>{
 
 
 })
-

@@ -115,27 +115,30 @@ async function fetchData() {
 }
 
 function renderCategories(cates, posts) {
-  const container = document.querySelector(".categories-container");
+  const container = document.querySelector(".categories-container-home");
   if (!container) return;
   container.innerHTML = "";
 
   cates.forEach(cate => {
-
     const cate_id = cate.id;
     const meta = cate.meta || {};
     const cateThumbnail = meta.thumbnail || "";
     const shortDesc = meta.short_desc || "";
     const cateTitle = cate.title.rendered || "No title";
 
-  
+    // Lấy tất cả posts của category và sort
     const catePosts = posts
       .filter(p => p.meta?.id_cate == cate.id)
       .sort((a, b) => (a.meta?.top || 0) - (b.meta?.top || 0));
 
-    const postListHTML = catePosts
-      .map(post => `
+    // Chỉ lấy 6 items đầu tiên để hiển thị
+    const displayPosts = catePosts.slice(0, 6);
+
+    // Render list với số thứ tự tự động từ 1-6
+    const postListHTML = displayPosts
+      .map((post, index) => `
         <li>
-          <p class="features-list-top">${post.meta?.top || ""}</p>
+          <p class="features-list-top">${index + 1}</p>
           <img
             class="features-list-logo-image"
             src="${post.meta?.logo || ""}"
@@ -145,6 +148,21 @@ function renderCategories(cates, posts) {
         </li>
       `)
       .join("");
+
+    // Lấy 3 logos cuối cùng trong toàn bộ catePosts
+    const lastThreePosts = catePosts.slice(-3);
+    const lastThreeLogosHTML = lastThreePosts
+      .map(post => `
+        <img
+          class="footer-logo-preview"
+          src="${post.meta?.logo || ""}"
+          alt="${post.title.rendered}"
+        />
+      `)
+      .join("");
+
+    // Tổng số items
+    const totalItems = catePosts.length;
 
     const cardHTML = `
       <div class="card">
@@ -171,9 +189,13 @@ function renderCategories(cates, posts) {
         </ul>
 
         <div class="card-footer">
-          <a href="${WP_HOME}/categories?cate_id=${cate.id}" class="visit-btn">
-            View all <i class="fa-solid fa-chevron-right"></i>
+          <a href="${cate.link}" class="visit-btn">
+            <span>Load ${totalItems} sites</span>
+            <i class="fa-solid fa-chevron-right footer-arrow-icon"></i>
           </a>
+          <div class="footer-logos">
+            ${lastThreeLogosHTML}
+          </div>
         </div>
       </div>
     `;
@@ -181,98 +203,97 @@ function renderCategories(cates, posts) {
     container.insertAdjacentHTML("beforeend", cardHTML);
   });
 }
-
 fetchData();
 
 
 
 
-/** =========banner-slide==========  */
-document.addEventListener("DOMContentLoaded", async () => {
-  const bannerContainer = document.querySelector("#banner-slide");
+// /** =========banner-slide==========  */
+// document.addEventListener("DOMContentLoaded", async () => {
+//   const bannerContainer = document.querySelector("#banner-slide-home");
 
-  try {
-    const cateRes = await fetch(`${API_BASE}/post_item?per_page=5`);
-    const cate = await cateRes.json();
+//   try {
+//     const cateRes = await fetch(`${API_BASE}/post_item?per_page=5`);
+//     const cate = await cateRes.json();
 
-    cate.forEach((banner) => {
-        const meta = banner.meta || {};
-        const image = meta.image || "";
-        const title = banner?.title?.rendered || "No Title";
+//     cate.forEach((banner) => {
+//         const meta = banner.meta || {};
+//         const image = meta.image || "";
+//         const title = banner?.title?.rendered || "No Title";
 
-        const bannerHTML = `
-          <div class="banner-card">
-            <img
-              src="${image}"
-              alt="${title}"
-              class="banner-card-image"
-            />
-            <a href="${WP_HOME}/detailscate/?post_id=${banner.id}"  class="banner-card-btn">${title}</a>
-          </div>
-        `;
-        bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
-      });
+//         const bannerHTML = `
+//           <div class="banner-card">
+//             <img
+//               src="${image}"
+//               alt="${title}"
+//               class="banner-card-image"
+//             />
+//             <a href="${WP_HOME}/detailscate/?post_id=${banner.id}"  class="banner-card-btn">${title}</a>
+//           </div>
+//         `;
+//         bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
+//       });
 
-  } catch (error) {
-    console.error("Lỗi khi tải banner:", error);
-  }
-});
-
-
+//   } catch (error) {
+//     console.error("Lỗi khi tải banner:", error);
+//   }
+// });
 
 
-/** =========Cars Blogs==========  */
-document.addEventListener("DOMContentLoaded", async () => {
-  const bannerContainer = document.querySelector("#cars-blogs");
-
-  try {
-    const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/cars_blog?per_page=3");
-    const banners = await res.json();
-
-    banners.forEach((banner) => {
-        const meta = banner.meta || {};
-        const blog_desc = meta.blog_desc || "";
-        const title = banner?.title?.rendered || "Banner";
 
 
-        const bannerHTML = `
-        <section class="info-section">
-        <div>
-          <div class="info-header">
-            <h2>${title}</h2>
-            <div class="info-icons">
-              <span>🌟</span>
-              <span>🏆</span>
-            </div>
-          </div>
-          <div class="info-content">
-            <p>
-              ${blog_desc}
-            </p>
-            <div class="fade-overlay"></div>
-          </div>
-          <div class="btn-container">
-            <button class="show-more" onclick="toggleContent(this)">
-              <span class="text">Read More</span>
-              <span class="icon"><i class="fa-solid fa-angles-down"></i></span>
-            </button>
-          </div>
-        </div>
-        </section>
-        `;
-        bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
-      });
+// /** =========Cars Blogs==========  */
+// document.addEventListener("DOMContentLoaded", async () => {
+//   const bannerContainer = document.querySelector("#cars-blogs-home");
 
-  } catch (error) {
-    console.error("Lỗi khi tải banner:", error);
-  }
-});
+//   try {
+//     const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/cars_blog?per_page=3");
+//     const banners = await res.json();
+
+//     banners.forEach((banner) => {
+//         const meta = banner.meta || {};
+//         const blog_desc = meta.blog_desc || "";
+//         const title = banner?.title?.rendered || "Banner";
+
+
+//         const bannerHTML = `
+//         <section class="info-section">
+//         <div>
+//           <div class="info-header">
+//             <h2>${title}</h2>
+//             <div class="info-icons">
+//               <span>🌟</span>
+//               <span>🏆</span>
+//             </div>
+//           </div>
+//           <div class="info-content">
+//             <p>
+//               ${blog_desc}
+//             </p>
+//             <div class="fade-overlay"></div>
+//           </div>
+//           <div class="btn-container">
+//             <button class="show-more" onclick="toggleContent(this)">
+//               <span class="text">Read More</span>
+//               <span class="icon"><i class="fa-solid fa-angles-down"></i></span>
+//             </button>
+//           </div>
+//         </div>
+//         </section>
+//         `;
+//         bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
+//       });
+
+//   } catch (error) {
+//     console.error("Lỗi khi tải banner:", error);
+//   }
+// });
 
 
 /** Blog Section */
 
 document.addEventListener("DOMContentLoaded", async () => {
-  const bannerContainer = document.querySelector("#section-blog");
+  const bannerContainer = document.querySelector("#section-blog-home");
 
   try {
     const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/post_item?per_page=3");
@@ -324,6 +345,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Lỗi khi tải banner:", error);
   }
 });
+
+
 
 
 

@@ -4,9 +4,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/blogs?per_page=100");
     const blogs = await res.json();
 
-    if (!Array.isArray(blogs) || blogs.length === 0) return;
+        const visibleBlogs = blogs.filter((blog) => {
+      const isVisible = blog.meta?._blogs_visible;
+      return isVisible === "1" || isVisible === true || isVisible === 1;
+    });
 
-    const randomBlog = blogs[Math.floor(Math.random() * blogs.length)];
+
+    if (!Array.isArray(visibleBlogs) || visibleBlogs.length === 0) return;
+
+    const randomBlog = visibleBlogs[Math.floor(Math.random() * visibleBlogs.length)];
 
     const meta = randomBlog.meta || {};
     const bg_short_desc = meta.bg_short_desc || "";

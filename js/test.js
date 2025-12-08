@@ -1,449 +1,380 @@
-// ============================================
-// STREAMING SITES SEARCH SYSTEM
-// ============================================
+document.addEventListener("DOMContentLoaded", async () => {
+  const bannerContainer = document.querySelector("#banner-carousel");
 
-class StreamingSearch {
-  constructor() {
-    // WordPress REST API Endpoints
-   this.API_POST_ITEMS = 'https://nano4me.org/wp-json/wp/v2/post_item';
-    this.API_BLOGS = 'https://nano4me.org/wp-json/wp/v2/blogs';
-    
-    this.state = {
-      query: '',
-      postItemResults: [],
-      blogResults: [],
-      allPostItems: [],
-      allBlogs: [],
-      isLoading: false,
-      isOpen: false,
-      selectedIndex: -1,
-      error: null,
-      cache: {}
-    };
-    
-    this.debounceTimer = null;
-    this.MIN_CHARS = 3;
-    this.MAX_RESULTS_PER_SECTION = 5;
-    this.DEBOUNCE_TIME = 400;
-    
-    this.init();
-  }
+  if (!bannerContainer) return;
 
-  // Khởi tạo
-  async init() {
-    this.cacheElements();
-    if (!this.searchInput) {
-      console.error('Search input not found');
-      return;
-    }
-    this.attachEvents();
-    await this.fetchAllData();
-  }
+  try {
+    const res = await fetch(
+      "https://nano4me.org/wp-json/wp/v2/post_item?per_page=100"
+    );
+    const items = await res.json();
 
-  // Cache các DOM elements
-  cacheElements() {
-    this.searchContainer = document.querySelector('.input-search-icon');
-    this.searchInput = this.searchContainer?.querySelector('input[type="text"]');
-    this.searchIcon = this.searchContainer?.querySelector('.icon-search');
-    
-    if (this.searchContainer && this.searchInput) {
-      this.createDropdown();
-    }
-  }
+    console.log("All post items:", items);
 
-  // Tạo dropdown HTML
-  createDropdown() {
-    const dropdown = document.createElement('div');
-    dropdown.className = 'search-dropdown';
-    dropdown.innerHTML = `
-      <div class="search-dropdown-content">
-        <div class="search-loading">
-          <i class="fa-solid fa-spinner fa-spin"></i>
-          <span>Searching...</span>
-        </div>
-        <div class="search-results">
-          <!-- Streaming Sites Section -->
-          <div class="search-section" id="streaming-section">
-            <div class="search-section-header">
-              <i class="fa-solid fa-tv"></i>
-              <span>STREAMING SITES</span>
-            </div>
-            <div class="search-section-results" id="streaming-results"></div>
-          </div>
-          
-          <!-- Blog Section -->
-          <div class="search-section" id="blog-section">
-            <div class="search-section-header">
-              <i class="fa-solid fa-newspaper"></i>
-              <span>ARTICLES</span>
-            </div>
-            <div class="search-section-results" id="blog-results"></div>
-          </div>
-        </div>
-        <div class="search-empty">
-          <i class="fa-solid fa-magnifying-glass"></i>
-          <p>No results found</p>
-          <span>Try different keywords</span>
-        </div>
-        <div class="search-error">
-          <i class="fa-solid fa-triangle-exclamation"></i>
-          <p>Something went wrong</p>
-          <span>Please try again later</span>
-        </div>
-      </div>
-    `;
-    
-    this.searchContainer.style.position = 'relative';
-    this.searchContainer.appendChild(dropdown);
-    this.dropdown = dropdown;
-    this.streamingContainer = dropdown.querySelector('#streaming-results');
-    this.blogContainer = dropdown.querySelector('#blog-results');
-    this.streamingSection = dropdown.querySelector('#streaming-section');
-    this.blogSection = dropdown.querySelector('#blog-section');
-  }
+    // Random shuffle
+    const shuffled = items.sort(() => Math.random() - 0.5);
 
-  // Fetch tất cả data từ 2 APIs
-  async fetchAllData() {
-    try {
-      const [postItemsRes, blogsRes] = await Promise.all([
-        fetch(this.API_POST_ITEMS + '?per_page=100'),
-        fetch(this.API_BLOGS + '?per_page=100')
-      ]);
-      
-      if (!postItemsRes.ok || !blogsRes.ok) {
-        throw new Error('Failed to fetch data');
-      }
-      
-      this.state.allPostItems = await postItemsRes.json();
-      this.state.allBlogs = await blogsRes.json();
-      
-      console.log('✅ Loaded streaming sites:', this.state.allPostItems.length);
-      console.log('✅ Loaded blogs:', this.state.allBlogs.length);
-    } catch (error) {
-      console.error('❌ Error fetching data:', error);
-      this.state.error = error.message;
-    }
-  }
+    // Lấy 4 items đầu tiên
+    const randomFour = shuffled.slice(0, 4);
 
-  // Attach event listeners
-  attachEvents() {
-    this.searchInput.addEventListener('input', (e) => this.handleInput(e));
-    this.searchInput.addEventListener('focus', () => this.handleFocus());
-    this.searchInput.addEventListener('keydown', (e) => this.handleKeyboard(e));
-    document.addEventListener('click', (e) => this.handleClickOutside(e));
-  }
+    randomFour.forEach((item) => {
+      const meta = item.meta || {};
+      const image = meta.bgr_image || "";
+      const postLink = meta.post_link || "#";
+      const detailLink = item.link || "#";
+      const title = item.title.rendered || "No title";
 
-  // Xử lý input
-  handleInput(e) {
-    const query = e.target.value.trim();
-    this.state.query = query;
-    clearTimeout(this.debounceTimer);
-    this.state.selectedIndex = -1;
-
-    if (query.length < this.MIN_CHARS) {
-      this.closeDropdown();
-      return;
-    }
-
-    this.showLoading();
-    this.debounceTimer = setTimeout(() => {
-      this.performSearch(query);
-    }, this.DEBOUNCE_TIME);
-  }
-
-  handleFocus() {
-    if (this.state.query.length >= this.MIN_CHARS) {
-      const hasResults = this.state.postItemResults.length > 0 || this.state.blogResults.length > 0;
-      if (hasResults) this.openDropdown();
-    }
-  }
-
-  handleKeyboard(e) {
-    if (!this.state.isOpen) return;
-
-    const totalResults = this.state.postItemResults.length + this.state.blogResults.length;
-    if (totalResults === 0) return;
-
-    switch(e.key) {
-      case 'ArrowDown':
-        e.preventDefault();
-        this.navigateDown(totalResults);
-        break;
-      case 'ArrowUp':
-        e.preventDefault();
-        this.navigateUp(totalResults);
-        break;
-      case 'Enter':
-        e.preventDefault();
-        if (this.state.selectedIndex >= 0) {
-          this.selectCurrentItem();
-        }
-        break;
-      case 'Escape':
-        this.closeDropdown();
-        this.searchInput.blur();
-        break;
-    }
-  }
-
-  navigateDown(total) {
-    if (this.state.selectedIndex < total - 1) {
-      this.state.selectedIndex++;
-      this.updateSelectedItem();
-    }
-  }
-
-  navigateUp(total) {
-    if (this.state.selectedIndex > 0) {
-      this.state.selectedIndex--;
-      this.updateSelectedItem();
-    }
-  }
-
-  updateSelectedItem() {
-    const allItems = this.dropdown.querySelectorAll('.search-result-item');
-    allItems.forEach((item, index) => {
-      if (index === this.state.selectedIndex) {
-        item.classList.add('selected');
-        item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
-      } else {
-        item.classList.remove('selected');
-      }
-    });
-  }
-
-  selectCurrentItem() {
-    const allItems = this.dropdown.querySelectorAll('.search-result-item');
-    const selectedItem = allItems[this.state.selectedIndex];
-    if (selectedItem) {
-      const link = selectedItem.dataset.link;
-      window.location.href = link;
-    }
-  }
-
-  handleClickOutside(e) {
-    if (!this.searchContainer.contains(e.target)) {
-      this.closeDropdown();
-    }
-  }
-
-  // Perform search
-  performSearch(query) {
-    const cacheKey = query.toLowerCase();
-    
-    if (this.state.cache[cacheKey]) {
-      console.log('📦 Using cached results');
-      const cached = this.state.cache[cacheKey];
-      this.state.postItemResults = cached.postItems;
-      this.state.blogResults = cached.blogs;
-      this.renderResults();
-      return;
-    }
-
-    const queryLower = query.toLowerCase();
-    
-    // Filter post items (streaming sites)
-    const filteredPostItems = this.state.allPostItems.filter(item => {
-      const title = item.title?.rendered?.toLowerCase() || '';
-      const desc = item.meta?.desc?.toLowerCase() || '';
-      return title.includes(queryLower) || desc.includes(queryLower);
-    }).slice(0, this.MAX_RESULTS_PER_SECTION);
-
-    // Filter blogs
-    const filteredBlogs = this.state.allBlogs.filter(blog => {
-      const title = blog.title?.rendered?.toLowerCase() || '';
-      const desc = blog.meta?.bg_short_desc?.toLowerCase() || '';
-      return title.includes(queryLower) || desc.includes(queryLower);
-    }).slice(0, this.MAX_RESULTS_PER_SECTION);
-
-    this.state.postItemResults = filteredPostItems;
-    this.state.blogResults = filteredBlogs;
-    
-    // Cache results
-    this.state.cache[cacheKey] = {
-      postItems: filteredPostItems,
-      blogs: filteredBlogs
-    };
-
-    this.renderResults();
-  }
-
-  // Render results
-  renderResults() {
-    this.state.isLoading = false;
-    const hasPostItems = this.state.postItemResults.length > 0;
-    const hasBlogs = this.state.blogResults.length > 0;
-
-    if (!hasPostItems && !hasBlogs) {
-      this.showEmpty();
-      return;
-    }
-
-    this.openDropdown();
-    this.hideLoading();
-    this.hideEmpty();
-    this.hideError();
-
-    // Render streaming sites
-    if (hasPostItems) {
-      this.streamingSection.style.display = 'block';
-      this.renderStreamingSites();
-    } else {
-      this.streamingSection.style.display = 'none';
-    }
-
-    // Render blogs
-    if (hasBlogs) {
-      this.blogSection.style.display = 'block';
-      this.renderBlogs();
-    } else {
-      this.blogSection.style.display = 'none';
-    }
-  }
-
-  // Render streaming sites
-  renderStreamingSites() {
-    const html = this.state.postItemResults.map((item, index) => {
-      const title = item.title?.rendered || 'Untitled';
-      const desc = item.meta?.desc || '';
-      const link = item.link || '#';
-      const logo = item.meta?.logo || '';
-      const popularity = item.meta?.popularity || 0;
-      const highlightedTitle = this.highlightText(title, this.state.query);
-
-      return `
-        <div class="search-result-item" data-index="${index}" data-link="${link}">
-          <div class="search-result-image">
-            ${logo ? `<img src="${logo}" alt="${title}" onerror="this.parentElement.innerHTML='<div class=\\'search-result-placeholder\\'><i class=\\'fa-solid fa-tv\\'></i></div>'">` : `<div class="search-result-placeholder"><i class="fa-solid fa-tv"></i></div>`}
-          </div>
-          <div class="search-result-content">
-            <div class="search-result-header">
-              <h4 class="search-result-title">${highlightedTitle}</h4>
-              ${popularity > 0 ? `<div class="search-result-rating"><i class="fa-solid fa-star"></i> ${popularity}%</div>` : ''}
-            </div>
-            <p class="search-result-excerpt">${this.truncate(this.stripHtml(desc), 100)}</p>
-          </div>
-          <div class="search-result-arrow">
-            <i class="fa-solid fa-arrow-right"></i>
-          </div>
+      const itemHTML = `
+        <div class="carousel-item" onclick="window.location.href='${detailLink}';" style="cursor: pointer;">
+          <img class="carousel-image" src="${image}" alt="${title}">
+          <button 
+            class="btn carousel-btn" 
+            onclick="event.stopPropagation(); window.open('${postLink}', '_blank');"
+          >
+            Visit Site
+            <i class="carousel-btn-icon fa-solid fa-angles-right"></i>
+          </button>
         </div>
       `;
-    }).join('');
-
-    this.streamingContainer.innerHTML = html;
-    this.attachClickEvents(this.streamingContainer);
-  }
-
-  // Render blogs
-  renderBlogs() {
-    const html = this.state.blogResults.map((blog, index) => {
-      const title = blog.title?.rendered || 'Untitled';
-      const desc = blog.meta?.bg_short_desc || '';
-      const link = blog.link || '#';
-      const thumbnail = blog.meta?.bg_thumbnail || '';
-      const author = blog.meta?.bg_author || '';
-      const date = blog.meta?.bg_date || '';
-      const highlightedTitle = this.highlightText(title, this.state.query);
-
-      return `
-        <div class="search-result-item" data-index="${this.state.postItemResults.length + index}" data-link="${link}">
-          <div class="search-result-image">
-            ${thumbnail ? `<img src="${thumbnail}" alt="${title}" onerror="this.parentElement.innerHTML='<div class=\\'search-result-placeholder\\'><i class=\\'fa-solid fa-newspaper\\'></i></div>'">` : `<div class="search-result-placeholder"><i class="fa-solid fa-newspaper"></i></div>`}
-          </div>
-          <div class="search-result-content">
-            <h4 class="search-result-title">${highlightedTitle}</h4>
-            <p class="search-result-excerpt">${this.truncate(this.stripHtml(desc), 100)}</p>
-            ${author || date ? `<div class="search-result-meta">
-              ${author ? `<i class="fa-solid fa-user"></i> ${author}` : ''}
-              ${author && date ? ' • ' : ''}
-              ${date ? date : ''}
-            </div>` : ''}
-          </div>
-          <div class="search-result-arrow">
-            <i class="fa-solid fa-arrow-right"></i>
-          </div>
-        </div>
-      `;
-    }).join('');
-
-    this.blogContainer.innerHTML = html;
-    this.attachClickEvents(this.blogContainer);
-  }
-
-  attachClickEvents(container) {
-    container.querySelectorAll('.search-result-item').forEach(item => {
-      item.addEventListener('click', () => {
-        window.location.href = item.dataset.link;
-      });
+      
+      bannerContainer.insertAdjacentHTML("beforeend", itemHTML);
     });
-  }
 
-  // Highlight text
-  highlightText(text, query) {
-    if (!query) return text;
-    const regex = new RegExp(`(${this.escapeRegex(query)})`, 'gi');
-    return text.replace(regex, '<mark>$1</mark>');
+  } catch (error) {
+    console.error("Lỗi khi tải post items:", error);
   }
+});
 
-  escapeRegex(str) {
-    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  }
+// ==========================
+const prevBtn = document.querySelector(".banner-section-prev");
+const nextBtn = document.querySelector(".banner-section-back");
+const slider = document.querySelector(".banner-section-slide");
 
-  stripHtml(html) {
-    const tmp = document.createElement('div');
-    tmp.innerHTML = html;
-    return tmp.textContent || tmp.innerText || '';
-  }
+if (prevBtn && nextBtn && slider) {
+  prevBtn.addEventListener("click", () => {
+    slider.scrollBy({
+      left: -320,
+      behavior: "smooth",
+    });
+  });
 
-  truncate(text, length) {
-    return text.length > length ? text.substring(0, length) + '...' : text;
-  }
+  nextBtn.addEventListener("click", () => {
+    slider.scrollBy({
+      left: 320,
+      behavior: "smooth",
+    });
+  });
+}
 
-  // Show/Hide states
-  showLoading() {
-    this.state.isLoading = true;
-    this.openDropdown();
-    this.dropdown.classList.add('loading');
-    this.dropdown.classList.remove('empty', 'error');
-  }
+/*   READ MORE  */
+// ==========================
+function toggleContent(button) {
+  const section = button.closest(".info-section");
+  const content = section.querySelector(".info-content");
+  const btnText = button.querySelector(".text");
+  const fadeOverlay = section.querySelector(".fade-overlay");
 
-  hideLoading() {
-    this.dropdown.classList.remove('loading');
-  }
+  content.classList.toggle("expanded");
+  button.classList.toggle("expanded");
 
-  showEmpty() {
-    this.openDropdown();
-    this.dropdown.classList.add('empty');
-    this.dropdown.classList.remove('loading', 'error');
-  }
-
-  hideEmpty() {
-    this.dropdown.classList.remove('empty');
-  }
-
-  showError() {
-    this.openDropdown();
-    this.dropdown.classList.add('error');
-    this.dropdown.classList.remove('loading', 'empty');
-  }
-
-  hideError() {
-    this.dropdown.classList.remove('error');
-  }
-
-  openDropdown() {
-    this.state.isOpen = true;
-    this.dropdown.classList.add('active');
-  }
-
-  closeDropdown() {
-    this.state.isOpen = false;
-    this.state.selectedIndex = -1;
-    this.dropdown.classList.remove('active');
+  if (content.classList.contains("expanded")) {
+    btnText.textContent = "Read Less";
+    fadeOverlay.classList.add("hidden");
+  } else {
+    btnText.textContent = "Read More";
+    fadeOverlay.classList.remove("hidden");
   }
 }
 
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  new StreamingSearch();
+/** Render Cart-Iteam */
+const API_BASE = "https://nano4me.org/wp-json/wp/v2";
+
+async function fetchAll(endpoint, perPage = 50) {
+  let page = 1;
+  let allData = [];
+  while (true) {
+    const res = await fetch(
+      `${API_BASE}/${endpoint}?page=${page}&per_page=${perPage}`
+    );
+    if (!res.ok) break;
+    const data = await res.json();
+    allData = [...allData, ...data];
+    if (data.length < perPage) break;
+    page++;
+  }
+  return allData;
+}
+
+async function fetchData() {
+  try {
+    const [cates, posts] = await Promise.all([
+      fetchAll("cate_post"),
+      fetchAll("post_item"),
+    ]);
+
+    console.log("Categories:", cates);
+    console.log("Posts:", posts);
+
+    renderCategories(cates, posts);
+  } catch (err) {
+    console.error("Lỗi khi fetch dữ liệu:", err);
+  }
+}
+
+function renderCategories(cates, posts) {
+  const container = document.querySelector(".categories-container-home");
+  if (!container) return;
+  container.innerHTML = "";
+
+  // FILTER: Chỉ lấy categories có checkbox được tick (visible = true hoặc "1")
+  const visibleCates = cates.filter((cate) => {
+    const isVisible = cate.meta?._cate_post_visible;
+    // Check cả string "1" và boolean true
+    return isVisible === "1" || isVisible === true || isVisible === 1;
+  });
+
+  console.log("Visible categories:", visibleCates);
+
+  // Render chỉ các categories visible
+  visibleCates.forEach((cate) => {
+    const cate_id = cate.id;
+    const meta = cate.meta || {};
+    const cateThumbnail = meta.thumbnail || "";
+    const shortDesc = meta.short_desc || "";
+    const cateTitle = cate.title.rendered || "No title";
+
+    // Lấy tất cả posts của category và sort
+    const catePosts = posts
+      .filter((p) => p.meta?.id_cate == cate.id)
+      .sort((a, b) => (a.meta?.top || 0) - (b.meta?.top || 0));
+
+    // Chỉ lấy 6 items đầu tiên để hiển thị
+    const displayPosts = catePosts.slice(0, 6);
+
+    // Render list với số thứ tự tự động từ 1-6
+    const postListHTML = displayPosts
+      .map(
+        (post, index) => `
+        <li>
+          <p class="features-list-top">${index + 1}</p>
+          <img
+            class="features-list-logo-image"
+            src="${post.meta?.logo || ""}"
+            alt="${post.title.rendered}"
+          />
+          <p class="text-line features-list-name">${post.title.rendered}</p>
+        </li>
+      `
+      )
+      .join("");
+
+    // Lấy 3 logos cuối cùng trong toàn bộ catePosts
+    const lastThreePosts = catePosts.slice(-3);
+    const lastThreeLogosHTML = lastThreePosts
+      .map(
+        (post) => `
+        <img
+          class="footer-logo-preview"
+          src="${post.meta?.logo || ""}"
+          alt="${post.title.rendered}"
+        />
+      `
+      )
+      .join("");
+
+    // Tổng số items
+    const totalItems = catePosts.length;
+
+    const cardHTML = `
+      <div class="card">
+        <div class="card-header">
+          <div class="card-icon">
+            <img
+              class="card-icon-image"
+              src="${cateThumbnail}"
+              alt="icon ${cateTitle}"
+            />
+          </div>
+          <div class="text-line card-title">
+            <a class="card-title-link" href="#">${cateTitle}</a>
+            <div class="card-tag">
+              <span class="card-tag-cate">TOP Popular in VietNam</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="text-line card-description">${shortDesc}</p>
+
+        <ul class="features-list">
+          ${postListHTML || "<li>No posts yet.</li>"}
+        </ul>
+
+        <div class="card-footer">
+          <a href="${cate.link}" class="visit-btn">
+            <span>Load ${totalItems} sites</span>
+            <i class="fa-solid fa-chevron-right footer-arrow-icon"></i>
+          </a>
+          <div class="footer-logos">
+            ${lastThreeLogosHTML}
+          </div>
+        </div>
+      </div>
+    `;
+
+    container.insertAdjacentHTML("beforeend", cardHTML);
+  });
+}
+fetchData();
+
+// /** =========banner-slide==========  */
+// document.addEventListener("DOMContentLoaded", async () => {
+//   const bannerContainer = document.querySelector("#banner-slide-home");
+
+//   try {
+//     const cateRes = await fetch(`${API_BASE}/post_item?per_page=5`);
+//     const cate = await cateRes.json();
+
+//     cate.forEach((banner) => {
+//         const meta = banner.meta || {};
+//         const image = meta.image || "";
+//         const title = banner?.title?.rendered || "No Title";
+
+//         const bannerHTML = `
+//           <div class="banner-card">
+//             <img
+//               src="${image}"
+//               alt="${title}"
+//               class="banner-card-image"
+//             />
+//             <a href="${WP_HOME}/detailscate/?post_id=${banner.id}"  class="banner-card-btn">${title}</a>
+//           </div>
+//         `;
+//         bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
+//       });
+
+//   } catch (error) {
+//     console.error("Lỗi khi tải banner:", error);
+//   }
+// });
+
+/** =========Cars Blogs==========  */
+// document.addEventListener("DOMContentLoaded", async () => {
+//   const bannerContainer = document.querySelector("#cars-blogs-home");
+
+//   try {
+//     const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/cars_blog?per_page=3");
+//     const banners = await res.json();
+
+//     banners.forEach((banner) => {
+//         const meta = banner.meta || {};
+//         const blog_desc = meta.blog_desc || "";
+//         const title = banner?.title?.rendered || "Banner";
+
+//         const bannerHTML = `
+//         <section class="info-section">
+//         <div>
+//           <div class="info-header">
+//             <h2>${title}</h2>
+//             <div class="info-icons">
+//               <span>🌟</span>
+//               <span>🏆</span>
+//             </div>
+//           </div>
+//           <div class="info-content">
+//             <p>
+//               ${blog_desc}
+//             </p>
+//             <div class="fade-overlay"></div>
+//           </div>
+//           <div class="btn-container">
+//             <button class="show-more" onclick="toggleContent(this)">
+//               <span class="text">Read More</span>
+//               <span class="icon"><i class="fa-solid fa-angles-down"></i></span>
+//             </button>
+//           </div>
+//         </div>
+//         </section>
+//         `;
+//         bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
+//       });
+
+//   } catch (error) {
+//     console.error("Lỗi khi tải banner:", error);
+//   }
+// });
+
+/** Blog Section */
+document.addEventListener("DOMContentLoaded", async () => {
+  const bannerContainer = document.querySelector("#section-blog-home");
+  
+  if (!bannerContainer) return;
+
+  try {
+    // Fetch blogs data
+    const res = await fetch(
+      "https://nano4me.org/wp-json/wp/v2/blogs?per_page=100"
+    );
+    const blogs = await res.json();
+
+    // Filter: Chỉ lấy blogs có _blogs_visible = "1"
+    const visibleBlogs = blogs.filter((blog) => {
+      const isVisible = blog.meta?._blogs_visible;
+      return isVisible === "1" || isVisible === true || isVisible === 1;
+    });
+
+    console.log("Visible blogs:", visibleBlogs);
+
+    // Lấy 3 blogs đầu tiên để hiển thị
+    const displayBlogs = visibleBlogs.slice(0, 3);
+
+    // Render từng blog
+    displayBlogs.forEach((blog) => {
+      const meta = blog.meta || {};
+      const title = blog?.title?.rendered || "No title";
+      const image = meta.bg_thumbnail || "";
+      const desc = meta.bg_short_desc || "No description";
+      
+      // Lấy author info từ REST API response (đã được expose từ PHP)
+      const author = blog.author_name || "Unknown Author";
+      const author_logo = blog.author_avatar || "";
+      
+      // Format date
+      const date = formatDate(blog.date);
+
+      const blogHTML = `
+        <a href="${blog.link}" class="blog-card">
+          <div class="blog-image">
+            <img src="${image}" alt="${title}" />
+          </div>
+          <div class="blog-content">
+            <h3 class="text-line blog-title">${title}</h3>
+            <p class="text-line blog-description">${desc}</p>
+            <div class="blog-meta">
+              <img class="blog-meta-avatar" src="${author_logo}" alt="${author}" />
+              <span>${author} | ${date}</span>
+            </div>
+            <span class="read-more">
+              <span>Read more</span>
+              <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i>
+            </span>
+          </div>
+        </a>
+      `;
+      
+      bannerContainer.insertAdjacentHTML("beforeend", blogHTML);
+    });
+
+  } catch (error) {
+    console.error("Lỗi khi tải blogs:", error);
+  }
 });
+
+// Helper function: Format date
+function formatDate(dateString) {
+  if (!dateString) return "No date";
+  
+  const date = new Date(dateString);
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  
+  return date.toLocaleDateString('en-US', options);
+}

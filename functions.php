@@ -14,7 +14,7 @@ function load_assets()
   wp_enqueue_style('proxyflow-searc', get_template_directory_uri() . '/css/search.css', array(), filemtime(get_stylesheet_directory() . '/css/search.css'));
   wp_enqueue_style('proxyflow-post', get_template_directory_uri() . '/css/blog_detail.css', array(), filemtime(get_stylesheet_directory() . '/css/blog_detail.css'));
   wp_enqueue_style('proxyflow-reviews', get_template_directory_uri() . '/css/blog.css', array(), filemtime(get_stylesheet_directory() . '/css/blog.css'));
-  wp_enqueue_style('proxyflow-home', get_template_directory_uri() . '/css/home.css', array(), filemtime(get_stylesheet_directory() . '/css/home.css'));
+  wp_enqueue_style('proxyflow-home', get_template_directory_uri() . '/css/home2.css', array(), filemtime(get_stylesheet_directory() . '/css/home2.css'));
   wp_enqueue_style('proxyflow-style', get_template_directory_uri() . '/css/categories.css', array(), filemtime(get_stylesheet_directory() . '/css/categories.css'));
   wp_enqueue_style('wpadmin-style', get_template_directory_uri() . '/css/detail_cate.css', array(), filemtime(get_stylesheet_directory() . '/css/detail_cate.css'));
   wp_enqueue_style('wpadmin-style1', get_template_directory_uri() . '/css/style.css', array(), filemtime(get_stylesheet_directory() . '/css/style.css'));
@@ -34,6 +34,10 @@ add_action('wp_enqueue_scripts', 'load_assets');
 require_once get_theme_file_path('/inc/uploads.php');
 require_once get_theme_file_path('/inc/logo.php');
 require_once get_theme_file_path('/inc/reviews.php');
+require_once get_theme_file_path('/inc/cate_status.php');
+require_once get_theme_file_path('/inc/cate_checkbox.php');
+require_once get_theme_file_path('/inc/blog_metafield.php');
+
 
 
 
@@ -95,51 +99,51 @@ add_action('init', 'create_blogs_cpt');
 
 
 /** Metabox DESC BLOG */
-function add_blog_desc_metabox()
-{
-  add_meta_box(
-    'blog_desc_box',             // ID
-    'Blog Description',          // Tiêu đề box
-    'render_blog_desc_metabox',  // Callback render nội dung
-    'blogs',                     // CPT bạn muốn thêm
-    'normal',                    // Vị trí
-    'high'                       // Ưu tiên
-  );
-}
-add_action('add_meta_boxes', 'add_blog_desc_metabox');
+// function add_blog_desc_metabox()
+// {
+//   add_meta_box(
+//     'blog_desc_box',             // ID
+//     'Blog Description',          // Tiêu đề box
+//     'render_blog_desc_metabox',  // Callback render nội dung
+//     'blogs',                     // CPT bạn muốn thêm
+//     'normal',                    // Vị trí
+//     'high'                       // Ưu tiên
+//   );
+// }
+// add_action('add_meta_boxes', 'add_blog_desc_metabox');
 
 
-// Hàm hiển thị trình soạn thảo
-function render_blog_desc_metabox($post)
-{
-  // Lấy dữ liệu đã lưu (nếu có)
-  $desc = get_post_meta($post->ID, '_blog_desc', true);
+// // Hàm hiển thị trình soạn thảo
+// function render_blog_desc_metabox($post)
+// {
+//   // Lấy dữ liệu đã lưu (nếu có)
+//   $desc = get_post_meta($post->ID, '_blog_desc', true);
 
-  // Sử dụng trình soạn thảo TinyMCE có toolbar đầy đủ
-  wp_editor(
-    $desc, // nội dung đã lưu
-    'blog_desc', // tên field
-    array(
-      'textarea_name' => 'blog_desc',
-      'media_buttons' => true, // cho phép chèn ảnh
-      'textarea_rows' => 10,
-      'teeny' => false, // false = hiển thị đầy đủ toolbar
-      'quicktags' => true, // cho phép dùng HTML nhanh
-    )
-  );
-}
+//   // Sử dụng trình soạn thảo TinyMCE có toolbar đầy đủ
+//   wp_editor(
+//     $desc, // nội dung đã lưu
+//     'blog_desc', // tên field
+//     array(
+//       'textarea_name' => 'blog_desc',
+//       'media_buttons' => true, // cho phép chèn ảnh
+//       'textarea_rows' => 10,
+//       'teeny' => false, // false = hiển thị đầy đủ toolbar
+//       'quicktags' => true, // cho phép dùng HTML nhanh
+//     )
+//   );
+// }
 
 
-// Lưu dữ liệu khi update/publish bài viết
-function save_blog_desc_metabox($post_id)
-{
-  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-    return;
-  if (isset($_POST['blog_desc'])) {
-    update_post_meta($post_id, '_blog_desc', wp_kses_post($_POST['blog_desc']));
-  }
-}
-add_action('save_post', 'save_blog_desc_metabox');
+// // Lưu dữ liệu khi update/publish bài viết
+// function save_blog_desc_metabox($post_id)
+// {
+//   if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
+//     return;
+//   if (isset($_POST['blog_desc'])) {
+//     update_post_meta($post_id, '_blog_desc', wp_kses_post($_POST['blog_desc']));
+//   }
+// }
+// add_action('save_post', 'save_blog_desc_metabox');
 
 
 /** CPT Categories Blog */
@@ -240,12 +244,12 @@ function create_post_item_type()
 {
   register_post_type('post_item', [
     'labels' => [
-      'name' => 'Posts',
-      'singular_name' => 'Post',
-      'menu_name' => 'Posts',
-      'all_items' => 'All Posts',
-      'add_new_item' => 'Add New Post',
-      'edit_item' => 'Edit Post'
+      'name' => 'Brand',
+      'singular_name' => 'Brand',
+      'menu_name' => 'Brand',
+      'all_items' => 'All Brand',
+      'add_new_item' => 'Add New Brand',
+      'edit_item' => 'Edit Brand'
     ],
     'public' => true,
     'show_in_rest' => true,
@@ -374,47 +378,47 @@ add_action('init', 'register_cate_item_meta_fields');
 
 
 /** CF Blogs */
-function register_blogs_meta_fields()
-{
-  register_post_meta('blogs', 'bg_short_desc', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
+// function register_blogs_meta_fields()
+// {
+//   // register_post_meta('blogs', 'bg_short_desc', [
+//   //   'type' => 'string',
+//   //   'single' => true,
+//   //   'show_in_rest' => true,
+//   // ]);
 
-  register_post_meta('blogs', '_blog_desc', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
+//   register_post_meta('blogs', '_blog_desc', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
 
-  register_post_meta('blogs', 'bg_thumbnail', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('blogs', 'bg_author', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('blogs', 'bg_date', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('blogs', 'bg_avatar', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('blogs', 'bg_author_logo', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-}
-add_action('init', 'register_blogs_meta_fields');
+//   // register_post_meta('blogs', 'bg_thumbnail', [
+//   //   'type' => 'string',
+//   //   'single' => true,
+//   //   'show_in_rest' => true,
+//   // ]);
+//   // register_post_meta('blogs', 'bg_author', [
+//   //   'type' => 'string',
+//   //   'single' => true,
+//   //   'show_in_rest' => true,
+//   // ]);
+//   // register_post_meta('blogs', 'bg_date', [
+//   //   'type' => 'string',
+//   //   'single' => true,
+//   //   'show_in_rest' => true,
+//   // ]);
+//   // register_post_meta('blogs', 'bg_avatar', [
+//   //   'type' => 'string',
+//   //   'single' => true,
+//   //   'show_in_rest' => true,
+//   // ]);
+//   // register_post_meta('blogs', 'bg_author_logo', [
+//   //   'type' => 'string',
+//   //   'single' => true,
+//   //   'show_in_rest' => true,
+//   // ]);
+// }
+// add_action('init', 'register_blogs_meta_fields');
 
 
 
@@ -507,46 +511,46 @@ add_action('init', 'register_post_item_meta_fields');
 
 /* ===================relationship==================  */
 
-function add_post_item_cate_metabox()
-{
-  add_meta_box(
-    'post_item_cate_box',        // ID của metabox
-    'Select Category',           // Tiêu đề hiển thị
-    'render_post_item_cate_box', // Callback để hiển thị nội dung
-    'post_item',                 // CPT áp dụng
-    'side',                      // Vị trí (side = cột bên phải)
-    'default'
-  );
-}
-add_action('add_meta_boxes', 'add_post_item_cate_metabox');
+// function add_post_item_cate_metabox()
+// {
+//   add_meta_box(
+//     'post_item_cate_box',        // ID của metabox
+//     'Select Category',           // Tiêu đề hiển thị
+//     'render_post_item_cate_box', // Callback để hiển thị nội dung
+//     'post_item',                 // CPT áp dụng
+//     'side',                      // Vị trí (side = cột bên phải)
+//     'default'
+//   );
+// }
+// add_action('add_meta_boxes', 'add_post_item_cate_metabox');
 
-// Hiển thị dropdown category trong metabox
-function render_post_item_cate_box($post)
-{
-  $current_cate = get_post_meta($post->ID, 'id_cate', true);
-  $categories = get_posts([
-    'post_type' => 'cate_post',
-    'numberposts' => -1,
-    'post_status' => 'publish'
-  ]);
+// // Hiển thị dropdown category trong metabox
+// function render_post_item_cate_box($post)
+// {
+//   $current_cate = get_post_meta($post->ID, 'id_cate', true);
+//   $categories = get_posts([
+//     'post_type' => 'cate_post',
+//     'numberposts' => -1,
+//     'post_status' => 'publish'
+//   ]);
 
-  echo '<select name="id_cate" style="width:100%">';
-  echo '<option value="">-- Select Category --</option>';
-  foreach ($categories as $cate) {
-    $selected = ($cate->ID == $current_cate) ? 'selected' : '';
-    echo "<option value='{$cate->ID}' {$selected}>{$cate->post_title}</option>";
-  }
-  echo '</select>';
-}
+//   echo '<select name="id_cate" style="width:100%">';
+//   echo '<option value="">-- Select Category --</option>';
+//   foreach ($categories as $cate) {
+//     $selected = ($cate->ID == $current_cate) ? 'selected' : '';
+//     echo "<option value='{$cate->ID}' {$selected}>{$cate->post_title}</option>";
+//   }
+//   echo '</select>';
+// }
 
-// Lưu lại meta id_cate khi update post_item
-function save_post_item_cate_meta($post_id)
-{
-  if (array_key_exists('id_cate', $_POST)) {
-    update_post_meta($post_id, 'id_cate', intval($_POST['id_cate']));
-  }
-}
-add_action('save_post_post_item', 'save_post_item_cate_meta');
+// // Lưu lại meta id_cate khi update post_item
+// function save_post_item_cate_meta($post_id)
+// {
+//   if (array_key_exists('id_cate', $_POST)) {
+//     update_post_meta($post_id, 'id_cate', intval($_POST['id_cate']));
+//   }
+// }
+// add_action('save_post_post_item', 'save_post_item_cate_meta');
 
 
 /** BOX selected Cate Banner */
@@ -595,14 +599,11 @@ function render_small_banner_multi_cate_box($post)
 }
 
 
-// 3️⃣ Lưu danh sách category khi update post
 function save_small_banner_multi_cate_meta($post_id)
 {
-  // Bảo vệ tránh autosave
   if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
     return;
 
-  // Kiểm tra quyền người dùng
   if (!current_user_can('edit_post', $post_id))
     return;
 

@@ -1,41 +1,49 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const bannerContainer = document.querySelector("#banner-carousel");
 
+  if (!bannerContainer) return;
+
   try {
-    const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/banner?per_page=100");
-    const banners = await res.json();
+    const res = await fetch(
+      "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/post_item?per_page=100"
+    );
+    const items = await res.json();
 
-    const shuffled = banners.sort(() => Math.random() - 0.5);
+    console.log("All post items:", items);
 
+    // Random shuffle
+    const shuffled = items.sort(() => Math.random() - 0.5);
+
+    // Lấy 4 items đầu tiên
     const randomFour = shuffled.slice(0, 4);
 
-    randomFour.forEach((banner) => {
-        const meta = banner.meta || {};
-        const image = meta.image || "";
-        const link = meta.link || "#";
-        const title = meta.title || banner.title.rendered || "Banner";
+    randomFour.forEach((item) => {
+      const meta = item.meta || {};
+      const image = meta.bgr_image || "";
+      const postLink = meta.post_link || "#";
+      const detailLink = item.link || "#";
+      const title = item.title.rendered || "No title";
 
-        const bannerHTML = `
-          <div class="carousel-item">
-            <img class="carousel-image" src="${image}" alt="${title}">
-            <button 
-              class="btn carousel-btn" 
-              onclick="window.open('${link}', '_blank')"
-            >
-              Get ${title}
-              <i class="carousel-btn-icon fa-solid fa-angles-right"></i>
-            </button>
-          </div>
-        `;
-        bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
-      });
+      const itemHTML = `
+        <div class="carousel-item" onclick="window.location.href='${detailLink}';" style="cursor: pointer;">
+          <img class="carousel-image" src="${image}" alt="${title}">
+          <button 
+            class="btn carousel-btn" 
+            onclick="event.stopPropagation(); window.open('${postLink}', '_blank');"
+          >
+            Visit Site
+            <i class="carousel-btn-icon fa-solid fa-angles-right"></i>
+          </button>
+        </div>
+      `;
+      
+      bannerContainer.insertAdjacentHTML("beforeend", itemHTML);
+    });
 
   } catch (error) {
-    console.error("Lỗi khi tải banner:", error);
+    console.error("Lỗi khi tải post items:", error);
   }
 });
-
-
 
 // ==========================
 const prevBtn = document.querySelector(".banner-section-prev");
@@ -58,7 +66,6 @@ if (prevBtn && nextBtn && slider) {
   });
 }
 
-
 /*   READ MORE  */
 // ==========================
 function toggleContent(button) {
@@ -79,8 +86,6 @@ function toggleContent(button) {
   }
 }
 
-
-
 /** Render Cart-Iteam */
 const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
 
@@ -88,7 +93,9 @@ async function fetchAll(endpoint, perPage = 50) {
   let page = 1;
   let allData = [];
   while (true) {
-    const res = await fetch(`${API_BASE}/${endpoint}?page=${page}&per_page=${perPage}`);
+    const res = await fetch(
+      `${API_BASE}/${endpoint}?page=${page}&per_page=${perPage}`
+    );
     if (!res.ok) break;
     const data = await res.json();
     allData = [...allData, ...data];
@@ -102,7 +109,7 @@ async function fetchData() {
   try {
     const [cates, posts] = await Promise.all([
       fetchAll("cate_post"),
-      fetchAll("post_item")
+      fetchAll("post_item"),
     ]);
 
     console.log("Categories:", cates);
@@ -119,61 +126,75 @@ function renderCategories(cates, posts) {
   if (!container) return;
   container.innerHTML = "";
 
-  cates.forEach(cate => {
-    const cate_id = cate.id;
+  // Chỉ lấy categories có tick visible
+  const visibleCates = cates.filter((cate) => {
+    const v = cate.meta?._cate_post_visible;
+    return v === "1" || v === 1 || v === true;
+  });
+
+  console.log("Visible categories:", visibleCates);
+
+  visibleCates.forEach((cate) => {
+    const cateId = cate.id;
     const meta = cate.meta || {};
+
     const cateThumbnail = meta.thumbnail || "";
     const shortDesc = meta.short_desc || "";
-    const cateTitle = cate.title.rendered || "No title";
+    const cateTitle = cate.title?.rendered || "No title";
 
-    // Lấy tất cả posts của category và sort
+    // Tối ưu: filter nhanh hơn + đúng logic id_cate_post (mảng)
     const catePosts = posts
-      .filter(p => p.meta?.id_cate == cate.id)
+      .filter((p) => {
+        const ids = p.meta?.id_cate_post;
+        return Array.isArray(ids) && ids.includes(cateId);
+      })
       .sort((a, b) => (a.meta?.top || 0) - (b.meta?.top || 0));
 
-    // Chỉ lấy 6 items đầu tiên để hiển thị
     const displayPosts = catePosts.slice(0, 6);
 
-    // Render list với số thứ tự tự động từ 1-6
-    const postListHTML = displayPosts
-      .map((post, index) => `
+    const postListHTML =
+      displayPosts.length > 0
+        ? displayPosts
+            .map(
+              (post, index) => `
         <li>
           <p class="features-list-top">${index + 1}</p>
-          <img
-            class="features-list-logo-image"
+          <img class="features-list-logo-image"
             src="${post.meta?.logo || ""}"
-            alt="${post.title.rendered}"
-          />
+            alt="${post.title.rendered}" />
+
           <p class="text-line features-list-name">${post.title.rendered}</p>
         </li>
-      `)
-      .join("");
+      `
+            )
+            .join("")
+        : `<li>No posts yet.</li>`;
 
-    // Lấy 3 logos cuối cùng trong toàn bộ catePosts
     const lastThreePosts = catePosts.slice(-3);
+
     const lastThreeLogosHTML = lastThreePosts
-      .map(post => `
-        <img
-          class="footer-logo-preview"
-          src="${post.meta?.logo || ""}"
-          alt="${post.title.rendered}"
-        />
-      `)
+      .map(
+        (post) => `
+      <img class="footer-logo-preview"
+        src="${post.meta?.logo || ""}"
+        alt="${post.title.rendered}" />
+    `
+      )
       .join("");
 
-    // Tổng số items
     const totalItems = catePosts.length;
 
     const cardHTML = `
       <div class="card">
+
+        <!-- HEADER -->
         <div class="card-header">
           <div class="card-icon">
-            <img
-              class="card-icon-image"
+            <img class="card-icon-image"
               src="${cateThumbnail}"
-              alt="icon ${cateTitle}"
-            />
+              alt="icon ${cateTitle}" />
           </div>
+
           <div class="text-line card-title">
             <a class="card-title-link" href="#">${cateTitle}</a>
             <div class="card-tag">
@@ -184,29 +205,31 @@ function renderCategories(cates, posts) {
 
         <p class="text-line card-description">${shortDesc}</p>
 
+        <!-- LIST -->
         <ul class="features-list">
-          ${postListHTML || "<li>No posts yet.</li>"}
+          ${postListHTML}
         </ul>
 
+        <!-- FOOTER -->
         <div class="card-footer">
           <a href="${cate.link}" class="visit-btn">
             <span>Load ${totalItems} sites</span>
             <i class="fa-solid fa-chevron-right footer-arrow-icon"></i>
           </a>
+
           <div class="footer-logos">
             ${lastThreeLogosHTML}
           </div>
         </div>
+
       </div>
     `;
 
     container.insertAdjacentHTML("beforeend", cardHTML);
   });
 }
+
 fetchData();
-
-
-
 
 // /** =========banner-slide==========  */
 // document.addEventListener("DOMContentLoaded", async () => {
@@ -239,10 +262,7 @@ fetchData();
 //   }
 // });
 
-
-
-
-// /** =========Cars Blogs==========  */
+/** =========Cars Blogs==========  */
 // document.addEventListener("DOMContentLoaded", async () => {
 //   const bannerContainer = document.querySelector("#cars-blogs-home");
 
@@ -254,7 +274,6 @@ fetchData();
 //         const meta = banner.meta || {};
 //         const blog_desc = meta.blog_desc || "";
 //         const title = banner?.title?.rendered || "Banner";
-
 
 //         const bannerHTML = `
 //         <section class="info-section">
@@ -289,66 +308,78 @@ fetchData();
 //   }
 // });
 
-
 /** Blog Section */
-
 document.addEventListener("DOMContentLoaded", async () => {
   const bannerContainer = document.querySelector("#section-blog-home");
+  
+  if (!bannerContainer) return;
 
   try {
-    const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/post_item?per_page=3");
-    const banners = await res.json();
+    // Fetch blogs data
+    const res = await fetch(
+      "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/blogs?per_page=100"
+    );
+    const blogs = await res.json();
 
-    banners.forEach((banner) => {
-        const meta = banner.meta || {};
-        const title = banner?.title?.rendered || "Banner";
-        const image = meta.image || "";
-        const desc = meta.desc || "Description";
-        const author_logo = meta.author_logo || "";
-        const author = meta.author || "Author";
-        const date = meta.date || "Date";
+    // Filter: Chỉ lấy blogs có _blogs_visible = "1"
+    const visibleBlogs = blogs.filter((blog) => {
+      const isVisible = blog.meta?._blogs_visible;
+      return isVisible === "1" || isVisible === true || isVisible === 1;
+    });
 
-        const bannerHTML = `
-          <div class="blog-card">
-              <div
-                class="blog-image"
-              >
-                <img
-                    src="${image}"
-                    alt=""
-                  />
-              </div>
-              <div class="blog-content">
-                <h3 class="text-line blog-title">${title}</h3>
-                <p class="text-line blog-description">
-                 ${desc}
-                </p>
-                <div class="blog-meta">
-                  <img
-                    class="blog-meta-avatar"
-                    src="${author_logo}"
-                    alt=""
-                  />
-                  <span>${author} | ${date}</span>
-                </div>
-                <a href="${WP_HOME}/detailscate/?post_id=${banner.id}" class="read-more"
-                  ><span>Read more</span>
-                  <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i
-                ></a>
-              </div>
+    console.log("Visible blogs:", visibleBlogs);
+
+    // Lấy 3 blogs đầu tiên để hiển thị
+    const displayBlogs = visibleBlogs.slice(0, 3);
+
+    // Render từng blog
+    displayBlogs.forEach((blog) => {
+      const meta = blog.meta || {};
+      const title = blog?.title?.rendered || "No title";
+      const image = meta.bg_thumbnail || "";
+      const desc = meta.bg_short_desc || "No description";
+      
+      // Lấy author info từ REST API response (đã được expose từ PHP)
+      const author = blog.author_name || "Unknown Author";
+      const author_logo = blog.author_avatar || "";
+      
+      // Format date
+      const date = formatDate(blog.date);
+
+      const blogHTML = `
+        <a href="${blog.link}" class="blog-card">
+          <div class="blog-image">
+            <img src="${image}" alt="${title}" />
+          </div>
+          <div class="blog-content">
+            <h3 class="text-line blog-title">${title}</h3>
+            <p class="text-line blog-description">${desc}</p>
+            <div class="blog-meta">
+              <img class="blog-meta-avatar" src="${author_logo}" alt="${author}" />
+              <span>${author} | ${date}</span>
             </div>
-        `;
-        bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
-      });
+            <span class="read-more">
+              <span>Read more</span>
+              <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i>
+            </span>
+          </div>
+        </a>
+      `;
+      
+      bannerContainer.insertAdjacentHTML("beforeend", blogHTML);
+    });
 
   } catch (error) {
-    console.error("Lỗi khi tải banner:", error);
+    console.error("Lỗi khi tải blogs:", error);
   }
 });
 
-
-
-
-
-
-
+// Helper function: Format date
+function formatDate(dateString) {
+  if (!dateString) return "No date";
+  
+  const date = new Date(dateString);
+  const options = { year: 'numeric', month: 'short', day: 'numeric' };
+  
+  return date.toLocaleDateString('en-US', options);
+}

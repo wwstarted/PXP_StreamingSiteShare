@@ -66,25 +66,63 @@ if (prevBtn && nextBtn && slider) {
   });
 }
 
-/*   READ MORE  */
-// ==========================
+/**
+ * Toggle Read More / Read Less functionality
+ * for info-section content
+ */
 function toggleContent(button) {
-  const section = button.closest(".info-section");
-  const content = section.querySelector(".info-content");
-  const btnText = button.querySelector(".text");
-  const fadeOverlay = section.querySelector(".fade-overlay");
+  const section = button.closest('.info-section');
+  const content = section.querySelector('.info-content-scrollable');
+  const btnText = button.querySelector('.text');
+  const fadeOverlay = section.querySelector('.fade-overlay');
 
-  content.classList.toggle("expanded");
-  button.classList.toggle("expanded");
+  // Toggle classes
+  content.classList.toggle('expanded');
+  button.classList.toggle('expanded');
 
-  if (content.classList.contains("expanded")) {
-    btnText.textContent = "Read Less";
-    fadeOverlay.classList.add("hidden");
+  // Update button text and fade overlay
+  if (content.classList.contains('expanded')) {
+    btnText.textContent = 'Read More';
+    fadeOverlay.classList.add('hidden');
+    
+    // Smooth scroll to top of content when closing (optional)
+    // content.scrollTop = 0;
   } else {
-    btnText.textContent = "Read More";
-    fadeOverlay.classList.remove("hidden");
+    btnText.textContent = 'Read Less';
+    fadeOverlay.classList.remove('hidden');
+    
+    // Scroll back to section when collapsing
+    section.scrollIntoView({ 
+      behavior: 'smooth', 
+      block: 'start' 
+    });
   }
 }
+
+/**
+ * Optional: Auto-detect if content needs "Read More" button
+ * Hide button if content is short
+ */
+document.addEventListener('DOMContentLoaded', () => {
+  const contentElements = document.querySelectorAll('.info-content-scrollable');
+  
+  contentElements.forEach((content) => {
+    const section = content.closest('.info-section');
+    const button = section.querySelector('.show-more');
+    
+    // Check if content height exceeds max-height
+    if (content.scrollHeight <= 400) {
+      // Content is short, hide button and fade overlay
+      if (button) button.style.display = 'none';
+      
+      const fadeOverlay = section.querySelector('.fade-overlay');
+      if (fadeOverlay) fadeOverlay.style.display = 'none';
+      
+      // Remove max-height constraint
+      content.style.maxHeight = 'none';
+    }
+  });
+});
 
 /** Render Cart-Iteam */
 const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
@@ -126,10 +164,12 @@ function renderCategories(cates, posts) {
   if (!container) return;
   container.innerHTML = "";
 
-  const visibleCates = cates.filter((cate) => {
+  const visibleCates2 = cates.filter((cate) => {
     const v = cate.meta?._cate_post_visible;
     return v === "1" || v === 1 || v === true;
   });
+
+  const visibleCates = visibleCates2.slice(0,6);
 
   console.log("Visible categories:", visibleCates);
 

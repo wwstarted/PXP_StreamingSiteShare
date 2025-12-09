@@ -2,31 +2,25 @@ document.addEventListener("DOMContentLoaded", async () => {
   const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
   const WP_HOME = window.WP_HOME;
 
-  /* ============================================
-   *  A. FETCH CHỈ 2 LẦN — TOÀN TRANG DÙNG CHUNG
-   * ============================================ */
+// fetch data
   const [allCate, allPosts] = await Promise.all([
     fetch(`${API_BASE}/cate_post?per_page=100`).then(r => r.json()),
     fetch(`${API_BASE}/post_item?per_page=100`).then(r => r.json()),
   ]);
 
-  /* ============================================
-   *  B. LẤY CATEGORY ID TỪ URL (slug page)
-   * ============================================ */
+// get categories
   const slug = location.pathname.split('/').filter(Boolean).pop();
   let currentCate = allCate.find(c => c.slug === slug) || allCate[0];
   let currentCateId = currentCate.id;
 
-  /* ========================================================================== */
-  /*  C. RENDER BANNER SECTION (TOP)                                            */
-  /* ========================================================================== */
+// render top
 
   async function renderBannerSection() {
     const cateMeta = currentCate.meta || {};
     const cateThumbnail = cateMeta.thumbnail || "";
     const cateShortDesc = cateMeta.short_desc || "";
 
-    // Lấy banner thuộc cate này
+    // get banner of cate
     const bannerRes = await fetch(`${API_BASE}/small_banners?per_page=100`);
     const banners = await bannerRes.json();
 
@@ -60,9 +54,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-  /* ========================================================================== */
-  /*  D. CONTENT TOP                                                            */
-  /* ========================================================================== */
+// content top*/
 
   async function renderContentTop() {
     document
@@ -85,146 +77,214 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
   }
 
-  /* ========================================================================== */
-  /*  E. CONTENT BOTTOM (LIST POST THUỘC CATEGORY NÀY)                          */
-  /* ========================================================================== */
+// content bottom
+ async function renderContentBottom() {
+  const rightContent = document.querySelector("#right_content_bottom");
 
-  async function renderContentBottom() {
-    const rightContent = document.querySelector("#right_content_bottom");
+  const posts = allPosts
+    .filter(
+      p =>
+        Array.isArray(p.meta?.id_cate_post) &&
+        p.meta.id_cate_post.map(String).includes(String(currentCateId))
+    )
+    .sort((a, b) => (b.meta?.popularity || 0) - (a.meta?.popularity || 0));
 
-    const posts = allPosts
-      .filter(
-        p =>
-          Array.isArray(p.meta?.id_cate_post) &&
-          p.meta.id_cate_post.map(String).includes(String(currentCateId))
-      )
-      .sort((a, b) => (b.meta?.popularity || 0) - (a.meta?.popularity || 0));
+  if (!posts.length) {
+    rightContent.insertAdjacentHTML("beforeend", "<p>No posts.</p>");
+    return;
+  }
 
-    if (!posts.length) {
-      rightContent.insertAdjacentHTML("beforeend", "<p>No posts.</p>");
-      return;
-    }
+  const rows = posts
+    .map((p, i) => {
+      const logo = p.meta?.logo || "https://via.placeholder.com/50";
+      const popularity = p.meta?.popularity || 0;
+      const title = p.title.rendered;
+      const link = p.link;
 
-    const rows = posts
-      .map((p, i) => {
-        const logo = p.meta?.logo || "https://via.placeholder.com/50";
-        const popularity = p.meta?.popularity || 0;
-        return `
-        <a href="${p.link}" class="table-row">
-          <span>${i + 1}</span>
-          <img src="${logo}" />
-          <span>${p.title.rendered}</span>
-          <div class="bar"><div class="fill" style="width:${popularity}%"></div></div>
+      return `
+        <a href="${link}" class="table-row">
+          <span class="rank-badge">${i + 1}</span>
+          
+          <img src="${logo}" alt="${title}" />
+          
+          <span class="post-title">${title}</span>
+          
+          <div class="popularity-wrapper">
+            <div class="bar">
+              <div class="fill" style="width:${popularity}%"></div>
+            </div>
+            <span class="popularity-percent">${popularity}%</span>
+          </div>
+          
+          <div class="row-icon">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
         </a>`;
-      })
+    })
+    .join("");
+
+  rightContent.insertAdjacentHTML("beforeend", rows);
+}
+
+// related cate
+
+async function renderRelatedCate() {
+  const wrap = document.querySelector(".left_content");
+
+  const otherCate = allCate.filter(c => c.id !== currentCateId);
+
+  otherCate.forEach(c => {
+    const cMeta = c.meta || {};
+    const cThumb = cMeta.thumbnail || "https://via.placeholder.com/80";
+    const categoryTitle = c.title.rendered;
+    const categoryLink = c.link;
+
+    // Lấy posts thuộc category này
+    const posts = allPosts.filter(
+      p =>
+        Array.isArray(p.meta?.id_cate_post) &&
+        p.meta.id_cate_post.map(String).includes(String(c.id))
+    );
+
+    const totalPosts = posts.length;
+    const top5 = posts.slice(0, 5);
+    const remain = totalPosts - top5.length;
+
+    // Render mini logos (top 5)
+    const logosHTML = top5
+      .map(p => `<img src="${p.meta?.logo || 'https://via.placeholder.com/26'}" alt="${p.title.rendered}" />`)
       .join("");
 
-    rightContent.insertAdjacentHTML("beforeend", rows);
-  }
+    // Button text
+    const buttonText = remain > 0 ? `+${remain} sites` : '';
 
-  /* ========================================================================== */
-  /*  F. RELATED CATEGORIES                                                     */
-  /* ========================================================================== */
-
-  async function renderRelatedCate() {
-    const wrap = document.querySelector(".left_content");
-
-    const otherCate = allCate.filter(c => c.id !== currentCateId);
-
-    otherCate.forEach(c => {
-      const cMeta = c.meta || {};
-      const cThumb = cMeta.thumbnail || "https://via.placeholder.com/80";
-
-      // lấy post thuộc cate đó
-      const posts = allPosts.filter(
-        p =>
-          Array.isArray(p.meta?.id_cate_post) &&
-          p.meta.id_cate_post.map(String).includes(String(c.id))
-      );
-
-      const top5 = posts.slice(0, 5);
-
-      const logos = top5
-        .map(p => `<img src="${p.meta?.logo || ""}" />`)
-        .join("");
-
-      const remain = posts.length - top5.length;
-
-      wrap.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div class="related-item">
-          <img src="${cThumb}" />
-          <div class="info">
-            <h3>${c.title.rendered}</h3>
-            <div class="mini-logos">
-              ${logos}
-              ${
-                remain > 0
-                  ? `<a href="${c.link}" class="visit-btn-cate">+${remain}</a>`
-                  : ""
-              }
-            </div>
+    wrap.insertAdjacentHTML(
+      "beforeend",
+      `
+      <a href="${categoryLink}" class="related-item">
+        <img src="${cThumb}" class="related-icon" alt="${categoryTitle}" />
+        
+        <div class="info">
+          <div class="category-header">
+            <h3>${categoryTitle}</h3>
+            <span class="count-badge">${totalPosts}</span>
+          </div>
+          
+          <div class="mini-logos">
+            ${logosHTML}
+            ${remain > 0 ? `<a href="${categoryLink}" class="visit-btn-cate" onclick="event.stopPropagation()">${buttonText}</a>` : ''}
           </div>
         </div>
+      </a>
       `
-      );
-    });
-  }
+    );
+  });
+}
 
-  /* ========================================================================== */
-  /*  G. BRAND SECTION                                                          */
-  /* ========================================================================== */
+async function renderBrandSection() {
+  const brandContainer = document.querySelector("#brand-container");
 
-  async function renderBrandSection() {
-    const brandContainer = document.querySelector("#brand-container");
+  const randomPosts = allPosts.slice(0, 7);
 
-    const randomPosts = allPosts.slice(0, 5);
+  randomPosts.forEach(p => {
+    const img = p.meta?.image || "https://via.placeholder.com/400x200";
+    const logo = p.meta?.logo || "";
+    const popularity = p.meta?.popularity || "";
+    const title = p.title.rendered;
+    const link = p.link;
 
-    randomPosts.forEach(p => {
-      const img = p.meta?.image || "";
-      brandContainer.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div class="banner-card">
-          <img src="${img}" class="banner-card-image" />
-          <a href="${WP_HOME}/detailscate/?post_id=${p.id}" class="banner-card-btn">
-            ${p.title.rendered}
+    // Logo HTML - placeholder nếu không có logo
+    const logoHTML = logo 
+      ? `<img class="brand-logo" src="${logo}" alt="${title}" />` 
+      : `<div class="brand-logo-placeholder">
+           <i class="fa-solid fa-fire"></i>
+         </div>`;
+
+    // Tags HTML
+    const tagsHTML = `
+      <div class="brand-tags">
+        <span class="tag">Popular</span>
+        ${popularity ? `<span class="tag">${popularity}%</span>` : ''}
+      </div>
+    `;
+
+    brandContainer.insertAdjacentHTML(
+      "beforeend",
+      `
+      <div class="banner-card">
+        <!-- Background Image -->
+        <img src="${img}" class="banner-card-image" alt="${title}" />
+        
+        <!-- Gradient Overlay -->
+        <div class="banner-card-overlay"></div>
+        
+        <!-- Glass Info Panel -->
+        <div class="banner-card-info">
+          ${logoHTML}
+          
+          <h3 class="brand-title">${title}</h3>
+          
+          ${tagsHTML}
+          
+          <a href="${link}" class="banner-card-btn">
+            <span>View Details</span>
+            <i class="fa-solid fa-arrow-right"></i>
           </a>
         </div>
+      </div>
       `
-      );
-    });
-  }
+    );
+  });
+}
 
-  /* ========================================================================== */
-  /*  H. BANNER SLIDE                                                           */
-  /* ========================================================================== */
+// banner slider
 
-  async function renderBannerSlide() {
-    const related = document.querySelector("#banner-slide");
-    const banners = await fetch(`${API_BASE}/banner`).then(r => r.json());
+async function renderBannerSlide() {
+  const related = document.querySelector("#banner-slide");
+  const banners = await fetch(`${API_BASE}/banner`).then(r => r.json());
 
-    banners.forEach(b => {
-      const meta = b.meta || {};
-      related.insertAdjacentHTML(
-        "beforeend",
-        `
-        <div class="banner-card">
-          <img src="${meta.image || ""}" class="banner-card-image" />
-          <a href="${meta.link || "#"}" class="banner-card-btn">
-            ${meta.title || b.title.rendered}
+  banners.forEach(b => {
+    const meta = b.meta || {};
+    const img = meta.image || "https://via.placeholder.com/400x200";
+    const logo = meta.logo || "";
+    const title = meta.title || b.title.rendered;
+    const link = meta.link || "#";
+    const popularity = meta.popularity || "";
+
+    const logoHTML = logo 
+      ? `<img class="brand-logo" src="${logo}" alt="${title}" />` 
+      : `<div class="brand-logo-placeholder">
+           <i class="fa-solid fa-star"></i>
+         </div>`;
+
+    const tagsHTML = `
+      <div class="brand-tags">
+        <span class="tag">Featured</span>
+        ${popularity ? `<span class="tag">${popularity}%</span>` : ''}
+      </div>
+    `;
+
+    related.insertAdjacentHTML(
+      "beforeend",
+      `
+      <div class="banner-card">
+        <img src="${img}" class="banner-card-image" alt="${title}" />
+        <div class="banner-card-overlay"></div>
+        
+        <div class="banner-card-info">
+          ${logoHTML}
+          <h3 class="brand-title">${title}</h3>
+          ${tagsHTML}
+          <a href="${link}" class="banner-card-btn">
+            <span>View Details</span>
+            <i class="fa-solid fa-arrow-right"></i>
           </a>
         </div>
+      </div>
       `
-      );
-    });
-  }
-
-  /* ========================================================================== */
-  /*  RUN ALL                                                                   */
-  /* ========================================================================== */
-
+    );
+  });
+}
   renderBannerSection();
   renderContentTop();
   renderContentBottom();

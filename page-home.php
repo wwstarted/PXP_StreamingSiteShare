@@ -30,7 +30,7 @@
         </div>
     </section>
 
-    <!-- Info Section -->
+    <!-- Info Section / Cars Blogs -->
     <div id="cars-blogs-home">
         <section class="info-section">
             <div class="info-header">
@@ -43,8 +43,25 @@
                     <span>🏆</span>
                 </div>
             </div>
-            <div class="info-content-scrollable">
-                <?php the_content() ?>
+
+            <!-- Content Wrapper -->
+            <div class="info-content-wrapper">
+                <div class="info-content-scrollable">
+                    <?php the_content() ?>
+                </div>
+
+                <!-- Fade Overlay -->
+                <div class="fade-overlay"></div>
+            </div>
+
+            <!-- Read More Button -->
+            <div class="btn-container">
+                <button class="show-more" onclick="toggleContent(this)">
+                    <span class="text">Read Less</span>
+                    <span class="icon">
+                        <i class="fa-solid fa-angles-up"></i>
+                    </span>
+                </button>
             </div>
         </section>
     </div>

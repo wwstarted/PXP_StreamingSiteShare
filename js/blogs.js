@@ -126,6 +126,4 @@ document.addEventListener("DOMContentLoaded", async()=>{
     console.error("Lỗi khi tải dữ liệu:", err);
     rootContainer.innerHTML = "<p>Lỗi tải dữ liệu từ API.</p>";
   }
-
-
 })

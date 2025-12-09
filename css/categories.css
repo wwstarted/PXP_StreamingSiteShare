@@ -3,7 +3,7 @@
 ======================================== */
 
 /* Banner */
-  .banner {
+.banner {
   display: flex;
   align-items: center;
   background: rgba(30, 41, 82, 0.8);
@@ -14,11 +14,11 @@
   transition: transform 0.3s ease;
 }
 
-  .banner:hover {
+.banner:hover {
   transform: translateY(-10px);
 }
 
-  .banner-left img {
+.banner-left img {
   width: 120px;
   height: 120px;
   border-radius: 50%;
@@ -27,26 +27,26 @@
   transition: transform 0.3s ease;
 }
 
-  .banner:hover .banner-left img {
+.banner:hover .banner-left img {
   transform: scale(1.1);
 }
 
-  .banner-right {
+.banner-right {
   flex: 1;
 }
 
-  .banner:hover .banner-right img {
+.banner:hover .banner-right img {
   transform: scale(1.05);
 }
 
-  .platforms {
+.platforms {
   display: flex;
   gap: 20px;
   margin-top: 10px;
   flex-wrap: wrap;
 }
 
-  .platforms img {
+.platforms img {
   width: 100px;
   height: 40px;
   border-radius: 10px;
@@ -56,14 +56,14 @@
 }
 
 /* Content Section */
-  .content {
+.content {
   display: flex;
   justify-content: space-between;
   gap: 30px;
 }
 
 /* Right Content */
-  .right_content {
+.right_content {
   flex: 3;
   background: rgba(30, 41, 82, 0.8);
   border-radius: 20px;
@@ -72,19 +72,19 @@
   transition: transform 0.3s ease;
 }
 
-  .right_content:hover {
+.right_content:hover {
   transform: translateY(-10px);
 }
 
-  .right_content h2 {
+.right_content h2 {
   margin-bottom: 20px;
   font-size: 22px;
   border-bottom: 2px solid #2f46b4;
   padding-bottom: 8px;
 }
 
-  .table-header,
-  .table-row {
+.table-header,
+.table-row {
   display: grid;
   grid-template-columns: 50px 70px 1fr 150px;
   align-items: center;
@@ -95,14 +95,14 @@
   color: white;
 }
 
-  .table-header {
+.table-header {
   font-weight: bold;
   color: #a9b7f5;
   border-bottom: 1px solid #314a9d;
   margin-bottom: 10px;
 }
 
-  .table-row {
+.table-row {
   background: rgba(255, 255, 255, 0.05);
   border-radius: 10px;
   margin-bottom: 12px;
@@ -110,11 +110,11 @@
   transition: background 0.3s ease;
 }
 
-  .table-row:hover {
+.table-row:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-  .table-row img {
+.table-row img {
   width: 40px;
   height: 40px;
   border-radius: 50%;
@@ -122,32 +122,32 @@
   object-position: center;
 }
 
-  .bar {
+.bar {
   background: #2c3a80;
   height: 10px;
   border-radius: 5px;
   overflow: hidden;
 }
 
-  .fill {
+.fill {
   background: #3fa9ff;
   height: 100%;
   border-radius: 5px;
   transition: width 0.3s ease;
 }
 
-  .ads {
+.ads {
   text-align: center;
   margin: 20px 0;
 }
 
-  .ads img {
+.ads img {
   width: 100%;
   border-radius: 15px;
 }
 
 /* Left Content */
-  .left_content {
+.left_content {
   flex: 1.3;
   background: rgba(30, 41, 82, 0.8);
   border-radius: 20px;
@@ -156,18 +156,18 @@
   transition: transform 0.3s ease;
 }
 
-  .left_content:hover {
+.left_content:hover {
   transform: translateY(-10px);
 }
 
-  .left_content h2 {
+.left_content h2 {
   margin-bottom: 20px;
   font-size: 22px;
   border-bottom: 2px solid #2f46b4;
   padding-bottom: 8px;
 }
 
-  .related-item {
+.related-item {
   display: flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.05);
@@ -177,11 +177,11 @@
   transition: background 0.3s ease;
 }
 
-  .related-item:hover {
+.related-item:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-  .related-item img {
+.related-item img {
   width: 50px;
   height: 49px;
   border-radius: 50%;
@@ -189,13 +189,13 @@
   object-position: center;
 }
 
-  .related-item .info {
+.related-item .info {
   margin-left: 10px;
   flex: 1;
   min-width: 0;
 }
 
-  .related-item h3 {
+.related-item h3 {
   font-size: 15px;
   margin: 0 0 6px 0;
   white-space: nowrap;
@@ -203,19 +203,19 @@
   text-overflow: ellipsis;
 }
 
-  .mini-logos {
+.mini-logos {
   display: flex;
   align-items: center;
   gap: 5px;
   flex-wrap: wrap;
 }
 
-  .mini-logos img {
+.mini-logos img {
   width: 20px;
   height: 20px;
 }
 
-  .visit-btn-cate {
+.visit-btn-cate {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -232,21 +232,21 @@
   flex-shrink: 0;
 }
 
-  .visit-btn-cate:hover {
+.visit-btn-cate:hover {
   transform: scale(1.05);
 }
 
-  .ads-side {
+.ads-side {
   margin: 20px 0;
 }
 
-  .ads-side img {
+.ads-side img {
   width: 100%;
   border-radius: 12px;
 }
 
 /* Slider Section */
-  .brand-section {
+.brand-section {
   background: rgba(30, 41, 82, 0.8);
   border-radius: 20px;
   color: #fff;
@@ -255,19 +255,19 @@
   margin-top: 50px;
 }
 
-  .brand-header {
+.brand-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 30px;
 }
 
-  .brand-header h2 {
+.brand-header h2 {
   font-size: 1.5rem;
   font-weight: 600;
 }
 
-  .brand-header .show-all {
+.brand-header .show-all {
   color: #fff;
   text-decoration: none;
   font-weight: bold;
@@ -275,11 +275,11 @@
   transition: color 0.3s ease;
 }
 
-  .brand-header .show-all:hover {
+.brand-header .show-all:hover {
   color: #667eea;
 }
 
-  .brand-slider {
+.brand-slider {
   position: relative;
 }
 
@@ -287,19 +287,19 @@
   opacity: 1;
 }
 
-  .brand-container {
+.brand-container {
   display: flex;
-  gap: 25px;
+  gap: 13px;
   overflow-x: auto;
   scroll-behavior: smooth;
   scrollbar-width: none;
 }
 
-  .brand-container::-webkit-scrollbar {
+.brand-container::-webkit-scrollbar {
   display: none;
 }
 
-  .brand-item {
+.brand-item {
   background-color: #124e89;
   border-radius: 12px;
   padding: 20px;
@@ -309,19 +309,19 @@
   flex-shrink: 0;
 }
 
-  .brand-item img {
+.brand-item img {
   width: 100px;
   height: 100px;
   object-fit: contain;
   margin-bottom: 10px;
 }
 
-  .brand-item p {
+.brand-item p {
   font-size: 1rem;
   margin: 0;
 }
 
-  .brand-item:hover {
+.brand-item:hover {
   transform: scale(1.08);
 }
 
@@ -357,89 +357,89 @@
    RESPONSIVE - IPAD PRO (1024px)
 ======================================== */
 @media (max-width: 1024px) {
-    .container {
+  .container {
     padding: 0 30px;
   }
 
   /* Banner */
-    .banner {
+  .banner {
     padding: 25px;
     gap: 25px;
     margin: 30px 0;
   }
 
-    .banner-left img {
+  .banner-left img {
     width: 100px;
     height: 100px;
   }
 
-    .platforms {
+  .platforms {
     gap: 15px;
   }
 
-    .platforms img {
+  .platforms img {
     width: 80px;
     height: 35px;
   }
 
   /* Content */
-    .content {
+  .content {
     gap: 25px;
   }
 
-    .right_content,
-    .left_content {
+  .right_content,
+  .left_content {
     padding: 22px;
   }
 
-    .right_content h2,
-    .left_content h2 {
+  .right_content h2,
+  .left_content h2 {
     font-size: 20px;
   }
 
   /* Table */
-    .table-header,
-    .table-row {
+  .table-header,
+  .table-row {
     grid-template-columns: 45px 65px 1fr 130px;
     gap: 8px;
   }
 
-    .table-row img {
+  .table-row img {
     width: 38px;
     height: 38px;
   }
 
   /* Related Items */
-    .related-item img {
+  .related-item img {
     width: 45px;
     height: 45px;
   }
 
-    .related-item h3 {
+  .related-item h3 {
     font-size: 14px;
   }
 
   /* Brand Section */
-    .brand-section {
+  .brand-section {
     padding: 45px 50px;
     margin-top: 40px;
   }
 
-    .brand-header h2 {
+  .brand-header h2 {
     font-size: 1.3rem;
   }
 
-    .brand-item {
+  .brand-item {
     min-width: 160px;
     padding: 18px;
   }
 
-    .brand-item img {
+  .brand-item img {
     width: 90px;
     height: 90px;
   }
 
-    .brand-container {
+  .brand-container {
     gap: 20px;
   }
 }
@@ -449,19 +449,19 @@
 ======================================== */
 @media (min-width: 769px) and (max-width: 1024px) {
   /* Stack content on tablet portrait */
-    .content {
+  .content {
     flex-direction: column;
   }
 
-    .right_content,
-    .left_content {
+  .right_content,
+  .left_content {
     flex: 1;
     width: 100%;
   }
 
   /* Table more readable */
-    .table-header,
-    .table-row {
+  .table-header,
+  .table-row {
     grid-template-columns: 50px 80px 1fr 140px;
   }
 }
@@ -470,12 +470,12 @@
    RESPONSIVE - IPHONE 12 PRO (390px)
 ======================================== */
 @media (max-width: 768px) {
-    .container {
+  .container {
     padding: 0 16px;
   }
 
   /* Banner */
-    .banner {
+  .banner {
     flex-direction: column;
     text-align: center;
     padding: 20px;
@@ -483,140 +483,135 @@
     margin: 25px 0;
   }
 
-    .banner-left img {
+  .banner-left img {
     width: 90px;
     height: 90px;
   }
 
-    .banner-right {
+  .banner-right {
     width: 100%;
   }
 
-    .platforms {
+  .platforms {
     justify-content: center;
     gap: 12px;
   }
 
-    .platforms img {
+  .platforms img {
     width: 70px;
     height: 32px;
   }
 
   /* Content - Stack vertically */
-    .content {
+  .content {
     flex-direction: column;
     gap: 20px;
   }
 
-    .right_content,
-    .left_content {
+  .right_content,
+  .left_content {
     width: 100%;
     padding: 18px;
   }
 
-    .right_content h2,
-    .left_content h2 {
+  .right_content h2,
+  .left_content h2 {
     font-size: 18px;
     margin-bottom: 16px;
     padding-bottom: 6px;
   }
 
   /* Table - Simplified layout */
-    .table-header {
+  .table-header {
     display: none; /* Hide header on mobile */
   }
 
-    .table-row {
+  .table-row {
     grid-template-columns: 40px 1fr auto;
     padding: 12px;
     gap: 12px;
   }
 
-    .table-row img {
+  .table-row img {
     width: 40px;
     height: 40px;
   }
 
   /* Hide rank number on mobile for cleaner look */
-    .table-row > *:first-child {
+  .table-row > *:first-child {
     display: none;
   }
 
-    .bar {
+  .bar {
     height: 8px;
     margin-top: 4px;
   }
 
   /* Related Items */
-    .related-item {
+  .related-item {
     padding: 12px;
     margin-bottom: 10px;
   }
 
-    .related-item img {
+  .related-item img {
     width: 45px;
     height: 45px;
   }
 
-    .related-item h3 {
+  .related-item h3 {
     font-size: 14px;
     margin-bottom: 4px;
   }
 
-    .mini-logos img {
+  .mini-logos img {
     width: 18px;
     height: 18px;
   }
 
-    .visit-btn-cate {
+  .visit-btn-cate {
     width: 36px;
     height: 22px;
     font-size: 12px;
   }
 
   /* Ads */
-    .ads,
-    .ads-side {
+  .ads,
+  .ads-side {
     margin: 15px 0;
   }
 
   /* Brand Section */
-    .brand-section {
+  .brand-section {
     padding: 30px 20px;
     margin-top: 30px;
   }
 
-    .brand-header {
+  .brand-header {
     flex-direction: row;
     align-items: center;
     margin-bottom: 20px;
   }
 
-    .brand-header h2 {
+  .brand-header h2 {
     font-size: 1.1rem;
   }
 
-    .brand-header .show-all {
+  .brand-header .show-all {
     font-size: 13px;
   }
 
-    .brand-container {
-    gap: 15px;
-    padding: 0 5px; /* Add padding for better scrolling */
-  }
-
-    .brand-item {
+  .brand-item {
     min-width: 140px;
     padding: 16px 12px;
   }
 
-    .brand-item img {
+  .brand-item img {
     width: 75px;
     height: 75px;
     margin-bottom: 8px;
   }
 
-    .brand-item p {
+  .brand-item p {
     font-size: 0.9rem;
   }
 
@@ -626,22 +621,22 @@
   }
 
   /* Show scroll indicator on mobile */
-    .brand-container {
+  .brand-container {
     scrollbar-width: thin;
     scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
   }
 
-    .brand-container::-webkit-scrollbar {
+  .brand-container::-webkit-scrollbar {
     display: block;
     height: 4px;
   }
 
-    .brand-container::-webkit-scrollbar-track {
+  .brand-container::-webkit-scrollbar-track {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
   }
 
-    .brand-container::-webkit-scrollbar-thumb {
+  .brand-container::-webkit-scrollbar-thumb {
     background: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
   }
@@ -651,63 +646,63 @@
    EXTRA SMALL DEVICES (< 390px)
 ======================================== */
 @media (max-width: 389px) {
-    .container {
+  .container {
     padding: 0 12px;
   }
 
-    .banner {
+  .banner {
     padding: 16px;
     gap: 16px;
   }
 
-    .banner-left img {
+  .banner-left img {
     width: 75px;
     height: 75px;
   }
 
-    .platforms {
+  .platforms {
     gap: 8px;
   }
 
-    .platforms img {
+  .platforms img {
     width: 60px;
     height: 28px;
   }
 
-    .right_content,
-    .left_content {
+  .right_content,
+  .left_content {
     padding: 16px;
   }
 
-    .right_content h2,
-    .left_content h2 {
+  .right_content h2,
+  .left_content h2 {
     font-size: 16px;
   }
 
-    .table-row {
+  .table-row {
     padding: 10px;
     gap: 10px;
   }
 
-    .brand-section {
+  .brand-section {
     padding: 25px 16px;
   }
 
-    .brand-header h2 {
+  .brand-header h2 {
     font-size: 1rem;
   }
 
-    .brand-item {
+  .brand-item {
     min-width: 120px;
     padding: 14px 10px;
   }
 
-    .brand-item img {
+  .brand-item img {
     width: 65px;
     height: 65px;
   }
 
-    .brand-item p {
+  .brand-item p {
     font-size: 0.85rem;
   }
 }
@@ -723,25 +718,299 @@ html {
 
 /* Touch target improvements for mobile */
 @media (max-width: 768px) {
-    .table-row,
-    .related-item,
-    .brand-item,
-    .visit-btn-cate {
+  .table-row,
+  .related-item,
+  .brand-item,
+  .visit-btn-cate {
     min-height: 44px;
   }
 }
 
 /* Loading state */
-  .table-row.loading,
-  .brand-item.loading {
+.table-row.loading,
+.brand-item.loading {
   opacity: 0.6;
   pointer-events: none;
 }
 
 /* Focus states for accessibility */
-  .table-row:focus,
-  .related-item:focus,
-  .brand-item:focus {
+.table-row:focus,
+.related-item:focus,
+.brand-item:focus {
   outline: 2px solid #667eea;
   outline-offset: 2px;
+}
+
+.banner-card {
+  min-width: 280px;
+  height: 180px;
+  border-radius: 20px;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.banner-card-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.banner-card:hover .banner-card-image {
+  transform: scale(1.1);
+}
+
+/* Overlay gradient để text dễ đọc hơn */
+.banner-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  /* background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)); */
+  z-index: 2;
+  transition: opacity 0.3s ease;
+}
+
+.banner-card:hover::after {
+  opacity: 0.8;
+}
+
+.banner-card::before {
+  position: absolute;
+  top: 15px;
+  font-weight: bold;
+  color: white;
+  font-size: 18px;
+  z-index: 3;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.banner-card:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.banner-card-btn {
+  text-decoration: none; /* bỏ gạch chân */
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  color: #333;
+  padding: 10px 25px;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 14px;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  z-index: 3;
+}
+
+.banner-card:hover .banner-card-btn {
+  bottom: 15px;
+  opacity: 1;
+}
+
+.banner-card-btn:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateX(-50%) scale(1.05);
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.banner-section:hover .banner-section-icon {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Info Sections */
+.info-section {
+  background: rgba(30, 41, 82, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
+  margin-bottom: 55px;
+  margin-top: 55px;
+}
+
+.info-section:hover {
+  transform: translateY(-5px);
+}
+
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid rgba(102, 126, 234, 0.3);
+}
+
+.info-header h2 {
+  font-size: 32px;
+  color: #fff;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.info-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.info-icons span {
+  font-size: 28px;
+  animation: float 3s ease-in-out infinite;
+  display: inline-block;
+}
+
+.info-icons span:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.info-icons span:nth-child(2) {
+  animation-delay: 0.5s;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.info-content {
+  font-size: 17px;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.9);
+  max-height: 230px;
+  overflow: hidden;
+  transition: max-height 0.5s ease;
+  position: relative;
+}
+
+.info-content.expanded {
+  max-height: 1000px;
+}
+
+.info-content p {
+  margin-bottom: 15px;
+}
+
+p.info-content-tiltle {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.info-content p:last-child {
+  margin-bottom: 0;
+}
+
+.fade-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: linear-gradient(to bottom, transparent, rgba(30, 41, 82, 0.85));
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.fade-overlay.hidden {
+  opacity: 0;
+}
+
+.btn-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+.show-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 30px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.show-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.show-more:active {
+  transform: translateY(0);
+}
+
+.show-more .icon {
+  font-size: 14px;
+  transition: transform 0.3s ease;
+}
+
+.show-more.expanded .icon {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 768px) {
+  .info-section {
+    padding: 30px 20px;
+  }
+
+  .info-header h2 {
+    font-size: 24px;
+  }
+
+  .info-icons span {
+    font-size: 24px;
+  }
+
+  .info-content {
+    font-size: 15px;
+  }
+  .info-icons {
+    flex-direction: column;
+  }
 }

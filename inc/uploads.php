@@ -6,12 +6,12 @@ add_action('add_meta_boxes', 'register_post_item_image_metabox');
 function register_post_item_image_metabox()
 {
     add_meta_box(
-        'post_item_images_metabox',           // ID
-        'Image Fields',                        // Tiêu đề
-        'render_post_item_images_metabox',    // Callback
-        'post_item',                          // Post type
-        'normal',                             // Context
-        'high'                                // Priority
+        'post_item_images_metabox',
+        'Image Fields',
+        'render_post_item_images_metabox',
+        'post_item',
+        'normal',
+        'high'
     );
 }
 
@@ -36,167 +36,167 @@ function render_post_item_images_metabox($post)
     );
 
     ?>
-    <style>
-        .image-field-wrapper {
-            margin-bottom: 25px;
-            padding: 15px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
+<style>
+.image-field-wrapper {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
-        .image-field-wrapper label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 8px;
-            color: #23282d;
-        }
+.image-field-wrapper label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #23282d;
+}
 
-        .image-input-group {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
+.image-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
 
-        .image-input-group input[type="text"] {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ddd;
-            border-radius: 3px;
-        }
+.image-input-group input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
 
-        .upload-image-btn,
-        .remove-image-btn {
-            padding: 8px 15px;
-            border: none;
-            border-radius: 3px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
+.upload-image-btn,
+.remove-image-btn {
+    padding: 8px 15px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s;
+}
 
-        .upload-image-btn {
-            background: #0073aa;
-            color: white;
-        }
+.upload-image-btn {
+    background: #0073aa;
+    color: white;
+}
 
-        .upload-image-btn:hover {
-            background: #005177;
-        }
+.upload-image-btn:hover {
+    background: #005177;
+}
 
-        .remove-image-btn {
-            background: #dc3232;
-            color: white;
-        }
+.remove-image-btn {
+    background: #dc3232;
+    color: white;
+}
 
-        .remove-image-btn:hover {
-            background: #a00;
-        }
+.remove-image-btn:hover {
+    background: #a00;
+}
 
-        .image-preview {
-            margin-top: 10px;
-        }
+.image-preview {
+    margin-top: 10px;
+}
 
-        .image-preview img {
-            max-width: 200px;
-            max-height: 200px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            display: block;
-        }
+.image-preview img {
+    max-width: 200px;
+    max-height: 200px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    display: block;
+}
 
-        .no-image {
-            color: #999;
-            font-style: italic;
-        }
-    </style>
+.no-image {
+    color: #999;
+    font-style: italic;
+}
+</style>
 
-    <div class="post-item-images-container">
-        <?php foreach ($fields as $field_key => $field_label): ?>
-            <?php $field_value = get_post_meta($post->ID, $field_key, true); ?>
+<div class="post-item-images-container">
+    <?php foreach ($fields as $field_key => $field_label): ?>
+    <?php $field_value = get_post_meta($post->ID, $field_key, true); ?>
 
-            <div class="image-field-wrapper">
-                <label for="<?php echo $field_key; ?>"><?php echo $field_label; ?></label>
+    <div class="image-field-wrapper">
+        <label for="<?php echo $field_key; ?>"><?php echo $field_label; ?></label>
 
-                <div class="image-input-group">
-                    <input type="text" id="<?php echo $field_key; ?>" name="<?php echo $field_key; ?>"
-                        value="<?php echo esc_url($field_value); ?>" placeholder="Enter image URL or click Upload" />
-                    <button type="button" class="upload-image-btn" data-field="<?php echo $field_key; ?>">
-                        📤 Upload
-                    </button>
-                    <button type="button" class="remove-image-btn" data-field="<?php echo $field_key; ?>">
-                        ❌ Remove
-                    </button>
-                </div>
+        <div class="image-input-group">
+            <input type="text" id="<?php echo $field_key; ?>" name="<?php echo $field_key; ?>"
+                value="<?php echo esc_url($field_value); ?>" placeholder="Enter image URL or click Upload" />
+            <button type="button" class="upload-image-btn" data-field="<?php echo $field_key; ?>">
+                📤 Upload
+            </button>
+            <button type="button" class="remove-image-btn" data-field="<?php echo $field_key; ?>">
+                ❌ Remove
+            </button>
+        </div>
 
-                <div class="image-preview" id="preview-<?php echo $field_key; ?>">
-                    <?php if ($field_value): ?>
-                        <img src="<?php echo esc_url($field_value); ?>" alt="<?php echo $field_label; ?>">
-                    <?php else: ?>
-                        <span class="no-image">No image selected</span>
-                    <?php endif; ?>
-                </div>
-            </div>
-
-        <?php endforeach; ?>
+        <div class="image-preview" id="preview-<?php echo $field_key; ?>">
+            <?php if ($field_value): ?>
+            <img src="<?php echo esc_url($field_value); ?>" alt="<?php echo $field_label; ?>">
+            <?php else: ?>
+            <span class="no-image">No image selected</span>
+            <?php endif; ?>
+        </div>
     </div>
 
-    <script>
-        jQuery(document).ready(function ($) {
-            // Upload button click
-            $('.upload-image-btn').on('click', function (e) {
-                e.preventDefault();
+    <?php endforeach; ?>
+</div>
 
-                var button = $(this);
-                var fieldName = button.data('field');
-                var customUploader;
+<script>
+jQuery(document).ready(function($) {
+    // Upload button click
+    $('.upload-image-btn').on('click', function(e) {
+        e.preventDefault();
 
-                // Nếu media frame đã tồn tại, mở lại
-                if (customUploader) {
-                    customUploader.open();
-                    return;
-                }
+        var button = $(this);
+        var fieldName = button.data('field');
+        var customUploader;
 
-                // Tạo media frame
-                customUploader = wp.media({
-                    title: 'Choose Image',
-                    button: {
-                        text: 'Use this image'
-                    },
-                    multiple: false
-                });
+        // Nếu media frame đã tồn tại, mở lại
+        if (customUploader) {
+            customUploader.open();
+            return;
+        }
 
-                // Khi chọn image
-                customUploader.on('select', function () {
-                    var attachment = customUploader.state().get('selection').first().toJSON();
-
-                    // Set URL vào input
-                    $('#' + fieldName).val(attachment.url);
-
-                    // Update preview
-                    $('#preview-' + fieldName).html('<img src="' + attachment.url + '" alt="Preview">');
-                });
-
-                // Mở media frame
-                customUploader.open();
-            });
-
-            // Remove button click
-            $('.remove-image-btn').on('click', function (e) {
-                e.preventDefault();
-
-                var button = $(this);
-                var fieldName = button.data('field');
-
-                // Clear input
-                $('#' + fieldName).val('');
-
-                // Clear preview
-                $('#preview-' + fieldName).html('<span class="no-image">No image selected</span>');
-            });
+        // Tạo media frame
+        customUploader = wp.media({
+            title: 'Choose Image',
+            button: {
+                text: 'Use this image'
+            },
+            multiple: false
         });
-    </script>
-    <?php
+
+        // Khi chọn image
+        customUploader.on('select', function() {
+            var attachment = customUploader.state().get('selection').first().toJSON();
+
+            // Set URL vào input
+            $('#' + fieldName).val(attachment.url);
+
+            // Update preview
+            $('#preview-' + fieldName).html('<img src="' + attachment.url + '" alt="Preview">');
+        });
+
+        // Mở media frame
+        customUploader.open();
+    });
+
+    // Remove button click
+    $('.remove-image-btn').on('click', function(e) {
+        e.preventDefault();
+
+        var button = $(this);
+        var fieldName = button.data('field');
+
+        // Clear input
+        $('#' + fieldName).val('');
+
+        // Clear preview
+        $('#preview-' + fieldName).html('<span class="no-image">No image selected</span>');
+    });
+});
+</script>
+<?php
 }
 
 // 3. ENQUEUE MEDIA LIBRARY SCRIPT
@@ -319,166 +319,166 @@ function render_post_item_metabox($post)
     $hates = !empty($hates_json) ? json_decode($hates_json, true) : [];
 
     ?>
-    <style>
-        .metabox-field {
-            margin-bottom: 20px;
-        }
+<style>
+.metabox-field {
+    margin-bottom: 20px;
+}
 
-        .metabox-field label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
+.metabox-field label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
 
-        .metabox-field input[type="text"],
-        .metabox-field input[type="url"],
-        .metabox-field input[type="date"],
-        .metabox-field input[type="number"] {
-            width: 100%;
-            padding: 8px;
-        }
+.metabox-field input[type="text"],
+.metabox-field input[type="url"],
+.metabox-field input[type="date"],
+.metabox-field input[type="number"] {
+    width: 100%;
+    padding: 8px;
+}
 
-        .repeater-field {
-            border: 1px solid #ddd;
-            padding: 15px;
-            background: #f9f9f9;
-        }
+.repeater-field {
+    border: 1px solid #ddd;
+    padding: 15px;
+    background: #f9f9f9;
+}
 
-        .repeater-item {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
+.repeater-item {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
 
-        .repeater-item input {
-            flex: 1;
-            padding: 8px;
-        }
+.repeater-item input {
+    flex: 1;
+    padding: 8px;
+}
 
-        .repeater-item .remove-btn {
-            background: #dc3232;
-            color: white;
-            border: none;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
+.repeater-item .remove-btn {
+    background: #dc3232;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    border-radius: 3px;
+}
 
-        .repeater-item .remove-btn:hover {
-            background: #a00;
-        }
+.repeater-item .remove-btn:hover {
+    background: #a00;
+}
 
-        .add-repeater-btn {
-            background: #2271b1;
-            color: white;
-            border: none;
-            padding: 8px 15px;
-            cursor: pointer;
-            border-radius: 3px;
-            margin-top: 10px;
-        }
+.add-repeater-btn {
+    background: #2271b1;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-top: 10px;
+}
 
-        .add-repeater-btn:hover {
-            background: #135e96;
-        }
-    </style>
+.add-repeater-btn:hover {
+    background: #135e96;
+}
+</style>
 
-    <!-- Author -->
-    <div class="metabox-field">
-        <label for="post_item_author">Tên tác giả</label>
-        <input type="text" id="post_item_author" name="post_item_author" value="<?php echo esc_attr($author); ?>"
-            placeholder="Nhập tên tác giả">
-    </div>
+<!-- Author -->
+<div class="metabox-field">
+    <label for="post_item_author">Tên tác giả</label>
+    <input type="text" id="post_item_author" name="post_item_author" value="<?php echo esc_attr($author); ?>"
+        placeholder="Nhập tên tác giả">
+</div>
 
-    <!-- Date -->
-    <div class="metabox-field">
-        <label for="post_item_date">Ngày xuất bản</label>
-        <input type="date" id="post_item_date" name="post_item_date" value="<?php echo esc_attr($date); ?>">
-    </div>
+<!-- Date -->
+<div class="metabox-field">
+    <label for="post_item_date">Ngày xuất bản</label>
+    <input type="date" id="post_item_date" name="post_item_date" value="<?php echo esc_attr($date); ?>">
+</div>
 
-    <!-- Popularity -->
-    <div class="metabox-field">
-        <label for="post_item_popularity">Độ phổ biến (0-100%)</label>
-        <input type="number" id="post_item_popularity" name="post_item_popularity"
-            value="<?php echo esc_attr($popularity); ?>" min="0" max="100" placeholder="0-100">
-    </div>
+<!-- Popularity -->
+<div class="metabox-field">
+    <label for="post_item_popularity">Độ phổ biến (0-100%)</label>
+    <input type="number" id="post_item_popularity" name="post_item_popularity"
+        value="<?php echo esc_attr($popularity); ?>" min="0" max="100" placeholder="0-100">
+</div>
 
-    <!-- Post Link -->
-    <div class="metabox-field">
-        <label for="post_item_post_link">Link bên ngoài</label>
-        <input type="url" id="post_item_post_link" name="post_item_post_link" value="<?php echo esc_url($post_link); ?>"
-            placeholder="https://example.com">
-    </div>
+<!-- Post Link -->
+<div class="metabox-field">
+    <label for="post_item_post_link">Link bên ngoài</label>
+    <input type="url" id="post_item_post_link" name="post_item_post_link" value="<?php echo esc_url($post_link); ?>"
+        placeholder="https://example.com">
+</div>
 
-    <!-- Likes (Repeater) -->
-    <div class="metabox-field">
-        <label>Đánh giá tốt (Likes)</label>
-        <div class="repeater-field" id="likes-repeater">
-            <?php if (!empty($likes) && is_array($likes)): ?>
-                <?php foreach ($likes as $like): ?>
-                    <div class="repeater-item">
-                        <input type="text" name="post_item_likes[]" value="<?php echo esc_attr($like); ?>"
-                            placeholder="Nhập đánh giá tốt">
-                        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="repeater-item">
-                    <input type="text" name="post_item_likes[]" value="" placeholder="Nhập đánh giá tốt">
-                    <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
-                </div>
-            <?php endif; ?>
+<!-- Likes (Repeater) -->
+<div class="metabox-field">
+    <label>Đánh giá tốt (Likes)</label>
+    <div class="repeater-field" id="likes-repeater">
+        <?php if (!empty($likes) && is_array($likes)): ?>
+        <?php foreach ($likes as $like): ?>
+        <div class="repeater-item">
+            <input type="text" name="post_item_likes[]" value="<?php echo esc_attr($like); ?>"
+                placeholder="Nhập đánh giá tốt">
+            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
         </div>
-        <button type="button" class="add-repeater-btn" onclick="addLikeField()">+ Add Like</button>
-    </div>
-
-    <!-- Hates (Repeater) -->
-    <div class="metabox-field">
-        <label>Đánh giá không tốt (Hates)</label>
-        <div class="repeater-field" id="hates-repeater">
-            <?php if (!empty($hates) && is_array($hates)): ?>
-                <?php foreach ($hates as $hate): ?>
-                    <div class="repeater-item">
-                        <input type="text" name="post_item_hates[]" value="<?php echo esc_attr($hate); ?>"
-                            placeholder="Nhập đánh giá không tốt">
-                        <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
-                    </div>
-                <?php endforeach; ?>
-            <?php else: ?>
-                <div class="repeater-item">
-                    <input type="text" name="post_item_hates[]" value="" placeholder="Nhập đánh giá không tốt">
-                    <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
-                </div>
-            <?php endif; ?>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <div class="repeater-item">
+            <input type="text" name="post_item_likes[]" value="" placeholder="Nhập đánh giá tốt">
+            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
         </div>
-        <button type="button" class="add-repeater-btn" onclick="addHateField()">+ Add Hate</button>
+        <?php endif; ?>
     </div>
+    <button type="button" class="add-repeater-btn" onclick="addLikeField()">+ Add Like</button>
+</div>
 
-    <script>
-        function addLikeField() {
-            const container = document.getElementById('likes-repeater');
-            const newField = document.createElement('div');
-            newField.className = 'repeater-item';
-            newField.innerHTML = `
+<!-- Hates (Repeater) -->
+<div class="metabox-field">
+    <label>Đánh giá không tốt (Hates)</label>
+    <div class="repeater-field" id="hates-repeater">
+        <?php if (!empty($hates) && is_array($hates)): ?>
+        <?php foreach ($hates as $hate): ?>
+        <div class="repeater-item">
+            <input type="text" name="post_item_hates[]" value="<?php echo esc_attr($hate); ?>"
+                placeholder="Nhập đánh giá không tốt">
+            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
+        </div>
+        <?php endforeach; ?>
+        <?php else: ?>
+        <div class="repeater-item">
+            <input type="text" name="post_item_hates[]" value="" placeholder="Nhập đánh giá không tốt">
+            <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
+        </div>
+        <?php endif; ?>
+    </div>
+    <button type="button" class="add-repeater-btn" onclick="addHateField()">+ Add Hate</button>
+</div>
+
+<script>
+function addLikeField() {
+    const container = document.getElementById('likes-repeater');
+    const newField = document.createElement('div');
+    newField.className = 'repeater-item';
+    newField.innerHTML = `
                 <input type="text" name="post_item_likes[]" value="" placeholder="Nhập đánh giá tốt">
                 <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
                 `;
-            container.appendChild(newField);
-        }
+    container.appendChild(newField);
+}
 
-        function addHateField() {
-            const container = document.getElementById('hates-repeater');
-            const newField = document.createElement('div');
-            newField.className = 'repeater-item';
-            newField.innerHTML = `
+function addHateField() {
+    const container = document.getElementById('hates-repeater');
+    const newField = document.createElement('div');
+    newField.className = 'repeater-item';
+    newField.innerHTML = `
                 <input type="text" name="post_item_hates[]" value="" placeholder="Nhập đánh giá không tốt">
                 <button type="button" class="remove-btn" onclick="this.parentElement.remove()">×</button>
                 `;
-            container.appendChild(newField);
-        }
-    </script>
-    <?php
+    container.appendChild(newField);
+}
+</script>
+<?php
 }
 
 

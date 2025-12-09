@@ -1,233 +1,229 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
+  const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
 
-    // let sharedBlogId = null;
-    // async function getSharedBlogId() {
-    // if (sharedBlogId) return sharedBlogId;
+  // Lấy slug từ pathname
+  function getSlugFromPath() {
+    const parts = location.pathname.split("/").filter(Boolean);
+    return parts[parts.length - 1] || null;
+  }
 
-    // const params = new URLSearchParams(window.location.search);
-    // let postId = params.get("id");
+  const blogId = getSlugFromPath();
+  console.log("✅ Post ID dùng chung:", blogId);
 
-    // sharedBlogId = postId;
-    // console.log("Blog ID dùng chung:", sharedBlogId);
-    // return sharedBlogId;
-    // }
-    // const blogId = await getSharedBlogId()
-    // =========
+  // Helper function: Format date
+  function formatDate(dateString) {
+    if (!dateString) return "No date";
+    const date = new Date(dateString);
+    const options = { year: "numeric", month: "short", day: "numeric" };
+    return date.toLocaleDateString("en-US", options);
+  }
 
-   // Lấy slug từ pathname, ví dụ /reviews/proxy-seller
-function getSlugFromPath() {
-  const parts = location.pathname.split('/').filter(Boolean); // ['reviews','proxy-seller']
-  return parts[parts.length - 1] || null;
-}
-
- const blogId = await getSlugFromPath();
-
- console.log("✅ Post ID dùng chung:", blogId);
-    // ============
-
-/** =================================================== */
-    const relatedBlogs = document.querySelector(".blog-grid");
+  // ========================================
+  // 1. FETCH RELATED BLOGS
+  // ========================================
+  const relatedBlogs = document.querySelector(".blog-grid");
+  if (relatedBlogs) {
     try {
-        const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/blogs?per_page=100");
-        const blogs = await res.json();
+      const res = await fetch(`${API_BASE}/blogs?per_page=100`);
+      const blogs = await res.json();
 
-        blogs.forEach((blog) => {
-            const meta = blog.meta || {};
-            const bg_short_desc = meta.bg_short_desc || "";
-            const title = blog?.title?.rendered || "Banner";
-            const bg_avatar = meta.bg_avatar || "";
-            const bg_author = meta.bg_author || "";
-            const bg_date = meta.bg_date || "";
-            const bg_author_logo = meta.bg_author_logo || "";
-
-            const bannerHTML = `
-                <div class="blog-card">
-                <div class="blog-image">
-                    <img
-                    src="${bg_avatar}"
-                    alt=""
-                    />
-                </div>
-                <div class="blog-content">
-                <h3 class="text-line blog-title">
-                    ${title}
-                </h3>
-                <p class="text-line blog-description">
-                    ${bg_short_desc}
-                </p>
-                <div class="blog-meta">
-                    <img
-                    class="blog-meta-avatar"
-                    src="${bg_author_logo}"
-                    alt=""
-                    />
-                    <span>${bg_author} | ${bg_date}</span>
-                </div>
-                <a href="${blog.link || '#'}" class="read-more"
-                    ><span>Read more</span>
-                    <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i
-                ></a>
-                </div>
-            </div>
-            `;
-
-            relatedBlogs.insertAdjacentHTML("beforeend", bannerHTML);
-        });
-
-
-        
-
-    } catch (error) {
-        console.error("Lỗi khi tải banner:", error);
-    }
-
-/**===================================================== */
-    const sidebar = document.querySelector(".sidebar-widget");
-    try {
-        const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/blogs?per_page=100");
-        const blogs = await res.json();
-
-        blogs.forEach((blog) => {
-            const meta = blog.meta || {};
-            const bg_short_desc = meta.bg_short_desc || "";
-            const title = blog?.title?.rendered || "Banner";
-            const bg_avatar = meta.bg_avatar || "";
-            const bg_author = meta.bg_author || "";
-            const bg_date = meta.bg_date || "";
-            const bg_author_logo = meta.bg_author_logo || "";
-
-            const bannerHTML = `
-                <div class="post-item">
-                    <div class="post-thumbnail">
-                        <img
-                        src="${bg_avatar}"
-                        alt="Post"
-                        />
-                    </div>
-                    <div class="post-info">
-                        <h4>
-                        <a class="text-line text-blog-tilte" href="${blog.link || '#'}"
-                            >${title}</a
-                        >
-                        </h4>
-                        <div class="post-date">
-                        <i class="fa-regular fa-clock"></i> ${bg_date}
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            sidebar.insertAdjacentHTML("beforeend", bannerHTML);
-        });
-    } catch (error) {
-        console.error("Lỗi khi tải banner:", error);
-    }
-
-/** ==================================================== */
-    const blog_header = document.querySelector(".article-header");
-    try {
-        const res = await fetch(`${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`);
-        const blogs = await res.json();
-        const blog = blogs[0];
-
-        
+      blogs.forEach((blog) => {
         const meta = blog.meta || {};
-        const bg_short_desc = meta.bg_short_desc || "";
-        const title = blog?.title?.rendered || "Banner";
-        const bg_avatar = meta.bg_avatar || "";
-        const bg_author = meta.bg_author || "";
-        const bg_date = meta.bg_date || "";
-        const bg_author_logo = meta.bg_author_logo || "";
+        const shortDesc = meta.bg_short_desc || "";
+        const title = blog?.title?.rendered || "Untitled";
+        const featuredImage = meta.bg_thumbnail || "";
+        
+        // ✅ Lấy author từ custom fields
+        const authorName = blog.author_name || "Unknown Author";
+        const authorAvatar = blog.author_avatar || "";
+        const postDate = formatDate(blog.date);
 
-        const tagIds = blog.blog_tag || [];
+        const bannerHTML = `
+          <div class="blog-card">
+            <div class="blog-image">
+              <img src="${featuredImage}" alt="${title}" />
+            </div>
+            <div class="blog-content">
+              <h3 class="text-line blog-title">${title}</h3>
+              <p class="text-line blog-description">${shortDesc}</p>
+              <div class="blog-meta">
+                <img class="blog-meta-avatar" src="${authorAvatar}" alt="${authorName}" />
+                <span>${authorName} | ${postDate}</span>
+              </div>
+              <a href="${blog.link || "#"}" class="read-more">
+                <span>Read more</span>
+                <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i>
+              </a>
+            </div>
+          </div>
+        `;
 
-        let tagsHTML = "";
-        if (tagIds.length > 0) {
+        relatedBlogs.insertAdjacentHTML("beforeend", bannerHTML);
+      });
+    } catch (error) {
+      console.error("Lỗi khi tải related blogs:", error);
+    }
+  }
+
+  // ========================================
+  // 2. FETCH SIDEBAR POSTS
+  // ========================================
+  const sidebar = document.querySelector(".sidebar-widget");
+  if (sidebar) {
+    try {
+      const res = await fetch(`${API_BASE}/blogs?per_page=100`);
+      const blogs = await res.json();
+
+      blogs.forEach((blog) => {
+        const meta = blog.meta || {};
+        const featuredImage = meta.bg_thumbnail || "";
+        const title = blog?.title?.rendered || "Untitled";
+        const postDate = formatDate(blog.date);
+
+        const bannerHTML = `
+          <div class="post-item">
+            <div class="post-thumbnail">
+              <img src="${featuredImage}" alt="${title}" />
+            </div>
+            <div class="post-info">
+              <h4>
+                <a class="text-line text-blog-tilte" href="${blog.link || "#"}">${title}</a>
+              </h4>
+              <div class="post-date">
+                <i class="fa-regular fa-clock"></i> ${postDate}
+              </div>
+            </div>
+          </div>
+        `;
+
+        sidebar.insertAdjacentHTML("beforeend", bannerHTML);
+      });
+    } catch (error) {
+      console.error("Lỗi khi tải sidebar:", error);
+    }
+  }
+
+  // ========================================
+  // 3. FETCH ARTICLE HEADER
+  // ========================================
+  const blog_header = document.querySelector(".article-header");
+  if (blog_header) {
+    try {
+      const res = await fetch(
+        `${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`
+      );
+      const blogs = await res.json();
+      const blog = blogs[0];
+
+      // ✅ Lấy author từ custom fields
+      const authorName = blog.author_name || "Unknown Author";
+      const authorAvatar = blog.author_avatar || "";
+      const postDate = formatDate(blog.date);
+      const title = blog?.title?.rendered || "Untitled";
+
+      // Lấy tags
+      const tagIds = blog.blog_tag || [];
+      let tagsHTML = "";
+
+      if (tagIds.length > 0) {
         const tagPromises = tagIds.map(async (id) => {
-            const tagRes = await fetch(`http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/blog_tag/${id}`);
-            const tagData = await tagRes.json();
-            return `<span class="tag">${tagData.name}</span>`;
+          const tagRes = await fetch(`${API_BASE}/blog_tag/${id}`);
+          const tagData = await tagRes.json();
+          return `<span class="tag">${tagData.name}</span>`;
         });
 
         const tags = await Promise.all(tagPromises);
         tagsHTML = tags.join("");
-        }
+      }
 
-            const bannerHTML = `
-                <div class="article-tags">
-                ${tagsHTML || "<span class='tag'>No Tag</span>"}
-                </div>
-                <h1>${title}</h1>
-                <div class="article-meta">
-                <div class="article-meta-left">
-                    <span class="article-views">
-                    <i class="fa-solid fa-eye"></i>
-                    46 lượt xem
-                    </span>
-                    <div class="author">
-                    <img src="${bg_author_logo}" alt="Author" />
-                    <span>${bg_author} — ${bg_date}</span>
-                    </div>
-                </div>
-                <div class="article-actions">
-                    <a href="https://x.com/"><i class="fa-brands fa-twitter"></i></a>
-                    <a href="https://www.facebook.com/index.php/"><i class="fa-brands fa-facebook"></i></a>
-                    <a href="https://ca.linkedin.com/"><i class="fa-brands fa-linkedin"></i></a>
-                </div>
-                </div>
-            `;
+      const bannerHTML = `
+        <div class="article-tags">
+          ${tagsHTML || "<span class='tag'>No Tag</span>"}
+        </div>
+        <h1>${title}</h1>
+        <div class="article-meta">
+          <div class="article-meta-left">
+            <span class="article-views">
+              <i class="fa-solid fa-eye"></i>
+              46 lượt xem
+            </span>
+            <div class="author">
+              <img src="${authorAvatar}" alt="${authorName}" />
+              <span>${authorName} — ${postDate}</span>
+            </div>
+          </div>
+          <div class="article-actions">
+            <a href="https://x.com/"><i class="fa-brands fa-twitter"></i></a>
+            <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook"></i></a>
+            <a href="https://ca.linkedin.com/"><i class="fa-brands fa-linkedin"></i></a>
+          </div>
+        </div>
+      `;
 
-            blog_header.insertAdjacentHTML("beforeend", bannerHTML);
+      blog_header.insertAdjacentHTML("beforeend", bannerHTML);
     } catch (error) {
-        console.error("Lỗi khi tải banner:", error);
+      console.error("Lỗi khi tải blog header:", error);
     }
-
-
-
-/** ==================================================== */
-
-
-   const blogDesc = document.querySelector("#article-content");
-
-  try {
-    const res = await fetch(`${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`);
-    const blogs = await res.json();
-    const blog = blogs[0];
-
-    const meta = blog.meta || {};
-    const desc = meta._blog_desc || "<p>Không có nội dung mô tả.</p>";
-
-    // Render nội dung trước
-    blogDesc.innerHTML = desc;
-
-    // Sau đó thêm TOC vào DOM
-    generateTableOfContents();
-  } catch (error) {
-    console.error("Lỗi khi tải blog:", error);
   }
 
-  const breadcrumb = document.querySelector(".breadcrumb_blog");
+  // ========================================
+  // 4. FETCH ARTICLE CONTENT & GENERATE TOC
+  // ========================================
+  const blogDesc = document.querySelector("#article-content");
+  if (blogDesc) {
     try {
-        const res = await fetch(`${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`);
-        const blogs = await res.json();
-        const blog = blogs[0];
-        
-            const title = blog?.title?.rendered || "Banner";
+      const res = await fetch(
+        `${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`
+      );
+      const blogs = await res.json();
+      const blog = blogs[0];
 
-            const bannerHTML = `
-                <a href="${WP_HOME}"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-                <a href="${WP_HOME}/blog/">Blog</a> /
-                <span>${title}</span>
-            `;
+      const meta = blog.meta || {};
+      const desc = meta._blog_desc || "<p>Không có nội dung mô tả.</p>";
 
-            breadcrumb.insertAdjacentHTML("beforeend", bannerHTML);
-        
+      blogDesc.innerHTML = desc;
+      generateTableOfContents();
+
+      setTimeout(() => {
+        if (typeof initScrollSpy === "function") {
+          initScrollSpy();
+        }
+      }, 500);
     } catch (error) {
-        console.error("Lỗi khi tải banner:", error);
+      console.error("Lỗi khi tải blog content:", error);
     }
+  }
+
+  // ========================================
+  // 5. FETCH BREADCRUMB
+  // ========================================
+  const breadcrumb = document.querySelector(".breadcrumb_blog");
+  if (breadcrumb) {
+    try {
+      const res = await fetch(
+        `${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`
+      );
+      const blogs = await res.json();
+      const blog = blogs[0];
+
+      const title = blog?.title?.rendered || "Untitled";
+
+      const bannerHTML = `
+        <a href="${WP_HOME}"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
+        <a href="${WP_HOME}/blog/">Blog</a> /
+        <span>${title}</span>
+      `;
+
+      breadcrumb.insertAdjacentHTML("beforeend", bannerHTML);
+    } catch (error) {
+      console.error("Lỗi khi tải breadcrumb:", error);
+    }
+  }
 });
 
+// ========================================
+// GENERATE TABLE OF CONTENTS
+// ========================================
 function generateTableOfContents() {
   const content = document.getElementById("article-content");
   if (!content) return;
@@ -235,7 +231,6 @@ function generateTableOfContents() {
   const headings = content.querySelectorAll("h2, h3");
   if (headings.length === 0) return;
 
-  // Tạo TOC mới và chèn lên đầu nội dung
   const toc = document.createElement("div");
   toc.className = "table-of-contents";
   toc.innerHTML = `
@@ -254,12 +249,10 @@ function generateTableOfContents() {
   const tocContent = toc.querySelector(".toc-content");
   const toggleIcon = toc.querySelector(".toc-toggle");
 
-  // Gắn sự kiện dropdown
   tocHeader.addEventListener("click", () => {
     tocContent.classList.toggle("show");
     toggleIcon.classList.toggle("rotate");
   });
-
 
   headings.forEach((heading, index) => {
     const id = `section-${index}`;
@@ -276,6 +269,3 @@ function generateTableOfContents() {
     tocList.appendChild(li);
   });
 }
-
-
-

@@ -1,380 +1,281 @@
 document.addEventListener("DOMContentLoaded", async () => {
-  const bannerContainer = document.querySelector("#banner-carousel");
+    const API_BASE = "https://nano4me.org/wp-json/wp/v2";
 
-  if (!bannerContainer) return;
+    // let sharedBlogId = null;
+    // async function getSharedBlogId() {
+    // if (sharedBlogId) return sharedBlogId;
 
-  try {
-    const res = await fetch(
-      "https://nano4me.org/post_item?per_page=100"
-    );
-    const items = await res.json();
+    // const params = new URLSearchParams(window.location.search);
+    // let postId = params.get("id");
 
-    console.log("All post items:", items);
+    // sharedBlogId = postId;
+    // console.log("Blog ID dùng chung:", sharedBlogId);
+    // return sharedBlogId;
+    // }
+    // const blogId = await getSharedBlogId()
+    // =========
 
-    // Random shuffle
-    const shuffled = items.sort(() => Math.random() - 0.5);
-
-    // Lấy 4 items đầu tiên
-    const randomFour = shuffled.slice(0, 4);
-
-    randomFour.forEach((item) => {
-      const meta = item.meta || {};
-      const image = meta.bgr_image || "";
-      const postLink = meta.post_link || "#";
-      const detailLink = item.link || "#";
-      const title = item.title.rendered || "No title";
-
-      const itemHTML = `
-        <div class="carousel-item" onclick="window.location.href='${detailLink}';" style="cursor: pointer;">
-          <img class="carousel-image" src="${image}" alt="${title}">
-          <button 
-            class="btn carousel-btn" 
-            onclick="event.stopPropagation(); window.open('${postLink}', '_blank');"
-          >
-            Visit Site
-            <i class="carousel-btn-icon fa-solid fa-angles-right"></i>
-          </button>
-        </div>
-      `;
-      
-      bannerContainer.insertAdjacentHTML("beforeend", itemHTML);
-    });
-
-  } catch (error) {
-    console.error("Lỗi khi tải post items:", error);
-  }
-});
-
-// ==========================
-const prevBtn = document.querySelector(".banner-section-prev");
-const nextBtn = document.querySelector(".banner-section-back");
-const slider = document.querySelector(".banner-section-slide");
-
-if (prevBtn && nextBtn && slider) {
-  prevBtn.addEventListener("click", () => {
-    slider.scrollBy({
-      left: -320,
-      behavior: "smooth",
-    });
-  });
-
-  nextBtn.addEventListener("click", () => {
-    slider.scrollBy({
-      left: 320,
-      behavior: "smooth",
-    });
-  });
+   // Lấy slug từ pathname, ví dụ /reviews/proxy-seller
+function getSlugFromPath() {
+  const parts = location.pathname.split('/').filter(Boolean); // ['reviews','proxy-seller']
+  return parts[parts.length - 1] || null;
 }
 
-/*   READ MORE  */
-// ==========================
-function toggleContent(button) {
-  const section = button.closest(".info-section");
-  const content = section.querySelector(".info-content");
-  const btnText = button.querySelector(".text");
-  const fadeOverlay = section.querySelector(".fade-overlay");
+ const blogId = await getSlugFromPath();
 
-  content.classList.toggle("expanded");
-  button.classList.toggle("expanded");
+ console.log("✅ Post ID dùng chung:", blogId);
+    // ============
 
-  if (content.classList.contains("expanded")) {
-    btnText.textContent = "Read Less";
-    fadeOverlay.classList.add("hidden");
-  } else {
-    btnText.textContent = "Read More";
-    fadeOverlay.classList.remove("hidden");
-  }
-}
+/** =================================================== */
+    const relatedBlogs = document.querySelector(".blog-grid");
+    try {
+        const res = await fetch("https://nano4me.org/wp-json/wp/v2/blogs?per_page=100");
+        const blogs = await res.json();
 
-/** Render Cart-Iteam */
-const API_BASE = "https://nano4me.org/wp-json/wp/v2";
+        blogs.forEach((blog) => {
+            const meta = blog.meta || {};
+            const bg_short_desc = meta.bg_short_desc || "";
+            const title = blog?.title?.rendered || "Banner";
+            const bg_avatar = meta.bg_avatar || "";
+            const bg_author = meta.bg_author || "";
+            const bg_date = meta.bg_date || "";
+            const bg_author_logo = meta.bg_author_logo || "";
 
-async function fetchAll(endpoint, perPage = 50) {
-  let page = 1;
-  let allData = [];
-  while (true) {
-    const res = await fetch(
-      `${API_BASE}/${endpoint}?page=${page}&per_page=${perPage}`
-    );
-    if (!res.ok) break;
-    const data = await res.json();
-    allData = [...allData, ...data];
-    if (data.length < perPage) break;
-    page++;
-  }
-  return allData;
-}
-
-async function fetchData() {
-  try {
-    const [cates, posts] = await Promise.all([
-      fetchAll("cate_post"),
-      fetchAll("post_item"),
-    ]);
-
-    console.log("Categories:", cates);
-    console.log("Posts:", posts);
-
-    renderCategories(cates, posts);
-  } catch (err) {
-    console.error("Lỗi khi fetch dữ liệu:", err);
-  }
-}
-
-function renderCategories(cates, posts) {
-  const container = document.querySelector(".categories-container-home");
-  if (!container) return;
-  container.innerHTML = "";
-
-  // FILTER: Chỉ lấy categories có checkbox được tick (visible = true hoặc "1")
-  const visibleCates = cates.filter((cate) => {
-    const isVisible = cate.meta?._cate_post_visible;
-    // Check cả string "1" và boolean true
-    return isVisible === "1" || isVisible === true || isVisible === 1;
-  });
-
-  console.log("Visible categories:", visibleCates);
-
-  // Render chỉ các categories visible
-  visibleCates.forEach((cate) => {
-    const cate_id = cate.id;
-    const meta = cate.meta || {};
-    const cateThumbnail = meta.thumbnail || "";
-    const shortDesc = meta.short_desc || "";
-    const cateTitle = cate.title.rendered || "No title";
-
-    // Lấy tất cả posts của category và sort
-    const catePosts = posts
-      .filter((p) => p.meta?.id_cate == cate.id)
-      .sort((a, b) => (a.meta?.top || 0) - (b.meta?.top || 0));
-
-    // Chỉ lấy 6 items đầu tiên để hiển thị
-    const displayPosts = catePosts.slice(0, 6);
-
-    // Render list với số thứ tự tự động từ 1-6
-    const postListHTML = displayPosts
-      .map(
-        (post, index) => `
-        <li>
-          <p class="features-list-top">${index + 1}</p>
-          <img
-            class="features-list-logo-image"
-            src="${post.meta?.logo || ""}"
-            alt="${post.title.rendered}"
-          />
-          <p class="text-line features-list-name">${post.title.rendered}</p>
-        </li>
-      `
-      )
-      .join("");
-
-    // Lấy 3 logos cuối cùng trong toàn bộ catePosts
-    const lastThreePosts = catePosts.slice(-3);
-    const lastThreeLogosHTML = lastThreePosts
-      .map(
-        (post) => `
-        <img
-          class="footer-logo-preview"
-          src="${post.meta?.logo || ""}"
-          alt="${post.title.rendered}"
-        />
-      `
-      )
-      .join("");
-
-    // Tổng số items
-    const totalItems = catePosts.length;
-
-    const cardHTML = `
-      <div class="card">
-        <div class="card-header">
-          <div class="card-icon">
-            <img
-              class="card-icon-image"
-              src="${cateThumbnail}"
-              alt="icon ${cateTitle}"
-            />
-          </div>
-          <div class="text-line card-title">
-            <a class="card-title-link" href="#">${cateTitle}</a>
-            <div class="card-tag">
-              <span class="card-tag-cate">TOP Popular in VietNam</span>
+            const bannerHTML = `
+                <div class="blog-card">
+                <div class="blog-image">
+                    <img
+                    src="${bg_avatar}"
+                    alt=""
+                    />
+                </div>
+                <div class="blog-content">
+                <h3 class="text-line blog-title">
+                    ${title}
+                </h3>
+                <p class="text-line blog-description">
+                    ${bg_short_desc}
+                </p>
+                <div class="blog-meta">
+                    <img
+                    class="blog-meta-avatar"
+                    src="${bg_author_logo}"
+                    alt=""
+                    />
+                    <span>${bg_author} | ${bg_date}</span>
+                </div>
+                <a href="${blog.link || '#'}" class="read-more"
+                    ><span>Read more</span>
+                    <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i
+                ></a>
+                </div>
             </div>
-          </div>
-        </div>
+            `;
 
-        <p class="text-line card-description">${shortDesc}</p>
+            relatedBlogs.insertAdjacentHTML("beforeend", bannerHTML);
+        });
 
-        <ul class="features-list">
-          ${postListHTML || "<li>No posts yet.</li>"}
-        </ul>
 
-        <div class="card-footer">
-          <a href="${cate.link}" class="visit-btn">
-            <span>Load ${totalItems} sites</span>
-            <i class="fa-solid fa-chevron-right footer-arrow-icon"></i>
-          </a>
-          <div class="footer-logos">
-            ${lastThreeLogosHTML}
-          </div>
-        </div>
-      </div>
-    `;
+        
 
-    container.insertAdjacentHTML("beforeend", cardHTML);
-  });
-}
-fetchData();
+    } catch (error) {
+        console.error("Lỗi khi tải banner:", error);
+    }
 
-// /** =========banner-slide==========  */
-// document.addEventListener("DOMContentLoaded", async () => {
-//   const bannerContainer = document.querySelector("#banner-slide-home");
+/**===================================================== */
+    const sidebar = document.querySelector(".sidebar-widget");
+    try {
+        const res = await fetch("https://nano4me.org/wp-json/wp/v2/blogs?per_page=100");
+        const blogs = await res.json();
 
-//   try {
-//     const cateRes = await fetch(`${API_BASE}/post_item?per_page=5`);
-//     const cate = await cateRes.json();
+        blogs.forEach((blog) => {
+            const meta = blog.meta || {};
+            const bg_short_desc = meta.bg_short_desc || "";
+            const title = blog?.title?.rendered || "Banner";
+            const bg_avatar = meta.bg_avatar || "";
+            const bg_author = meta.bg_author || "";
+            const bg_date = meta.bg_date || "";
+            const bg_author_logo = meta.bg_author_logo || "";
 
-//     cate.forEach((banner) => {
-//         const meta = banner.meta || {};
-//         const image = meta.image || "";
-//         const title = banner?.title?.rendered || "No Title";
+            const bannerHTML = `
+                <div class="post-item">
+                    <div class="post-thumbnail">
+                        <img
+                        src="${bg_avatar}"
+                        alt="Post"
+                        />
+                    </div>
+                    <div class="post-info">
+                        <h4>
+                        <a class="text-line text-blog-tilte" href="${blog.link || '#'}"
+                            >${title}</a
+                        >
+                        </h4>
+                        <div class="post-date">
+                        <i class="fa-regular fa-clock"></i> ${bg_date}
+                        </div>
+                    </div>
+                </div>
+            `;
 
-//         const bannerHTML = `
-//           <div class="banner-card">
-//             <img
-//               src="${image}"
-//               alt="${title}"
-//               class="banner-card-image"
-//             />
-//             <a href="${WP_HOME}/detailscate/?post_id=${banner.id}"  class="banner-card-btn">${title}</a>
-//           </div>
-//         `;
-//         bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
-//       });
+            sidebar.insertAdjacentHTML("beforeend", bannerHTML);
+        });
+    } catch (error) {
+        console.error("Lỗi khi tải banner:", error);
+    }
 
-//   } catch (error) {
-//     console.error("Lỗi khi tải banner:", error);
-//   }
-// });
+/** ==================================================== */
+    const blog_header = document.querySelector(".article-header");
+    try {
+        const res = await fetch(`${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`);
+        const blogs = await res.json();
+        const blog = blogs[0];
 
-/** =========Cars Blogs==========  */
-// document.addEventListener("DOMContentLoaded", async () => {
-//   const bannerContainer = document.querySelector("#cars-blogs-home");
+        
+        const meta = blog.meta || {};
+        const bg_short_desc = meta.bg_short_desc || "";
+        const title = blog?.title?.rendered || "Banner";
+        const bg_avatar = meta.bg_avatar || "";
+        const bg_author = meta.bg_author || "";
+        const bg_date = meta.bg_date || "";
+        const bg_author_logo = meta.bg_author_logo || "";
 
-//   try {
-//     const res = await fetch("http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/cars_blog?per_page=3");
-//     const banners = await res.json();
+        const tagIds = blog.blog_tag || [];
 
-//     banners.forEach((banner) => {
-//         const meta = banner.meta || {};
-//         const blog_desc = meta.blog_desc || "";
-//         const title = banner?.title?.rendered || "Banner";
+        let tagsHTML = "";
+        if (tagIds.length > 0) {
+        const tagPromises = tagIds.map(async (id) => {
+            const tagRes = await fetch(`https://nano4me.org/wp-json/wp/v2/blog_tag/${id}`);
+            const tagData = await tagRes.json();
+            return `<span class="tag">${tagData.name}</span>`;
+        });
 
-//         const bannerHTML = `
-//         <section class="info-section">
-//         <div>
-//           <div class="info-header">
-//             <h2>${title}</h2>
-//             <div class="info-icons">
-//               <span>🌟</span>
-//               <span>🏆</span>
-//             </div>
-//           </div>
-//           <div class="info-content">
-//             <p>
-//               ${blog_desc}
-//             </p>
-//             <div class="fade-overlay"></div>
-//           </div>
-//           <div class="btn-container">
-//             <button class="show-more" onclick="toggleContent(this)">
-//               <span class="text">Read More</span>
-//               <span class="icon"><i class="fa-solid fa-angles-down"></i></span>
-//             </button>
-//           </div>
-//         </div>
-//         </section>
-//         `;
-//         bannerContainer.insertAdjacentHTML("beforeend", bannerHTML);
-//       });
+        const tags = await Promise.all(tagPromises);
+        tagsHTML = tags.join("");
+        }
 
-//   } catch (error) {
-//     console.error("Lỗi khi tải banner:", error);
-//   }
-// });
+            const bannerHTML = `
+                <div class="article-tags">
+                ${tagsHTML || "<span class='tag'>No Tag</span>"}
+                </div>
+                <h1>${title}</h1>
+                <div class="article-meta">
+                <div class="article-meta-left">
+                    <span class="article-views">
+                    <i class="fa-solid fa-eye"></i>
+                    46 lượt xem
+                    </span>
+                    <div class="author">
+                    <img src="${bg_author_logo}" alt="Author" />
+                    <span>${bg_author} — ${bg_date}</span>
+                    </div>
+                </div>
+                <div class="article-actions">
+                    <a href="https://x.com/"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="https://www.facebook.com/index.php/"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="https://ca.linkedin.com/"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+                </div>
+            `;
 
-/** Blog Section */
-document.addEventListener("DOMContentLoaded", async () => {
-  const bannerContainer = document.querySelector("#section-blog-home");
-  
-  if (!bannerContainer) return;
+            blog_header.insertAdjacentHTML("beforeend", bannerHTML);
+    } catch (error) {
+        console.error("Lỗi khi tải banner:", error);
+    }
+
+
+
+/** ==================================================== */
+
+
+   const blogDesc = document.querySelector("#article-content");
 
   try {
-    // Fetch blogs data
-    const res = await fetch(
-      "https://nano4me.org/wp-json/wp/v2/blogs?per_page=100"
-    );
+    const res = await fetch(`${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`);
     const blogs = await res.json();
+    const blog = blogs[0];
 
-    // Filter: Chỉ lấy blogs có _blogs_visible = "1"
-    const visibleBlogs = blogs.filter((blog) => {
-      const isVisible = blog.meta?._blogs_visible;
-      return isVisible === "1" || isVisible === true || isVisible === 1;
-    });
+    const meta = blog.meta || {};
+    const desc = meta._blog_desc || "<p>Không có nội dung mô tả.</p>";
 
-    console.log("Visible blogs:", visibleBlogs);
+    // Render nội dung trước
+    blogDesc.innerHTML = desc;
 
-    // Lấy 3 blogs đầu tiên để hiển thị
-    const displayBlogs = visibleBlogs.slice(0, 3);
-
-    // Render từng blog
-    displayBlogs.forEach((blog) => {
-      const meta = blog.meta || {};
-      const title = blog?.title?.rendered || "No title";
-      const image = meta.bg_thumbnail || "";
-      const desc = meta.bg_short_desc || "No description";
-      
-      // Lấy author info từ REST API response (đã được expose từ PHP)
-      const author = blog.author_name || "Unknown Author";
-      const author_logo = blog.author_avatar || "";
-      
-      // Format date
-      const date = formatDate(blog.date);
-
-      const blogHTML = `
-        <a href="${blog.link}" class="blog-card">
-          <div class="blog-image">
-            <img src="${image}" alt="${title}" />
-          </div>
-          <div class="blog-content">
-            <h3 class="text-line blog-title">${title}</h3>
-            <p class="text-line blog-description">${desc}</p>
-            <div class="blog-meta">
-              <img class="blog-meta-avatar" src="${author_logo}" alt="${author}" />
-              <span>${author} | ${date}</span>
-            </div>
-            <span class="read-more">
-              <span>Read more</span>
-              <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i>
-            </span>
-          </div>
-        </a>
-      `;
-      
-      bannerContainer.insertAdjacentHTML("beforeend", blogHTML);
-    });
-
+    // Sau đó thêm TOC vào DOM
+    generateTableOfContents();
   } catch (error) {
-    console.error("Lỗi khi tải blogs:", error);
+    console.error("Lỗi khi tải blog:", error);
   }
+
+  const breadcrumb = document.querySelector(".breadcrumb_blog");
+    try {
+        const res = await fetch(`${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`);
+        const blogs = await res.json();
+        const blog = blogs[0];
+        
+            const title = blog?.title?.rendered || "Banner";
+
+            const bannerHTML = `
+                <a href="${WP_HOME}"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
+                <a href="${WP_HOME}/blog/">Blog</a> /
+                <span>${title}</span>
+            `;
+
+            breadcrumb.insertAdjacentHTML("beforeend", bannerHTML);
+        
+    } catch (error) {
+        console.error("Lỗi khi tải banner:", error);
+    }
 });
 
-// Helper function: Format date
-function formatDate(dateString) {
-  if (!dateString) return "No date";
-  
-  const date = new Date(dateString);
-  const options = { year: 'numeric', month: 'short', day: 'numeric' };
-  
-  return date.toLocaleDateString('en-US', options);
+function generateTableOfContents() {
+  const content = document.getElementById("article-content");
+  if (!content) return;
+
+  const headings = content.querySelectorAll("h2, h3");
+  if (headings.length === 0) return;
+
+  // Tạo TOC mới và chèn lên đầu nội dung
+  const toc = document.createElement("div");
+  toc.className = "table-of-contents";
+  toc.innerHTML = `
+    <div class="toc-header">
+      <h3><i class="fa-solid fa-list-ul"></i> Nội dung chính</h3>
+      <i class="fa-solid fa-chevron-down toc-toggle"></i>
+    </div>
+    <div class="toc-content">
+      <ul class="toc-list"></ul>
+    </div>
+  `;
+  content.prepend(toc);
+
+  const tocList = toc.querySelector(".toc-list");
+  const tocHeader = toc.querySelector(".toc-header");
+  const tocContent = toc.querySelector(".toc-content");
+  const toggleIcon = toc.querySelector(".toc-toggle");
+
+  // Gắn sự kiện dropdown
+  tocHeader.addEventListener("click", () => {
+    tocContent.classList.toggle("show");
+    toggleIcon.classList.toggle("rotate");
+  });
+
+
+  headings.forEach((heading, index) => {
+    const id = `section-${index}`;
+    heading.id = id;
+
+    const li = document.createElement("li");
+    const a = document.createElement("a");
+    a.href = `#${id}`;
+    a.innerHTML = `<span class="toc-number">${index + 1}.</span> <span>${heading.textContent}</span>`;
+
+    if (heading.tagName === "H3") li.classList.add("sub-item");
+
+    li.appendChild(a);
+    tocList.appendChild(li);
+  });
 }
+
+
+

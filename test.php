@@ -1,107 +1,136 @@
-<?php get_header() ?>
+<!DOCTYPE html>
+<html lang="en">
 
-<main class="container">
-    <!-- Hero Carousel -->
-    <section class="hero-carousel">
-        <div class="carousel-wrapper" id="banner-carousel">
-            <!--  Fetch Data here -->
-        </div>
-    </section>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <?php wp_head(); ?>
+</head>
 
-    <!-- Cards Grid -->
-    <section class="cards-grid categories-container-home">
-        <!--  Fetch Data here -->
-    </section>
+<body <?php body_class(); ?>>
 
-    <!-- Blog Section -->
-    <section class="blog-section-home">
-        <div class="blog-header">
-            <div class="logo-icon">▶</div>
-            <h2>Movies Listing Blog</h2>
-        </div>
-        <div class="blog-grid-home" id="section-blog-home">
-            <!-- fetch data here -->
-        </div>
+    <?php
+    $is_post_item_detail = is_singular('post_item');
 
+    $logo_url = get_option('site_logo_url', '');
+    $has_custom_logo = !empty($logo_url);
+    ?>
 
-        <div style="text-align: center; margin-top: 30px">
-            <a href="<?php echo home_url("/blog") ?>" class="visit-btn-bl"><span>Go to Car Blog</span>
-                <i style="font-size: 14px; margin-top: 4px; margin-left: 6px" class="fa-solid fa-chevron-right"></i></a>
-        </div>
-    </section>
+    <?php if ($is_post_item_detail): ?>
+    <div class="hero-wrapper">
+        <?php endif; ?>
 
+        <header>
+            <div class="container">
+                <div class="header-content">
 
-    <!-- Info Section -->
+                    <!-- Logo -->
+                    <div class="logo">
+                        <a href="<?php echo home_url(); ?>">
 
+                            <?php
+                            $logo_url = get_theme_mod('header_logo');
+                            $site_title = get_bloginfo('name');
+                            ?>
 
-    <!--     <div id="cars-blogs-home">
-       
-    </div> -->
+                            <?php if ($logo_url): ?>
 
-    <section class="info-section">
-        <div>
-            <div class="info-header">
-                <h2><?php echo get_the_title(); ?></h2>
-                <div class="info-icons">
-                    <span>🌟</span>
-                    <span>🏆</span>
+                            <!-- Có logo → hiện logo, không hiện chữ -->
+                            <img src="<?php echo esc_url($logo_url); ?>" alt="<?php echo esc_attr($site_title); ?>"
+                                class="site-logo">
+
+                            <?php else: ?>
+
+                            <!-- Không có logo → hiện fallback icon + chữ -->
+                            <div class="logo-icon">▶</div>
+                            <span><?php echo esc_html($site_title); ?></span>
+
+                            <?php endif; ?>
+
+                        </a>
+                    </div>
+
+                    <!-- Desktop / Tablet Menu -->
+                    <div class="header-menu">
+                        <?php if (has_nav_menu('main-menu')): ?>
+                        <nav class="main-nav">
+                            <?php
+                                wp_nav_menu([
+                                    'theme_location' => 'main-menu',
+                                    'container' => false,
+                                    'menu_class' => 'main-menu-list'
+                                ]);
+                                ?>
+                        </nav>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Search + Social -->
+                    <div class="search-box">
+                        <div class="input-search-icon">
+                            <input type="text" placeholder="Stream your next favorite thing..." />
+                            <i class="icon-search fa-solid fa-magnifying-glass"></i>
+                        </div>
+
+                        <div class="social-icons">
+                            <span><i class="fa-brands fa-square-facebook"></i></span>
+                            <span><i class="fa-brands fa-youtube"></i></span>
+                            <span><i class="fa-brands fa-x-twitter"></i></span>
+                        </div>
+
+                        <!-- Mobile Hamburger -->
+                        <button id="openMenuBtn" class="hamburger">
+                            <i class="fa-solid fa-bars"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
-            <div class="info-content">
-                <p>
-                    <?php the_content(); ?>
-                </p>
-                <div class="fade-overlay"></div>
-            </div>
-            <div class="btn-container">
-                <button class="show-more" onclick="toggleContent(this)">
-                    <span class="text">Read More</span>
-                    <span class="icon"><i class="fa-solid fa-angles-down"></i></span>
-                </button>
-            </div>
-        </div>
-    </section>
+        </header>
 
+        <?php if ($is_post_item_detail): ?>
+        <section class="top-content" id="top-content-section">
+        </section>
+        <?php endif; ?>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="cta-left">
-            <h2>Movies Listing</h2>
-            <div class="cta-title">Watch</div>
-            <p>Reviews The Best Streaming Sites Of 2025.</p>
-            <div class="cta-features">
-                <div class="cta-feature">
-                    <div class="cta-feature-icon">🎬</div>
-                    <div class="cta-feature-text">Free Movies</div>
-                </div>
-                <div class="cta-feature">
-                    <div class="cta-feature-icon">📺</div>
-                    <div>Live TV</div>
-                </div>
-                <div class="cta-feature">
-                    <div class="cta-feature-icon">🌐</div>
-                    <div>Websites</div>
-                </div>
+        <?php if ($is_post_item_detail): ?>
+    </div>
+    <!-- End Hero Wrapper -->
+    <?php endif; ?>
+
+    <!-- Mobile Menu Drawer -->
+    <div class="mobile-menu-drawer" id="mobileDrawer">
+        <div class="mobile-menu-header">
+            <div class="logo">
+                <a href="<?php echo home_url(); ?>">
+                    <?php if ($has_custom_logo): ?>
+                    <!-- Logo từ Options Page -->
+                    <img src="<?php echo esc_url($logo_url); ?>" alt="<?php bloginfo('name'); ?>" class="site-logo">
+                    <span>Movies Listing</span>
+                    <?php else: ?>
+                    <!-- Fallback: Logo mặc định -->
+                    <div class="logo-icon">▶</div>
+                    <span>Movies Listing</span>
+                    <?php endif; ?>
+                </a>
             </div>
-            <p style="margin-top: 30px; font-size: 18px; font-weight: bold">
-                On The Most Popular<br />Movies Listing
-            </p>
-            <p>
-                All the top streaming sites are sorted by quality, virus-free, and
-                100% safe.
-            </p>
+            <button class="close-menu" id="closeMenuBtn" aria-label="Close menu">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
-        <div class="cta-right">
-            <img src="https://plus.unsplash.com/premium_photo-1721225464894-46e7bb29e446?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c3RyZWFtaW5nJTIwc2l0ZXN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600"
-                alt="" style="
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-              object-position: center;
-            " />
-        </div>
-    </section>
-</main>
 
-<!-- Footer -->
-<?php get_footer() ?>
+        <nav class="mobile-nav">
+            <ul id="mobileMenu">
+                <?php
+                wp_nav_menu([
+                    'theme_location' => 'main-menu',   // lấy Main Menu luôn
+                    'container' => false,
+                    'menu_id' => 'mobileMenu',
+                    'menu_class' => 'mobile-menu-list'
+                ]);
+                ?>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- Overlay -->
+    <div class="mobile-overlay" id="mobileOverlay"></div>

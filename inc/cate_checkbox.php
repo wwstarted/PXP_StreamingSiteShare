@@ -1,10 +1,6 @@
 <?php
-/**
- * Multi-select Categories cho CPT post_item
- * Thêm code này vào functions.php
- */
 
-// QUAN TRỌNG: Register meta field để expose ra REST API
+// register
 add_action('init', 'register_post_item_cate_meta');
 function register_post_item_cate_meta()
 {
@@ -32,7 +28,6 @@ function register_post_item_cate_meta()
     ));
 }
 
-// Thêm Meta Box checkbox ở sidebar bên phải
 add_action('add_meta_boxes', 'add_post_item_multi_cate_metabox');
 function add_post_item_multi_cate_metabox()
 {
@@ -49,13 +44,11 @@ function add_post_item_multi_cate_metabox()
 // Render checkbox list
 function render_post_item_multi_cate_box($post)
 {
-    // Lấy danh sách category hiện tại (array)
     $current_cates = get_post_meta($post->ID, 'id_cate_post', true);
     if (!is_array($current_cates)) {
         $current_cates = array();
     }
 
-    // Lấy tất cả categories từ CPT cate_post
     $categories = get_posts(array(
         'post_type' => 'cate_post',
         'numberposts' => -1,
@@ -93,11 +86,11 @@ function render_post_item_multi_cate_box($post)
     echo '<p class="description" style="margin-top:8px;">Select one or multiple categories</p>';
 }
 
-// Lưu meta khi save post
+// save meta 
 add_action('save_post_post_item', 'save_post_item_multi_cate_meta', 10, 2);
 function save_post_item_multi_cate_meta($post_id, $post)
 {
-    // Kiểm tra nonce
+    // check nonce
     if (
         !isset($_POST['post_item_cate_nonce_field']) ||
         !wp_verify_nonce($_POST['post_item_cate_nonce_field'], 'post_item_cate_nonce')
@@ -110,22 +103,20 @@ function save_post_item_multi_cate_meta($post_id, $post)
         return;
     }
 
-    // Kiểm tra quyền
     if (!current_user_can('edit_post', $post_id)) {
         return;
     }
 
-    // Xử lý checkbox array
+    // checkbox array
     if (isset($_POST['id_cate_post']) && is_array($_POST['id_cate_post'])) {
         $selected_cates = array_map('intval', $_POST['id_cate_post']);
         update_post_meta($post_id, 'id_cate_post', $selected_cates);
     } else {
-        // Nếu không tick gì, lưu array rỗng
+        // empty array
         update_post_meta($post_id, 'id_cate_post', array());
     }
 }
 
-// Thêm column "Categories" vào admin list
 add_filter('manage_post_item_posts_columns', 'add_post_item_cate_column');
 function add_post_item_cate_column($columns)
 {

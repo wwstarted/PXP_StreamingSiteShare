@@ -333,6 +333,7 @@
 @media (max-width: 1024px) {
   .search-dropdown {
     max-height: 60vh;
+    left: -184px;
   }
 
   .search-dropdown-content {

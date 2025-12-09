@@ -126,7 +126,6 @@ function renderCategories(cates, posts) {
   if (!container) return;
   container.innerHTML = "";
 
-  // Chỉ lấy categories có tick visible
   const visibleCates = cates.filter((cate) => {
     const v = cate.meta?._cate_post_visible;
     return v === "1" || v === 1 || v === true;
@@ -142,7 +141,6 @@ function renderCategories(cates, posts) {
     const shortDesc = meta.short_desc || "";
     const cateTitle = cate.title?.rendered || "No title";
 
-    // Tối ưu: filter nhanh hơn + đúng logic id_cate_post (mảng)
     const catePosts = posts
       .filter((p) => {
         const ids = p.meta?.id_cate_post;
@@ -157,14 +155,14 @@ function renderCategories(cates, posts) {
         ? displayPosts
             .map(
               (post, index) => `
-        <li>
-          <p class="features-list-top">${index + 1}</p>
-          <img class="features-list-logo-image"
-            src="${post.meta?.logo || ""}"
-            alt="${post.title.rendered}" />
+        <a href="${post.link}" style="text-decoration: none; color: inherit;">
+    <li>
+        <p class="features-list-top">${index + 1}</p>
+        <img class="features-list-logo-image" src="${post.meta?.logo || ""}" alt="${post.title.rendered}" />
 
-          <p class="text-line features-list-name">${post.title.rendered}</p>
-        </li>
+        <p class="text-line features-list-name">${post.title.rendered}</p>
+    </li>
+</a>
       `
             )
             .join("")
@@ -175,9 +173,11 @@ function renderCategories(cates, posts) {
     const lastThreeLogosHTML = lastThreePosts
       .map(
         (post) => `
+        <a href="${post.link}" style="text-decoration: none; color: inherit;">
       <img class="footer-logo-preview"
         src="${post.meta?.logo || ""}"
         alt="${post.title.rendered}" />
+        </a>
     `
       )
       .join("");

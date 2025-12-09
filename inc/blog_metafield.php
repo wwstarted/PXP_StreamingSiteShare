@@ -123,105 +123,105 @@ function render_blogs_details_box($post)
     wp_nonce_field('blogs_details_nonce', 'blogs_details_nonce_field');
     ?>
 
-    <table class="form-table" style="margin-top: 10px;">
-        <tr>
-            <th style="width: 200px;">
-                <label for="bg_short_desc">Short Description</label>
-            </th>
-            <td>
-                <textarea id="bg_short_desc" name="bg_short_desc" rows="4" style="width: 100%; max-width: 600px;"
-                    placeholder="Enter a short description for this blog post..."><?php echo esc_textarea($short_desc); ?></textarea>
-                <p class="description">Brief summary of the blog post (shown in listings)</p>
-            </td>
-        </tr>
+<table class="form-table" style="margin-top: 10px;">
+    <tr>
+        <th style="width: 200px;">
+            <label for="bg_short_desc">Short Description</label>
+        </th>
+        <td>
+            <textarea id="bg_short_desc" name="bg_short_desc" rows="4" style="width: 100%; max-width: 600px;"
+                placeholder="Enter a short description for this blog post..."><?php echo esc_textarea($short_desc); ?></textarea>
+            <p class="description">Brief summary of the blog post (shown in listings)</p>
+        </td>
+    </tr>
 
-        <tr>
-            <th>
-                <label for="bg_thumbnail">Thumbnail Image</label>
-            </th>
-            <td>
-                <div class="blogs-thumbnail-wrapper">
-                    <input type="hidden" id="bg_thumbnail" name="bg_thumbnail" value="<?php echo esc_url($thumbnail); ?>" />
-                    <input type="hidden" id="bg_thumbnail_id" name="bg_thumbnail_id"
-                        value="<?php echo esc_attr($thumbnail_id); ?>" />
+    <tr>
+        <th>
+            <label for="bg_thumbnail">Thumbnail Image</label>
+        </th>
+        <td>
+            <div class="blogs-thumbnail-wrapper">
+                <input type="hidden" id="bg_thumbnail" name="bg_thumbnail" value="<?php echo esc_url($thumbnail); ?>" />
+                <input type="hidden" id="bg_thumbnail_id" name="bg_thumbnail_id"
+                    value="<?php echo esc_attr($thumbnail_id); ?>" />
 
-                    <div id="thumbnail-preview" style="margin-bottom: 10px;">
-                        <?php if ($thumbnail): ?>
-                            <img src="<?php echo esc_url($thumbnail); ?>"
-                                style="max-width: 300px; height: auto; border: 1px solid #ddd; border-radius: 4px;">
-                        <?php else: ?>
-                            <p style="color: #999;">No image selected</p>
-                        <?php endif; ?>
-                    </div>
-
-                    <button type="button" class="button button-secondary" id="upload_thumbnail_button">
-                        <span class="dashicons dashicons-upload" style="margin-top: 3px;"></span>
-                        <?php echo $thumbnail ? 'Change Image' : 'Upload Image'; ?>
-                    </button>
-
+                <div id="thumbnail-preview" style="margin-bottom: 10px;">
                     <?php if ($thumbnail): ?>
-                        <button type="button" class="button button-link-delete" id="remove_thumbnail_button"
-                            style="color: #b32d2e; margin-left: 10px;">
-                            Remove Image
-                        </button>
+                    <img src="<?php echo esc_url($thumbnail); ?>"
+                        style="max-width: 300px; height: auto; border: 1px solid #ddd; border-radius: 4px;">
+                    <?php else: ?>
+                    <p style="color: #999;">No image selected</p>
                     <?php endif; ?>
                 </div>
-                <p class="description">Featured image for the blog post</p>
-            </td>
-        </tr>
-    </table>
 
-    <script>
-        jQuery(document).ready(function ($) {
-            var mediaUploader;
+                <button type="button" class="button button-secondary" id="upload_thumbnail_button">
+                    <span class="dashicons dashicons-upload" style="margin-top: 3px;"></span>
+                    <?php echo $thumbnail ? 'Change Image' : 'Upload Image'; ?>
+                </button>
 
-            $('#upload_thumbnail_button').on('click', function (e) {
-                e.preventDefault();
+                <?php if ($thumbnail): ?>
+                <button type="button" class="button button-link-delete" id="remove_thumbnail_button"
+                    style="color: #b32d2e; margin-left: 10px;">
+                    Remove Image
+                </button>
+                <?php endif; ?>
+            </div>
+            <p class="description">Featured image for the blog post</p>
+        </td>
+    </tr>
+</table>
 
-                if (mediaUploader) {
-                    mediaUploader.open();
-                    return;
-                }
+<script>
+jQuery(document).ready(function($) {
+    var mediaUploader;
 
-                mediaUploader = wp.media({
-                    title: 'Choose Thumbnail Image',
-                    button: {
-                        text: 'Use this image'
-                    },
-                    multiple: false
-                });
+    $('#upload_thumbnail_button').on('click', function(e) {
+        e.preventDefault();
 
-                mediaUploader.on('select', function () {
-                    var attachment = mediaUploader.state().get('selection').first().toJSON();
-                    $('#bg_thumbnail').val(attachment.url);
-                    $('#bg_thumbnail_id').val(attachment.id);
-                    $('#thumbnail-preview').html('<img src="' + attachment.url +
-                        '" style="max-width: 300px; height: auto; border: 1px solid #ddd; border-radius: 4px;">'
-                    );
-                    $('#upload_thumbnail_button').text('Change Image');
+        if (mediaUploader) {
+            mediaUploader.open();
+            return;
+        }
 
-                    if ($('#remove_thumbnail_button').length === 0) {
-                        $('#upload_thumbnail_button').after(
-                            '<button type="button" class="button button-link-delete" id="remove_thumbnail_button" style="color: #b32d2e; margin-left: 10px;">Remove Image</button>'
-                        );
-                    }
-                });
-
-                mediaUploader.open();
-            });
-
-            $(document).on('click', '#remove_thumbnail_button', function (e) {
-                e.preventDefault();
-                $('#bg_thumbnail').val('');
-                $('#bg_thumbnail_id').val('');
-                $('#thumbnail-preview').html('<p style="color: #999;">No image selected</p>');
-                $('#upload_thumbnail_button').text('Upload Image');
-                $(this).remove();
-            });
+        mediaUploader = wp.media({
+            title: 'Choose Thumbnail Image',
+            button: {
+                text: 'Use this image'
+            },
+            multiple: false
         });
-    </script>
 
-    <?php
+        mediaUploader.on('select', function() {
+            var attachment = mediaUploader.state().get('selection').first().toJSON();
+            $('#bg_thumbnail').val(attachment.url);
+            $('#bg_thumbnail_id').val(attachment.id);
+            $('#thumbnail-preview').html('<img src="' + attachment.url +
+                '" style="max-width: 300px; height: auto; border: 1px solid #ddd; border-radius: 4px;">'
+            );
+            $('#upload_thumbnail_button').text('Change Image');
+
+            if ($('#remove_thumbnail_button').length === 0) {
+                $('#upload_thumbnail_button').after(
+                    '<button type="button" class="button button-link-delete" id="remove_thumbnail_button" style="color: #b32d2e; margin-left: 10px;">Remove Image</button>'
+                );
+            }
+        });
+
+        mediaUploader.open();
+    });
+
+    $(document).on('click', '#remove_thumbnail_button', function(e) {
+        e.preventDefault();
+        $('#bg_thumbnail').val('');
+        $('#bg_thumbnail_id').val('');
+        $('#thumbnail-preview').html('<p style="color: #999;">No image selected</p>');
+        $('#upload_thumbnail_button').text('Upload Image');
+        $(this).remove();
+    });
+});
+</script>
+
+<?php
 }
 
 // ========================================
@@ -251,18 +251,18 @@ function render_blogs_visibility_box($post)
     wp_nonce_field('blogs_visibility_nonce', 'blogs_visibility_nonce_field');
     ?>
 
-    <div style="padding: 10px 0;">
-        <label style="display: flex; align-items: center; cursor: pointer;">
-            <input type="checkbox" name="blogs_visible" value="1" <?php checked($is_visible, '1'); ?>
-                style="margin-right: 8px;" />
-            <span>Show on HomePage</span>
-        </label>
-        <p class="description" style="margin-top: 8px; color: #666;">
-            Tick to display this blog on homepage
-        </p>
-    </div>
+<div style="padding: 10px 0;">
+    <label style="display: flex; align-items: center; cursor: pointer;">
+        <input type="checkbox" name="blogs_visible" value="1" <?php checked($is_visible, '1'); ?>
+            style="margin-right: 8px;" />
+        <span>Show on HomePage</span>
+    </label>
+    <p class="description" style="margin-top: 8px; color: #666;">
+        Tick to display this blog on homepage
+    </p>
+</div>
 
-    <?php
+<?php
 }
 
 // ========================================
@@ -372,11 +372,9 @@ function add_author_info_to_blogs_api($response, $post, $request)
 {
     $author_id = $post->post_author;
 
-    // Lấy author data
     $author_name = get_the_author_meta('display_name', $author_id);
     $author_avatar = get_avatar_url($author_id, array('size' => 96));
 
-    // Thêm vào response
     $response->data['author_name'] = $author_name;
     $response->data['author_avatar'] = $author_avatar;
 

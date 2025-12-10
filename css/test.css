@@ -1,211 +1,587 @@
- #cars-blogs-home {
-      width: 100%;
-      max-width: 900px;
-    }
+/* ========================================
+   PREMIUM RIGHT SIDEBAR - COMPLETE DESIGN
+======================================== */
 
-    /* Info Section - Box chính */
-    .info-section {
-      background: rgba(30, 41, 82, 0.9);
-      border-radius: 20px;
-      border: 2px solid rgba(147, 51, 234, 0.4);
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-      padding: 40px;
-      max-height: 85vh;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
+/* Right Content Container */
+.right-content {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
 
-    /* Info Header */
-    .info-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 25px;
-      padding-bottom: 20px;
-      border-bottom: 2px solid rgba(147, 51, 234, 0.3);
-      flex-shrink: 0;
-    }
+/* ========================================
+   1. USER REVIEWS SECTION
+======================================== */
+.user-reviews-section {
+  background: linear-gradient(
+    135deg,
+    rgba(30, 41, 82, 0.95) 0%,
+    rgba(20, 30, 60, 0.95) 100%
+  );
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  animation: fadeInRight 0.6s ease;
+}
 
-    .info-header h2 {
-      font-size: 28px;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      flex: 1;
-      line-height: 1.3;
-    }
+.user-reviews-section h3 {
+  margin: 0 0 20px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
-    .info-icons {
-      display: flex;
-      gap: 15px;
-      font-size: 24px;
-      flex-shrink: 0;
-    }
+.user-reviews-section h3::before {
+  content: "💬";
+  font-size: 24px;
+}
 
-    /* Info Content */
-    .info-content {
-      flex: 1;
-      position: relative;
-      overflow: hidden;
-      margin-bottom: 20px;
-      min-height: 0;
-    }
+/* Review Cards */
+.review-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  animation: slideInRight 0.5s ease forwards;
+}
 
-    .info-content p {
-      font-size: 16px;
-      line-height: 1.8;
-      color: rgba(255, 255, 255, 0.9);
-      max-height: 130px;
-      overflow: hidden;
-      transition: all 0.4s ease;
-      margin: 0;
-    }
+.review-card:nth-child(2) { animation-delay: 0.1s; }
+.review-card:nth-child(3) { animation-delay: 0.2s; }
+.review-card:nth-child(4) { animation-delay: 0.3s; }
 
-    /* Khi expanded */
-    .info-content.expanded p {
-      max-height: none;
-      overflow-y: auto;
-      padding-right: 15px;
-      height: 100%;
-    }
+.review-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-    /* Custom Scrollbar */
-    .info-content.expanded p::-webkit-scrollbar {
-      width: 8px;
-    }
+.review-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
 
-    .info-content.expanded p::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-      margin: 5px 0;
-    }
+.review-card:hover::before {
+  opacity: 1;
+}
 
-    .info-content.expanded p::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border-radius: 10px;
-      transition: all 0.3s ease;
-    }
+.review-card:last-child {
+  margin-bottom: 0;
+}
 
-    .info-content.expanded p::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(135deg, #764ba2, #667eea);
-      box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
-    }
+/* Review Header */
+.review-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
 
-    /* Fade Overlay */
-    .fade-overlay {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 80px;
-      background: linear-gradient(to bottom, transparent, rgba(30, 41, 82, 0.95));
-      pointer-events: none;
-      opacity: 1;
-      transition: opacity 0.4s ease;
-    }
+.review-avatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
 
-    .info-content.expanded .fade-overlay {
-      opacity: 0;
-    }
+.review-info {
+  flex: 1;
+}
 
-    /* Button Container */
-    .btn-container {
-      display: flex;
-      justify-content: center;
-      flex-shrink: 0;
-    }
+.review-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 4px 0;
+}
 
-    .show-more {
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      border: none;
-      padding: 14px 35px;
-      border-radius: 30px;
-      color: #fff;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-    }
+.review-rating {
+  display: flex;
+  gap: 3px;
+}
 
-    .show-more:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
-      background: linear-gradient(135deg, #764ba2, #667eea);
-    }
+.review-rating .star {
+  color: #fbbf24;
+  font-size: 14px;
+}
 
-    .show-more:active {
-      transform: translateY(0);
-    }
+.review-rating .star.empty {
+  color: rgba(251, 191, 36, 0.2);
+}
 
-    .show-more .icon {
-      transition: transform 0.3s ease;
-      display: flex;
-      align-items: center;
-    }
+/* Review Text */
+.review-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: #d4d4d4;
+  margin: 0;
+}
 
-    .show-more.active .icon {
-      transform: rotate(180deg);
-    }
+/* ========================================
+   2. AD BANNER - REDESIGNED
+======================================== */
+.ad-banner {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  animation: fadeInRight 0.6s ease 0.2s backwards;
+}
 
-    /* Responsive */
-    @media (max-width: 768px) {
-      .info-section {
-        padding: 25px;
-        max-height: 90vh;
-      }
+.ad-banner::before {
+  content: "Sponsored";
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(10px);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 2;
+}
 
-      .info-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 15px;
-      }
+.ad-banner:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.4);
+}
 
-      .info-header h2 {
-        font-size: 22px;
-      }
+.ad-banner img {
+  width: 100%;
+  display: block;
+  border-radius: 20px;
+  transition: transform 0.3s ease;
+}
 
-      .info-icons {
-        font-size: 20px;
-      }
+.ad-banner:hover img {
+  transform: scale(1.05);
+}
 
-      .info-content p {
-        font-size: 14px;
-        max-height: 100px;
-      }
+/* ========================================
+   3. COMMENT BOX - PREMIUM REDESIGN
+======================================== */
+.comment-box {
+  background: linear-gradient(
+    135deg,
+    rgba(30, 41, 82, 0.95) 0%,
+    rgba(20, 30, 60, 0.95) 100%
+  );
+  padding: 25px;
+  border-radius: 20px;
+  box-shadow: 
+    0 10px 40px rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  animation: fadeInRight 0.6s ease 0.3s backwards;
+}
 
-      .show-more {
-        padding: 12px 28px;
-        font-size: 14px;
-      }
+.comment-box h4 {
+  margin: 0 0 18px 0;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-      .info-content.expanded p::-webkit-scrollbar {
-        width: 6px;
-      }
-    }
+.comment-box h4::before {
+  content: "✍️";
+  font-size: 20px;
+}
 
-    @media (max-width: 480px) {
-      body {
-        padding: 10px;
-      }
+/* Star Rating Picker */
+.star-rating-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 15px;
+}
 
-      .info-section {
-        padding: 20px;
-        border-radius: 15px;
-      }
+.star-rating-picker label {
+  font-size: 14px;
+  color: #d4d4d4;
+  font-weight: 500;
+}
 
-      .info-header h2 {
-        font-size: 20px;
-      }
+.stars-input {
+  display: flex;
+  gap: 6px;
+}
 
-      .info-content p {
-        font-size: 13px;
-      }
-    }
+.stars-input .star-btn {
+  background: none;
+  border: none;
+  color: rgba(251, 191, 36, 0.3);
+  font-size: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+  line-height: 1;
+}
 
-    
+.stars-input .star-btn:hover,
+.stars-input .star-btn.active {
+  color: #fbbf24;
+  transform: scale(1.1);
+}
+
+.stars-input .star-btn:active {
+  transform: scale(0.95);
+}
+
+/* Textarea */
+.comment-box textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  outline: none;
+  font-size: 14px;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  resize: vertical;
+  transition: all 0.3s ease;
+  margin-bottom: 15px;
+}
+
+.comment-box textarea::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.comment-box textarea:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(102, 126, 234, 0.5);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.comment-box textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.comment-box textarea::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+}
+
+.comment-box textarea::-webkit-scrollbar-thumb {
+  background: rgba(102, 126, 234, 0.5);
+  border-radius: 10px;
+}
+
+/* Submit Button */
+.comment-box .btn-submit {
+  width: 100%;
+  padding: 14px 24px;
+  border: none;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 12px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 15px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.comment-box .btn-submit::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.comment-box .btn-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+}
+
+.comment-box .btn-submit:hover::before {
+  left: 100%;
+}
+
+.comment-box .btn-submit:active {
+  transform: translateY(0);
+}
+
+.comment-box .btn-submit::after {
+  content: "→";
+  font-size: 18px;
+  transition: transform 0.3s ease;
+}
+
+.comment-box .btn-submit:hover::after {
+  transform: translateX(4px);
+}
+
+/* ========================================
+   ANIMATIONS
+======================================== */
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ========================================
+   RESPONSIVE - TABLET
+======================================== */
+@media (max-width: 1024px) {
+  .user-reviews-section,
+  .comment-box {
+    padding: 22px;
+  }
+
+  .user-reviews-section h3 {
+    font-size: 20px;
+  }
+
+  .review-card {
+    padding: 16px;
+  }
+
+  .review-avatar {
+    width: 42px;
+    height: 42px;
+    font-size: 17px;
+  }
+
+  .comment-box h4 {
+    font-size: 17px;
+  }
+
+  .comment-box textarea {
+    min-height: 90px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - MOBILE
+======================================== */
+@media (max-width: 768px) {
+  .right-content {
+    gap: 20px;
+  }
+
+  .user-reviews-section,
+  .comment-box {
+    padding: 20px;
+    border-radius: 16px;
+  }
+
+  .user-reviews-section h3 {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .user-reviews-section h3::before {
+    font-size: 22px;
+  }
+
+  .review-card {
+    padding: 15px;
+    margin-bottom: 12px;
+    border-radius: 14px;
+  }
+
+  .review-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+
+  .review-name {
+    font-size: 14px;
+  }
+
+  .review-rating .star {
+    font-size: 13px;
+  }
+
+  .review-text {
+    font-size: 13px;
+  }
+
+  /* Ad Banner */
+  .ad-banner {
+    border-radius: 16px;
+  }
+
+  .ad-banner::before {
+    top: 10px;
+    right: 10px;
+    padding: 3px 10px;
+    font-size: 10px;
+  }
+
+  /* Comment Box */
+  .comment-box h4 {
+    font-size: 16px;
+    margin-bottom: 15px;
+  }
+
+  .comment-box h4::before {
+    font-size: 18px;
+  }
+
+  .star-rating-picker {
+    margin-bottom: 12px;
+    gap: 10px;
+  }
+
+  .star-rating-picker label {
+    font-size: 13px;
+  }
+
+  .stars-input .star-btn {
+    font-size: 22px;
+  }
+
+  .comment-box textarea {
+    min-height: 85px;
+    padding: 12px 14px;
+    font-size: 13px;
+    margin-bottom: 12px;
+    border-radius: 10px;
+  }
+
+  .comment-box .btn-submit {
+    padding: 13px 20px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE - SMALL MOBILE
+======================================== */
+@media (max-width: 389px) {
+  .user-reviews-section,
+  .comment-box {
+    padding: 16px;
+  }
+
+  .user-reviews-section h3 {
+    font-size: 17px;
+  }
+
+  .review-card {
+    padding: 14px;
+  }
+
+  .review-header {
+    gap: 10px;
+  }
+
+  .review-avatar {
+    width: 38px;
+    height: 38px;
+    font-size: 15px;
+  }
+
+  .review-text {
+    font-size: 12px;
+  }
+
+  .comment-box h4 {
+    font-size: 15px;
+  }
+
+  .star-rating-picker {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .stars-input .star-btn {
+    font-size: 20px;
+  }
+
+  .comment-box textarea {
+    min-height: 80px;
+    font-size: 12px;
+  }
+
+  .comment-box .btn-submit {
+    padding: 12px 18px;
+    font-size: 13px;
+  }
+}
+
+/* ========================================
+   ACCESSIBILITY
+======================================== */
+.stars-input .star-btn:focus,
+.comment-box textarea:focus,
+.comment-box .btn-submit:focus {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Touch targets for mobile */
+@media (max-width: 768px) {
+  .stars-input .star-btn,
+  .comment-box .btn-submit {
+    min-height: 44px;
+  }
+}

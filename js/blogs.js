@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async()=>{
               <div class="card-image">
                 <div class="image-badge">LIVE SLOT</div>
                 <img src="${avatar}" alt="${title}" />
-                <div class="brand-logo">
+                <div class="brand-logo-blog">
                   <div class="brand-icon">▶</div>
                   <span>Streamingsites</span>
                 </div>
@@ -127,3 +127,5 @@ document.addEventListener("DOMContentLoaded", async()=>{
     rootContainer.innerHTML = "<p>Lỗi tải dữ liệu từ API.</p>";
   }
 })
+
+

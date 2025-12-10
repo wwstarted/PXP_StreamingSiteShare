@@ -298,7 +298,7 @@
   box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
 }
 
-.brand-logo {
+.brand-logo-blog {
   position: absolute;
   bottom: 16px;
   right: 16px;
@@ -687,7 +687,7 @@
     font-size: 11px;
   }
 
-  .brand-logo {
+  .brand-logo-blog {
     bottom: 12px;
     right: 12px;
     padding: 6px 12px;
@@ -699,8 +699,7 @@
     height: 18px;
     font-size: 10px;
   }
-
-  /* CTA Section - Stack vertically */
+  
   .cta-section {
     grid-template-columns: 1fr;
     margin: 40px 0 30px;

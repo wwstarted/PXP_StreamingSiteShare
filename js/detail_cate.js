@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       return null;
     }
     try {
-      const res = await fetch(`${API_BASE}/post_item?slug=${encodeURIComponent(slug)}`);
+      const res = await fetch(`${API_BASE}/posts?slug=${encodeURIComponent(slug)}`);
       const data = await res.json();
       if (Array.isArray(data) && data.length > 0) {
         sharedPostId = data[0].id;
@@ -105,24 +105,24 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  //  ================ current post =============
   let currentPost = null;
   try {
-    const res = await fetch(`${API_BASE}/post_item/${postId}`);
+    // ✅ Chuyển sang endpoint posts
+    const res = await fetch(`${API_BASE}/posts/${postId}`);
     currentPost = await res.json();
   } catch (err) {
     console.error("Lỗi khi fetch current post:", err);
     return;
   }
 
-// top content
+  // top content
   try {
     const topContentSection = document.querySelector("#top-content-section");
     if (topContentSection) {
       const postTitle = currentPost?.title?.rendered || "No title";
-      const postMeta = currentPost?.meta || {};
-      const postLogo = postMeta.logo || "";
-      const postLink = postMeta.post_link || "";
+      // ✅ Lấy từ root level
+      const postLogo = currentPost?.logo || "";
+      const postLink = currentPost?.post_link || "";
 
       topContentSection.innerHTML = `
         <div class="top-content-logo">
@@ -139,9 +139,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Lỗi khi render top content:", err);
   }
 
-// =================== background ====================
+  // =================== background ====================
   try {
-    const bgImage = currentPost?.meta?.bgr_image ||
+    const bgImage = currentPost?.bgr_image ||
       "http://localhost/PXP_SSW/wordpress/wp-content/themes/yourtheme/images/image_bgr.jpeg";
     const heroWrapper = document.querySelector(".hero-wrapper");
     if (heroWrapper) {
@@ -157,9 +157,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const contentleft = document.querySelector("#content-left");
     if (contentleft) {
       const postTitle = currentPost?.title?.rendered || "No title";
-      const postDesc = currentPost?.meta?._post_item_content || "No description available.";
-      const likesRaw = currentPost?.meta?.likes || "[]";
-      const hatesRaw = currentPost?.meta?.hates || "[]";
+      // ✅ Dùng content mặc định của WP
+      const postDesc = currentPost?.content?.rendered || "No description available.";
+      // ✅ Lấy từ root level
+      const likesRaw = currentPost?.likes || "[]";
+      const hatesRaw = currentPost?.hates || "[]";
       const likes = parseMaybeJson(likesRaw) || [];
       const hates = parseMaybeJson(hatesRaw) || [];
 
@@ -174,7 +176,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       contentleft.innerHTML = `
         <div class="left-content-inner">
           <h3>${postTitle}</h3>
-          <p>${postDesc}</p>
+          <div>${postDesc}</div>
           
           <div class="review-box">
             <div class="likes">
@@ -195,281 +197,278 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Lỗi khi render left content:", err);
   }
 
-//  ==================== right slidebar =======================
- try {
-  const contentgb = document.querySelector("#goodabad");
-  if (contentgb) {
-    // Static demo reviews data
-    const demoReviews = [
-      {
-        name: "John Doe",
-        initials: "JD",
-        rating: 5,
-        text: "Amazing streaming quality! The interface is super smooth and content library is huge. Definitely worth it!"
-      },
-      {
-        name: "Sarah Miller",
-        initials: "SM",
-        rating: 4,
-        text: "Great service overall. Fast loading times and good selection. Only issue is occasional buffering during peak hours."
-      },
-      {
-        name: "Mike Johnson",
-        initials: "MJ",
-        rating: 5,
-        text: "Best streaming platform I've used! Clean UI, no ads, and excellent customer support. Highly recommend!"
-      },
-      {
-        name: "Emily Wilson",
-        initials: "EW",
-        rating: 4,
-        text: "Solid platform with great features. Works perfectly on all my devices. Would give 5 stars if they had more international content."
-      }
-    ];
-
-    // Generate star rating HTML
-    function generateStars(rating) {
-      let starsHTML = '';
-      for (let i = 1; i <= 5; i++) {
-        if (i <= rating) {
-          starsHTML += '<span class="star">★</span>';
-        } else {
-          starsHTML += '<span class="star empty">★</span>';
+  //  ==================== right slidebar =======================
+  try {
+    const contentgb = document.querySelector("#goodabad");
+    if (contentgb) {
+      // Static demo reviews data
+      const demoReviews = [
+        {
+          name: "John Doe",
+          initials: "JD",
+          rating: 5,
+          text: "Amazing streaming quality! The interface is super smooth and content library is huge. Definitely worth it!"
+        },
+        {
+          name: "Sarah Miller",
+          initials: "SM",
+          rating: 4,
+          text: "Great service overall. Fast loading times and good selection. Only issue is occasional buffering during peak hours."
+        },
+        {
+          name: "Mike Johnson",
+          initials: "MJ",
+          rating: 5,
+          text: "Best streaming platform I've used! Clean UI, no ads, and excellent customer support. Highly recommend!"
+        },
+        {
+          name: "Emily Wilson",
+          initials: "EW",
+          rating: 4,
+          text: "Solid platform with great features. Works perfectly on all my devices. Would give 5 stars if they had more international content."
         }
-      }
-      return starsHTML;
-    }
+      ];
 
-    // Build reviews HTML
-    const reviewsHTML = demoReviews.map(review => `
-      <div class="review-card">
-        <div class="review-header">
-          <div class="review-avatar">${review.initials}</div>
-          <div class="review-info">
-            <p class="review-name">${review.name}</p>
-            <div class="review-rating">
-              ${generateStars(review.rating)}
+      // Generate star rating HTML
+      function generateStars(rating) {
+        let starsHTML = '';
+        for (let i = 1; i <= 5; i++) {
+          if (i <= rating) {
+            starsHTML += '<span class="star">★</span>';
+          } else {
+            starsHTML += '<span class="star empty">★</span>';
+          }
+        }
+        return starsHTML;
+      }
+
+      // Build reviews HTML
+      const reviewsHTML = demoReviews.map(review => `
+        <div class="review-card">
+          <div class="review-header">
+            <div class="review-avatar">${review.initials}</div>
+            <div class="review-info">
+              <p class="review-name">${review.name}</p>
+              <div class="review-rating">
+                ${generateStars(review.rating)}
+              </div>
             </div>
           </div>
+          <p class="review-text">${review.text}</p>
         </div>
-        <p class="review-text">${review.text}</p>
-      </div>
-    `).join('');
+      `).join('');
 
-    // Render entire user reviews section
-    contentgb.outerHTML = `
-      <div class="user-reviews-section">
-        <h3>User Reviews</h3>
-        ${reviewsHTML}
-      </div>
-    `;
-  }
-} catch (err) {
-  console.error("Lỗi when render user reviews:", err);
-}
-
-// ======================= comment box ==============================
-try {
-  const commentBox = document.querySelector(".comment-box");
-  if (commentBox) {
-    commentBox.innerHTML = `
-      <h4>Leave a Review</h4>
-      
-      <div class="star-rating-picker">
-        <label>Your Rating:</label>
-        <div class="stars-input" id="starsInput">
-          <button type="button" class="star-btn" data-rating="1">★</button>
-          <button type="button" class="star-btn" data-rating="2">★</button>
-          <button type="button" class="star-btn" data-rating="3">★</button>
-          <button type="button" class="star-btn" data-rating="4">★</button>
-          <button type="button" class="star-btn" data-rating="5">★</button>
+      // Render entire user reviews section
+      contentgb.outerHTML = `
+        <div class="user-reviews-section">
+          <h3>User Reviews</h3>
+          ${reviewsHTML}
         </div>
-      </div>
-
-      <textarea 
-        id="commentTextarea" 
-        placeholder="Share your experience with this streaming service..."
-        maxlength="500"
-      ></textarea>
-
-      <a href="${WP_HOME}/404notfound" class="btn-submit" id="submitBtn">
-        Submit Review
-      </a>
-    `;
-
-    setTimeout(() => {
-      const starsContainer = document.getElementById('starsInput');
-      const starBtns = starsContainer?.querySelectorAll('.star-btn');
-      let selectedRating = 0;
-
-      if (starBtns) {
-        starBtns.forEach(btn => {
-          btn.addEventListener('click', function() {
-            selectedRating = parseInt(this.dataset.rating);
-            
-            starBtns.forEach((star, index) => {
-              if (index < selectedRating) {
-                star.classList.add('active');
-              } else {
-                star.classList.remove('active');
-              }
-            });
-          });
-
-          btn.addEventListener('mouseenter', function() {
-            const hoverRating = parseInt(this.dataset.rating);
-            starBtns.forEach((star, index) => {
-              if (index < hoverRating) {
-                star.style.color = '#fbbf24';
-              }
-            });
-          });
-
-          btn.addEventListener('mouseleave', function() {
-            starBtns.forEach((star, index) => {
-              if (index < selectedRating) {
-                star.style.color = '#fbbf24';
-              } else {
-                star.style.color = 'rgba(251, 191, 36, 0.3)';
-              }
-            });
-          });
-        });
-      }
-
-      const submitBtn = document.getElementById('submitBtn');
-      const textarea = document.getElementById('commentTextarea');
-      
-      if (submitBtn && textarea) {
-        submitBtn.addEventListener('click', function(e) {
-          const comment = textarea.value.trim();
-          
-          if (selectedRating === 0) {
-            e.preventDefault();
-            alert('Please select a rating (1-5 stars)!');
-            return;
-          }
-          
-          if (comment === '') {
-            e.preventDefault();
-            alert('Please write your review!');
-            return;
-          }
-
-          if (comment.length < 10) {
-            e.preventDefault();
-            alert('Review must be at least 10 characters long!');
-            return;
-          }
-          
-          console.log('Rating:', selectedRating);
-          console.log('Comment:', comment);
-        });
-      }
-    }, 100);
-  }
-} catch (err) {
-  console.error("Lỗi when render comment box:", err);
-}
-
-// /============== related posts ====================
-try {
-  const detailsContainer = document.querySelector("#details-container");
-  if (!detailsContainer) {
-    console.warn("Không tìm thấy #details-container");
-  } else {
-    // Get current post's category IDs
-    const currentCateIds = toNumberArray(currentPost?.meta?.id_cate_post);
-    
-    if (!currentCateIds.length) {
-      detailsContainer.innerHTML = `
-        <p style="text-align: center; color: rgba(255,255,255,0.5); padding: 40px 20px;">
-          No related streaming sites found.
-        </p>
       `;
+    }
+  } catch (err) {
+    console.error("Lỗi when render user reviews:", err);
+  }
+
+  // ======================= comment box ==============================
+  try {
+    const commentBox = document.querySelector(".comment-box");
+    if (commentBox) {
+      commentBox.innerHTML = `
+        <h4>Leave a Review</h4>
+        
+        <div class="star-rating-picker">
+          <label>Your Rating:</label>
+          <div class="stars-input" id="starsInput">
+            <button type="button" class="star-btn" data-rating="1">★</button>
+            <button type="button" class="star-btn" data-rating="2">★</button>
+            <button type="button" class="star-btn" data-rating="3">★</button>
+            <button type="button" class="star-btn" data-rating="4">★</button>
+            <button type="button" class="star-btn" data-rating="5">★</button>
+          </div>
+        </div>
+
+        <textarea 
+          id="commentTextarea" 
+          placeholder="Share your experience with this streaming service..."
+          maxlength="500"
+        ></textarea>
+
+        <a href="${WP_HOME}/404notfound" class="btn-submit" id="submitBtn">
+          Submit Review
+        </a>
+      `;
+
+      setTimeout(() => {
+        const starsContainer = document.getElementById('starsInput');
+        const starBtns = starsContainer?.querySelectorAll('.star-btn');
+        let selectedRating = 0;
+
+        if (starBtns) {
+          starBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+              selectedRating = parseInt(this.dataset.rating);
+              
+              starBtns.forEach((star, index) => {
+                if (index < selectedRating) {
+                  star.classList.add('active');
+                } else {
+                  star.classList.remove('active');
+                }
+              });
+            });
+
+            btn.addEventListener('mouseenter', function() {
+              const hoverRating = parseInt(this.dataset.rating);
+              starBtns.forEach((star, index) => {
+                if (index < hoverRating) {
+                  star.style.color = '#fbbf24';
+                }
+              });
+            });
+
+            btn.addEventListener('mouseleave', function() {
+              starBtns.forEach((star, index) => {
+                if (index < selectedRating) {
+                  star.style.color = '#fbbf24';
+                } else {
+                  star.style.color = 'rgba(251, 191, 36, 0.3)';
+                }
+              });
+            });
+          });
+        }
+
+        const submitBtn = document.getElementById('submitBtn');
+        const textarea = document.getElementById('commentTextarea');
+        
+        if (submitBtn && textarea) {
+          submitBtn.addEventListener('click', function(e) {
+            const comment = textarea.value.trim();
+            
+            if (selectedRating === 0) {
+              e.preventDefault();
+              alert('Please select a rating (1-5 stars)!');
+              return;
+            }
+            
+            if (comment === '') {
+              e.preventDefault();
+              alert('Please write your review!');
+              return;
+            }
+
+            if (comment.length < 10) {
+              e.preventDefault();
+              alert('Review must be at least 10 characters long!');
+              return;
+            }
+            
+            console.log('Rating:', selectedRating);
+            console.log('Comment:', comment);
+          });
+        }
+      }, 100);
+    }
+  } catch (err) {
+    console.error("Lỗi when render comment box:", err);
+  }
+
+  // /============== related posts ====================
+  try {
+    const detailsContainer = document.querySelector("#details-container");
+    if (!detailsContainer) {
+      console.warn("Không tìm thấy #details-container");
     } else {
-      // Fetch all posts
-      const perPage = 100;
-      const allRes = await fetch(`${API_BASE}/post_item?per_page=${perPage}`);
-      const allPosts = await allRes.json();
-
-      // Filter related posts (same category, exclude current post)
-      const relatedPosts = (Array.isArray(allPosts) ? allPosts : [])
-        .filter(p => {
-          const pCateIds = toNumberArray(p?.meta?.id_cate_post);
-          return arraysIntersect(currentCateIds, pCateIds) && String(p.id) !== String(postId);
-        })
-        .slice(0, 8); // Limit to 8 related posts
-
-      if (!relatedPosts.length) {
+      // ✅ Get current post's category IDs từ root level
+      const currentCateIds = currentPost?.categories || [];
+      
+      if (!currentCateIds.length) {
         detailsContainer.innerHTML = `
           <p style="text-align: center; color: rgba(255,255,255,0.5); padding: 40px 20px;">
             No related streaming sites found.
           </p>
         `;
       } else {
-        // Render each related post as detail stream card
-        relatedPosts.forEach(post => {
-          const meta = post?.meta || {};
-          
-          // Get data
-          const image = meta.image || meta.bgr_image || "https://via.placeholder.com/400x200";
-          const logo = meta.logo || "";
-          const title = post?.title?.rendered || "No Title";
-          const link = post?.link || "#";
-          const popularity = meta.popularity || "";
-          
-          // Logo HTML - placeholder if no logo
-          const logoHTML = logo 
-            ? `<img class="detail-card-logo" src="${logo}" alt="${title}" />` 
-            : `<div class="detail-card-logo-placeholder">
-                 <i class="fa-solid fa-fire"></i>
-               </div>`;
-          
-          // Tags HTML
-          const tagsHTML = `
-            <div class="detail-card-tags">
-              <span class="detail-tag">Similar</span>
-              ${popularity ? `<span class="detail-tag">${popularity}%</span>` : ''}
-            </div>
+        // ✅ Fetch all posts từ endpoint mới
+        const perPage = 100;
+        const allRes = await fetch(`${API_BASE}/posts?per_page=${perPage}`);
+        const allPosts = await allRes.json();
+
+        // ✅ Filter related posts (same category, exclude current post)
+        const relatedPosts = (Array.isArray(allPosts) ? allPosts : [])
+          .filter(p => {
+            const pCateIds = p?.categories || [];
+            return arraysIntersect(currentCateIds, pCateIds) && String(p.id) !== String(postId);
+          })
+          .slice(0, 8); // Limit to 8 related posts
+
+        if (!relatedPosts.length) {
+          detailsContainer.innerHTML = `
+            <p style="text-align: center; color: rgba(255,255,255,0.5); padding: 40px 20px;">
+              No related streaming sites found.
+            </p>
           `;
-          
-          // Build detail stream card
-          const cardHTML = `
-            <div class="detail-stream-card">
-              <!-- Background Image -->
-              <img src="${image}" class="detail-card-image" alt="${title}" />
-              
-              <!-- Gradient Overlay -->
-              <div class="detail-card-overlay"></div>
-              
-              <!-- Glass Info Panel -->
-              <div class="detail-card-info">
-                ${logoHTML}
-                
-                <h3 class="detail-card-title">${title}</h3>
-                
-                ${tagsHTML}
-                
-                <a href="${link}" class="detail-card-btn">
-                  <span>View Details</span>
-                  <i class="fa-solid fa-arrow-right"></i>
-                </a>
+        } else {
+          // Render each related post as detail stream card
+          relatedPosts.forEach(post => {
+            // ✅ Lấy data từ root level
+            const image = post?.image || post?.bgr_image || "https://via.placeholder.com/400x200";
+            const logo = post?.logo || "";
+            const title = post?.title?.rendered || "No Title";
+            const link = post?.link || "#";
+            const popularity = post?.popularity || "";
+            
+            // Logo HTML - placeholder if no logo
+            const logoHTML = logo 
+              ? `<img class="detail-card-logo" src="${logo}" alt="${title}" />` 
+              : `<div class="detail-card-logo-placeholder">
+                   <i class="fa-solid fa-fire"></i>
+                 </div>`;
+            
+            // Tags HTML
+            const tagsHTML = `
+              <div class="detail-card-tags">
+                <span class="detail-tag">Similar</span>
+                ${popularity ? `<span class="detail-tag">${popularity}%</span>` : ''}
               </div>
-            </div>
-          `;
-          
-          detailsContainer.insertAdjacentHTML("beforeend", cardHTML);
-        });
+            `;
+            
+            // Build detail stream card
+            const cardHTML = `
+              <div class="detail-stream-card">
+                <!-- Background Image -->
+                <img src="${image}" class="detail-card-image" alt="${title}" />
+                
+                <!-- Gradient Overlay -->
+                <div class="detail-card-overlay"></div>
+                
+                <!-- Glass Info Panel -->
+                <div class="detail-card-info">
+                  ${logoHTML}
+                  
+                  <h3 class="detail-card-title">${title}</h3>
+                  
+                  ${tagsHTML}
+                  
+                  <a href="${link}" class="detail-card-btn">
+                    <span>View Details</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+            `;
+            
+            detailsContainer.insertAdjacentHTML("beforeend", cardHTML);
+          });
+        }
       }
     }
+  } catch (err) {
+    console.error("Lỗi fetch similar streaming sites:", err);
   }
-} catch (err) {
-  console.error("Lỗi fetch similar streaming sites:", err);
-}
 
-
-// ======================== breakcrumb=================================
+  // ======================== breakcrumb=================================
   try {
     const breadcrumb = document.querySelector(".breadcrumb");
     if (breadcrumb) {
@@ -485,8 +484,6 @@ try {
     console.error("Lỗi khi tải breadcrumb:", err);
   }
 });
-
-
 
 document.addEventListener('DOMContentLoaded', function() {
   const starsContainer = document.getElementById('starsInput');

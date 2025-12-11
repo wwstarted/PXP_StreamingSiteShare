@@ -3,34 +3,39 @@ document.addEventListener("DOMContentLoaded", async () => {
   const WP_HOME = window.WP_HOME;
 
   const [allCate, allPosts] = await Promise.all([
-    fetch(`${API_BASE}/cate_post?per_page=100`).then(r => r.json()),
-    fetch(`${API_BASE}/post_item?per_page=100`).then(r => r.json()),
+    fetch(`${API_BASE}/categories?per_page=100`).then(r => r.json()),
+    fetch(`${API_BASE}/posts?per_page=100`).then(r => r.json()),
   ]);
 
   const slug = location.pathname.split('/').filter(Boolean).pop();
   let currentCate = allCate.find(c => c.slug === slug) || allCate[0];
   let currentCateId = currentCate.id;
 
-
   async function renderBannerSection() {
     const cateMeta = currentCate.meta || {};
-    const cateThumbnail = cateMeta.thumbnail || "";
-    const cateShortDesc = cateMeta.short_desc || "";
+    const cateThumbnail = cateMeta?.thumbnail || "";
+    const cateShortDesc = currentCate.description || ""; 
 
-    const bannerRes = await fetch(`${API_BASE}/small_banners?per_page=100`);
+    const bannerRes = await fetch(`${API_BASE}/posts?per_page=100`);
     const banners = await bannerRes.json();
 
-    const relatedBanners = banners.filter(b =>
-      Array.isArray(b.meta?.id_cate_post) &&
-      b.meta.id_cate_post.map(String).includes(String(currentCateId))
+    const relatedBanners4 = banners.filter(b =>
+      Array.isArray(b.id_cate_post) &&
+      b.id_cate_post.map(String).includes(String(currentCateId))
     );
+
+     const shuffled = relatedBanners4.sort(() => Math.random() - 0.5);
+
+    const relatedBanners = shuffled.slice(0, 4);
+
+
 
     document.querySelector("#banner-section").innerHTML = `
       <div class="banner-left">
-        <img src="${cateThumbnail}" alt="${currentCate.title.rendered}" />
+        <img src="${cateThumbnail}" alt="${currentCate.name}" />
       </div>
       <div class="banner-right">
-        <h1>${currentCate.title.rendered}</h1>
+        <h1>${currentCate.name}</h1>
         <p>${cateShortDesc}</p>
         <div class="platforms">
           ${
@@ -38,8 +43,8 @@ document.addEventListener("DOMContentLoaded", async () => {
               ? relatedBanners
                   .map(
                     b => `
-            <a href="${b.meta?.sbanner_link || "#"}" target="_blank">
-              <img src="${b.meta?.sbanner_image || ""}" />
+            <a href="${b.link || "#"}" target="_blank">
+              <img src="${b.bgr_image || ""}" />
             </a>`
                   )
                   .join("")
@@ -50,7 +55,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-// ===================================== content top =======================================
+  // ===================================== content top =======================================
 
   async function renderContentTop() {
     document
@@ -58,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       .insertAdjacentHTML(
         "beforeend",
         `
-      <h2>${currentCate.title.rendered}</h2>
+      <h2>${currentCate.name}</h2>
       <div class="table-header">
         <span></span>
         <span></span>
@@ -73,31 +78,30 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
   }
 
-// ======================================= content bottom =======================
- async function renderContentBottom() {
-  const rightContent = document.querySelector("#right_content_bottom");
+  // ======================================= content bottom =======================
+  async function renderContentBottom() {
+    const rightContent = document.querySelector("#right_content_bottom");
 
-  const posts = allPosts
-    .filter(
-      p =>
-        Array.isArray(p.meta?.id_cate_post) &&
-        p.meta.id_cate_post.map(String).includes(String(currentCateId))
-    )
-    .sort((a, b) => (b.meta?.popularity || 0) - (a.meta?.popularity || 0));
+    const posts = allPosts
+      .filter(p => {
+        const cats = p.categories || [];
+        return cats.includes(currentCateId);
+      })
+      .sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
 
-  if (!posts.length) {
-    rightContent.insertAdjacentHTML("beforeend", "<p>No posts.</p>");
-    return;
-  }
+    if (!posts.length) {
+      rightContent.insertAdjacentHTML("beforeend", "<p>No posts.</p>");
+      return;
+    }
 
-  const rows = posts
-    .map((p, i) => {
-      const logo = p.meta?.logo || "https://via.placeholder.com/50";
-      const popularity = p.meta?.popularity || 0;
-      const title = p.title.rendered;
-      const link = p.link;
+    const rows = posts
+      .map((p, i) => {
+        const logo = p.logo || "https://via.placeholder.com/50";
+        const popularity = p.popularity || 0;
+        const title = p.title.rendered;
+        const link = p.link;
 
-      return `
+        return `
         <a href="${link}" class="table-row">
           <span class="rank-badge">${i + 1}</span>
           
@@ -116,47 +120,51 @@ document.addEventListener("DOMContentLoaded", async () => {
             <i class="fa-solid fa-arrow-right"></i>
           </div>
         </a>`;
-    })
-    .join("");
-
-  rightContent.insertAdjacentHTML("beforeend", rows);
-}
-
-// =================================== related cate =======================
-
-async function renderRelatedCate() {
-  const wrap = document.querySelector(".left_content");
-
-  const otherCate = allCate.filter(c => c.id !== currentCateId);
-
-  otherCate.forEach(c => {
-    const cMeta = c.meta || {};
-    const cThumb = cMeta.thumbnail || "https://via.placeholder.com/80";
-    const categoryTitle = c.title.rendered;
-    const categoryLink = c.link;
-
-    //==================== get posts same category ==================
-    const posts = allPosts.filter(
-      p =>
-        Array.isArray(p.meta?.id_cate_post) &&
-        p.meta.id_cate_post.map(String).includes(String(c.id))
-    );
-
-    const totalPosts = posts.length;
-    const top5 = posts.slice(0, 5);
-    const remain = totalPosts - top5.length;
-
-    // mini logo (limit 5)
-    const logosHTML = top5
-      .map(p => `<img src="${p.meta?.logo || 'https://via.placeholder.com/26'}" alt="${p.title.rendered}" />`)
+      })
       .join("");
 
-    // Button text
-    const buttonText = remain > 0 ? `+${remain} sites` : '';
+    rightContent.insertAdjacentHTML("beforeend", rows);
+  }
 
-    wrap.insertAdjacentHTML(
-      "beforeend",
-      `
+  // =================================== related cate =======================
+
+  async function renderRelatedCate() {
+    const wrap = document.querySelector(".left_content");
+
+    const otherCate2 = allCate.filter(c => c.id !== currentCateId);
+
+     const otherCate = otherCate2.filter((cate) => {
+    const v = cate.meta?._cate_visible;
+    return v === "1" || v === 1 || v === true;
+  });
+
+    otherCate.forEach(c => {
+      const cMeta = c.meta || {};
+      const cThumb = cMeta.thumbnail || "https://via.placeholder.com/80";
+      const categoryTitle = c.name;
+      const categoryLink = c.link;
+
+      //==================== get posts same category ==================
+      const posts = allPosts.filter(p => {
+        const cats = p.categories || [];
+        return cats.includes(c.id);
+      });
+
+      const totalPosts = posts.length;
+      const top5 = posts.slice(0, 5);
+      const remain = totalPosts - top5.length;
+
+      // mini logo (limit 5)
+      const logosHTML = top5
+        .map(p => `<img src="${p.logo || 'https://via.placeholder.com/26'}" alt="${p.title.rendered}" />`)
+        .join("");
+
+      // Button text
+      const buttonText = remain > 0 ? `+${remain} sites` : '';
+
+      wrap.insertAdjacentHTML(
+        "beforeend",
+        `
       <a href="${categoryLink}" class="related-item">
         <img src="${cThumb}" class="related-icon" alt="${categoryTitle}" />
         
@@ -173,40 +181,40 @@ async function renderRelatedCate() {
         </div>
       </a>
       `
-    );
-  });
-}
+      );
+    });
+  }
 
-async function renderBrandSection() {
-  const brandContainer = document.querySelector("#brand-container");
+  async function renderBrandSection() {
+    const brandContainer = document.querySelector("#brand-container");
 
-  const randomPosts = allPosts.slice(0, 7);
+    const randomPosts = allPosts.slice(0, 7);
 
-  randomPosts.forEach(p => {
-    const img = p.meta?.image || "https://via.placeholder.com/400x200";
-    const logo = p.meta?.logo || "";
-    const popularity = p.meta?.popularity || "";
-    const title = p.title.rendered;
-    const link = p.link;
+    randomPosts.forEach(p => {
+      const img = p.bgr_image || "https://via.placeholder.com/400x200";
+      const logo = p.logo || "";
+      const popularity = p.popularity || "";
+      const title = p.title.rendered;
+      const link = p.link;
 
-    // Logo HTML - placeholder nếu không có logo
-    const logoHTML = logo 
-      ? `<img class="brand-logo" src="${logo}" alt="${title}" />` 
-      : `<div class="brand-logo-placeholder">
-           <i class="fa-solid fa-fire"></i>
-         </div>`;
+      // Logo HTML - placeholder nếu không có logo
+      const logoHTML = logo 
+        ? `<img class="brand-logo" src="${logo}" alt="${title}" />` 
+        : `<div class="brand-logo-placeholder">
+             <i class="fa-solid fa-fire"></i>
+           </div>`;
 
-    // Tags HTML
-    const tagsHTML = `
+      // Tags HTML
+      const tagsHTML = `
       <div class="brand-tags">
         <span class="tag">Popular</span>
         ${popularity ? `<span class="tag">${popularity}%</span>` : ''}
       </div>
     `;
 
-    brandContainer.insertAdjacentHTML(
-      "beforeend",
-      `
+      brandContainer.insertAdjacentHTML(
+        "beforeend",
+        `
       <div class="banner-card">
         <!-- Background Image -->
         <img src="${img}" class="banner-card-image" alt="${title}" />
@@ -229,62 +237,16 @@ async function renderBrandSection() {
         </div>
       </div>
       `
-    );
-  });
-}
+      );
+    });
+  }
 
-// banner slider
 
-async function renderBannerSlide() {
-  const related = document.querySelector("#banner-slide");
-  const banners = await fetch(`${API_BASE}/banner`).then(r => r.json());
 
-  banners.forEach(b => {
-    const meta = b.meta || {};
-    const img = meta.image || "https://via.placeholder.com/400x200";
-    const logo = meta.logo || "";
-    const title = meta.title || b.title.rendered;
-    const link = meta.link || "#";
-    const popularity = meta.popularity || "";
 
-    const logoHTML = logo 
-      ? `<img class="brand-logo" src="${logo}" alt="${title}" />` 
-      : `<div class="brand-logo-placeholder">
-           <i class="fa-solid fa-star"></i>
-         </div>`;
-
-    const tagsHTML = `
-      <div class="brand-tags">
-        <span class="tag">Featured</span>
-        ${popularity ? `<span class="tag">${popularity}%</span>` : ''}
-      </div>
-    `;
-
-    related.insertAdjacentHTML(
-      "beforeend",
-      `
-      <div class="banner-card">
-        <img src="${img}" class="banner-card-image" alt="${title}" />
-        <div class="banner-card-overlay"></div>
-        
-        <div class="banner-card-info">
-          ${logoHTML}
-          <h3 class="brand-title">${title}</h3>
-          ${tagsHTML}
-          <a href="${link}" class="banner-card-btn">
-            <span>View Details</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </a>
-        </div>
-      </div>
-      `
-    );
-  });
-}
   renderBannerSection();
   renderContentTop();
   renderContentBottom();
   renderRelatedCate();
   renderBrandSection();
-  renderBannerSlide();
 });

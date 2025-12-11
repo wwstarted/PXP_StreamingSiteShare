@@ -1,12 +1,8 @@
 <?php
 
-// ============================================
-// 1. REGISTER TERM META FOR CATEGORY
-// ============================================
 add_action('init', 'register_category_term_meta');
 function register_category_term_meta()
 {
-    // Thumbnail
     register_term_meta('category', 'thumbnail', array(
         'type' => 'string',
         'single' => true,
@@ -15,7 +11,6 @@ function register_category_term_meta()
         'sanitize_callback' => 'esc_url_raw',
     ));
 
-    // Visibility
     register_term_meta('category', '_cate_visible', array(
         'type' => 'string',
         'single' => true,
@@ -25,14 +20,10 @@ function register_category_term_meta()
     ));
 }
 
-// ============================================
-// 2. ADD FIELDS TO "ADD NEW CATEGORY" FORM
-// ============================================
 add_action('category_add_form_fields', 'add_category_custom_fields');
 function add_category_custom_fields()
 {
     ?>
-<!-- Thumbnail -->
 <div class="form-field">
     <label for="category_thumbnail">Thumbnail (Ảnh đại diện)</label>
     <div style="display: flex; gap: 10px; align-items: center;">
@@ -46,7 +37,6 @@ function add_category_custom_fields()
     </div>
 </div>
 
-<!-- Visibility -->
 <div class="form-field">
     <label>
         <input type="checkbox" name="category_visible" value="1" checked />
@@ -57,22 +47,18 @@ function add_category_custom_fields()
 <?php
 }
 
-// ============================================
-// 3. ADD FIELDS TO "EDIT CATEGORY" FORM
-// ============================================
 add_action('category_edit_form_fields', 'edit_category_custom_fields', 10, 1);
 function edit_category_custom_fields($term)
 {
     $thumbnail = get_term_meta($term->term_id, 'thumbnail', true);
     $is_visible = get_term_meta($term->term_id, '_cate_visible', true);
 
-    // Default visible = 1
+
     if ($is_visible === '') {
         $is_visible = '1';
     }
     ?>
 
-<!-- Thumbnail -->
 <tr class="form-field">
     <th scope="row">
         <label for="category_thumbnail">Thumbnail</label>
@@ -100,7 +86,6 @@ function edit_category_custom_fields($term)
     </td>
 </tr>
 
-<!-- Visibility -->
 <tr class="form-field">
     <th scope="row">
         <label>Hiển thị</label>
@@ -116,31 +101,23 @@ function edit_category_custom_fields($term)
 <?php
 }
 
-// ============================================
-// 4. SAVE TERM META
-// ============================================
 add_action('created_category', 'save_category_custom_fields');
 add_action('edited_category', 'save_category_custom_fields');
 
 function save_category_custom_fields($term_id)
 {
-    // Save Thumbnail
     if (isset($_POST['category_thumbnail'])) {
         update_term_meta($term_id, 'thumbnail', esc_url_raw($_POST['category_thumbnail']));
     }
 
-    // Save Visibility
     $is_visible = isset($_POST['category_visible']) ? '1' : '0';
     update_term_meta($term_id, '_cate_visible', $is_visible);
 }
 
-// ============================================
-// 5. ADD CUSTOM COLUMNS TO CATEGORY LIST
-// ============================================
 add_filter('manage_edit-category_columns', 'add_category_custom_columns');
 function add_category_custom_columns($columns)
 {
-    // Thêm column Thumbnail và Visibility
+
     $new_columns = array();
     foreach ($columns as $key => $value) {
         $new_columns[$key] = $value;
@@ -176,13 +153,10 @@ function show_category_custom_columns($content, $column_name, $term_id)
     return $content;
 }
 
-// ============================================
-// 6. ENQUEUE MEDIA UPLOADER FOR CATEGORY
-// ============================================
 add_action('admin_enqueue_scripts', 'enqueue_category_media_uploader');
 function enqueue_category_media_uploader($hook)
 {
-    // Load only on category add/edit pages
+
     if ($hook === 'term.php' || $hook === 'edit-tags.php') {
         wp_enqueue_media();
         ?>
@@ -210,7 +184,7 @@ jQuery(document).ready(function($) {
             var attachment = mediaUploader.state().get('selection').first().toJSON();
             $('#category_thumbnail').val(attachment.url);
 
-            // Show preview
+
             $('#category-thumbnail-preview').show();
             $('#category-thumbnail-preview img').attr('src', attachment.url);
         });
@@ -218,7 +192,6 @@ jQuery(document).ready(function($) {
         mediaUploader.open();
     });
 
-    // Preview when manually entering URL
     $('#category_thumbnail').on('input', function() {
         var url = $(this).val();
         if (url) {
@@ -233,14 +206,6 @@ jQuery(document).ready(function($) {
 <?php
     }
 }
-
-// ============================================
-// 7. HELPER FUNCTION - GET VISIBLE CATEGORIES
-// ============================================
-/**
- * Lấy danh sách categories có visibility = 1
- * Sử dụng: $visible_cats = get_visible_categories();
- */
 function get_visible_categories($args = array())
 {
     $default_args = array(
@@ -255,11 +220,8 @@ function get_visible_categories($args = array())
             ),
             array(
                 'key' => '_cate_visible',
-                'compare' => 'NOT EXISTS' // Mặc định hiển thị nếu chưa set
+                'compare' => 'NOT EXISTS'
             )
         )
     );
-
-    $args = wp_parse_args($args, $default_args);
-    return get_terms($args);
 }

@@ -15,26 +15,21 @@ function register_post_details_metabox()
 
 function render_post_details_metabox($post)
 {
-    // Nonce field để bảo mật
     wp_nonce_field('post_details_nonce_action', 'post_details_nonce');
 
-    // Lấy giá trị hiện tại - IMAGE FIELDS
     $bgr_image = get_post_meta($post->ID, 'bgr_image', true);
     $image = get_post_meta($post->ID, 'image', true);
     $logo = get_post_meta($post->ID, 'logo', true);
 
-    // Lấy giá trị hiện tại - DETAIL FIELDS
     $popularity = get_post_meta($post->ID, 'popularity', true);
     $post_link = get_post_meta($post->ID, 'post_link', true);
 
-    // Lấy likes và hates (JSON decode)
     $likes_json = get_post_meta($post->ID, 'likes', true);
     $likes = !empty($likes_json) ? json_decode($likes_json, true) : [];
 
     $hates_json = get_post_meta($post->ID, 'hates', true);
     $hates = !empty($hates_json) ? json_decode($hates_json, true) : [];
 
-    // Định nghĩa các image fields
     $image_fields = array(
         'bgr_image' => 'Background Image',
         'image' => 'Main Image',
@@ -65,7 +60,6 @@ function render_post_details_metabox($post)
     border-left: 4px solid #2271b1;
 }
 
-/* IMAGE FIELDS STYLES */
 .image-field-wrapper {
     margin-bottom: 20px;
     padding: 15px;
@@ -139,7 +133,6 @@ function render_post_details_metabox($post)
     font-style: italic;
 }
 
-/* DETAIL FIELDS STYLES */
 .metabox-field {
     margin-bottom: 20px;
 }
@@ -205,8 +198,6 @@ function render_post_details_metabox($post)
 </style>
 
 <div class="post-details-container">
-
-    <!-- ========== SECTION 1: IMAGE FIELDS ========== -->
     <div class="metabox-section">
         <h3>📸 Image Fields</h3>
 
@@ -239,25 +230,21 @@ function render_post_details_metabox($post)
         <?php endforeach; ?>
     </div>
 
-    <!-- ========== SECTION 2: DETAIL FIELDS ========== -->
     <div class="metabox-section">
         <h3>📝 Post Details</h3>
 
-        <!-- Popularity -->
         <div class="metabox-field">
             <label for="post_popularity">Độ phổ biến (0-100%)</label>
             <input type="number" id="post_popularity" name="post_popularity"
                 value="<?php echo esc_attr($popularity); ?>" min="0" max="100" placeholder="0-100">
         </div>
 
-        <!-- Post Link -->
         <div class="metabox-field">
             <label for="post_post_link">Link bên ngoài</label>
             <input type="url" id="post_post_link" name="post_post_link" value="<?php echo esc_url($post_link); ?>"
                 placeholder="https://example.com">
         </div>
 
-        <!-- Likes (Repeater) -->
         <div class="metabox-field">
             <label>Đánh giá tốt (Likes)</label>
             <div class="repeater-field" id="likes-repeater">
@@ -279,7 +266,6 @@ function render_post_details_metabox($post)
             <button type="button" class="add-repeater-btn" onclick="addLikeField()">+ Add Like</button>
         </div>
 
-        <!-- Hates (Repeater) -->
         <div class="metabox-field">
             <label>Đánh giá không tốt (Hates)</label>
             <div class="repeater-field" id="hates-repeater">
@@ -307,7 +293,6 @@ function render_post_details_metabox($post)
 
 <script>
 jQuery(document).ready(function($) {
-    // Upload button click
     $('.upload-image-btn').on('click', function(e) {
         e.preventDefault();
 
@@ -315,13 +300,11 @@ jQuery(document).ready(function($) {
         var fieldName = button.data('field');
         var customUploader;
 
-        // Nếu media frame đã tồn tại, mở lại
         if (customUploader) {
             customUploader.open();
             return;
         }
 
-        // Tạo media frame
         customUploader = wp.media({
             title: 'Choose Image',
             button: {
@@ -330,37 +313,29 @@ jQuery(document).ready(function($) {
             multiple: false
         });
 
-        // Khi chọn image
         customUploader.on('select', function() {
             var attachment = customUploader.state().get('selection').first().toJSON();
 
-            // Set URL vào input
             $('#' + fieldName).val(attachment.url);
 
-            // Update preview
             $('#preview-' + fieldName).html('<img src="' + attachment.url + '" alt="Preview">');
         });
 
-        // Mở media frame
         customUploader.open();
     });
 
-    // Remove button click
     $('.remove-image-btn').on('click', function(e) {
         e.preventDefault();
 
         var button = $(this);
         var fieldName = button.data('field');
 
-        // Clear input
         $('#' + fieldName).val('');
 
-        // Clear preview
         $('#preview-' + fieldName).html('<span class="no-image">No image selected</span>');
     });
 });
 
-// Repeater Functions
 function addLikeField() {
     const container = document.getElementById('likes-repeater');
     const newField = document.createElement('div');
@@ -390,7 +365,6 @@ add_action('admin_enqueue_scripts', 'enqueue_post_media_uploader');
 
 function enqueue_post_media_uploader($hook)
 {
-    // Chỉ load trên post edit screen của 'post'
     if ($hook == 'post-new.php' || $hook == 'post.php') {
         global $post_type;
         if ('post' === $post_type) {
@@ -398,12 +372,10 @@ function enqueue_post_media_uploader($hook)
         }
     }
 }
-
 add_action('save_post', 'save_post_details_meta');
 
 function save_post_details_meta($post_id)
 {
-    // Kiểm tra nonce
     if (
         !isset($_POST['post_details_nonce']) ||
         !wp_verify_nonce($_POST['post_details_nonce'], 'post_details_nonce_action')
@@ -411,22 +383,18 @@ function save_post_details_meta($post_id)
         return;
     }
 
-    // Kiểm tra autosave
     if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
         return;
     }
 
-    // Kiểm tra quyền
     if (!current_user_can('edit_post', $post_id)) {
         return;
     }
 
-    // Kiểm tra post type
     if (get_post_type($post_id) !== 'post') {
         return;
     }
 
-    // ===== LƯU IMAGE FIELDS =====
     $image_fields = array('bgr_image', 'image', 'logo');
     foreach ($image_fields as $field) {
         if (isset($_POST[$field])) {
@@ -435,19 +403,16 @@ function save_post_details_meta($post_id)
         }
     }
 
-    // ===== LƯU POPULARITY =====
     if (isset($_POST['post_popularity'])) {
         $popularity = intval($_POST['post_popularity']);
         $popularity = max(0, min(100, $popularity)); // Giới hạn 0-100
         update_post_meta($post_id, 'popularity', $popularity);
     }
 
-    // ===== LƯU POST LINK =====
     if (isset($_POST['post_post_link'])) {
         update_post_meta($post_id, 'post_link', esc_url_raw($_POST['post_post_link']));
     }
 
-    // ===== LƯU LIKES (JSON) =====
     if (isset($_POST['post_likes']) && is_array($_POST['post_likes'])) {
         $likes = array_filter(array_map('sanitize_text_field', $_POST['post_likes']));
         update_post_meta($post_id, 'likes', json_encode(array_values($likes)));
@@ -455,7 +420,6 @@ function save_post_details_meta($post_id)
         update_post_meta($post_id, 'likes', json_encode([]));
     }
 
-    // ===== LƯU HATES (JSON) =====
     if (isset($_POST['post_hates']) && is_array($_POST['post_hates'])) {
         $hates = array_filter(array_map('sanitize_text_field', $_POST['post_hates']));
         update_post_meta($post_id, 'hates', json_encode(array_values($hates)));
@@ -481,7 +445,7 @@ function register_post_meta_in_rest()
 
     foreach ($meta_fields as $field) {
         register_rest_field(
-            'post',  // Đổi sang 'post'
+            'post',
             $field,
             array(
                 'get_callback' => function ($object) use ($field) {

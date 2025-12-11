@@ -5,22 +5,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     const res = await fetch(
-      "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/post_item?per_page=100"
+      "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/posts?per_page=100"
     );
     const items = await res.json();
 
     console.log("All post items:", items);
 
-    // Random shuffle
     const shuffled = items.sort(() => Math.random() - 0.5);
 
-    // Lấy 4 items đầu tiên
     const randomFour = shuffled.slice(0, 4);
 
     randomFour.forEach((item) => {
-      const meta = item.meta || {};
-      const image = meta.bgr_image || "";
-      const postLink = meta.post_link || "#";
+      const image = item.bgr_image || "";
+      const postLink = item.post_link || "#";
       const detailLink = item.link || "#";
       const title = item.title.rendered || "No title";
 
@@ -66,32 +63,22 @@ if (prevBtn && nextBtn && slider) {
   });
 }
 
-/**
- * Toggle Read More / Read Less functionality
- * for info-section content
- */
 function toggleContent(button) {
   const section = button.closest('.info-section');
   const content = section.querySelector('.info-content-scrollable');
   const btnText = button.querySelector('.text');
   const fadeOverlay = section.querySelector('.fade-overlay');
 
-  // Toggle classes
   content.classList.toggle('expanded');
   button.classList.toggle('expanded');
 
-  // Update button text and fade overlay
   if (content.classList.contains('expanded')) {
     btnText.textContent = 'Read More';
     fadeOverlay.classList.add('hidden');
-    
-    // Smooth scroll to top of content when closing (optional)
-    // content.scrollTop = 0;
   } else {
     btnText.textContent = 'Read Less';
     fadeOverlay.classList.remove('hidden');
     
-    // Scroll back to section when collapsing
     section.scrollIntoView({ 
       behavior: 'smooth', 
       block: 'start' 
@@ -99,10 +86,6 @@ function toggleContent(button) {
   }
 }
 
-/**
- * Optional: Auto-detect if content needs "Read More" button
- * Hide button if content is short
- */
 document.addEventListener('DOMContentLoaded', () => {
   const contentElements = document.querySelectorAll('.info-content-scrollable');
   
@@ -110,21 +93,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const section = content.closest('.info-section');
     const button = section.querySelector('.show-more');
     
-    // Check if content height exceeds max-height
     if (content.scrollHeight <= 400) {
-      // Content is short, hide button and fade overlay
       if (button) button.style.display = 'none';
       
       const fadeOverlay = section.querySelector('.fade-overlay');
       if (fadeOverlay) fadeOverlay.style.display = 'none';
-      
-      // Remove max-height constraint
+
       content.style.maxHeight = 'none';
     }
   });
 });
 
-/** Render Cart-Iteam */
 const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
 
 async function fetchAll(endpoint, perPage = 50) {
@@ -146,8 +125,8 @@ async function fetchAll(endpoint, perPage = 50) {
 async function fetchData() {
   try {
     const [cates, posts] = await Promise.all([
-      fetchAll("cate_post"),
-      fetchAll("post_item"),
+      fetchAll("categories"), 
+      fetchAll("posts"),      
     ]);
 
     console.log("Categories:", cates);
@@ -164,12 +143,13 @@ function renderCategories(cates, posts) {
   if (!container) return;
   container.innerHTML = "";
 
+  // ✅ Filter categories có _cate_visible = "1"
   const visibleCates2 = cates.filter((cate) => {
-    const v = cate.meta?._cate_post_visible;
+    const v = cate.meta?._cate_visible;
     return v === "1" || v === 1 || v === true;
   });
 
-  const visibleCates = visibleCates2.slice(0,6);
+  const visibleCates = visibleCates2.slice(0, 6);
 
   console.log("Visible categories:", visibleCates);
 
@@ -177,14 +157,16 @@ function renderCategories(cates, posts) {
     const cateId = cate.id;
     const meta = cate.meta || {};
 
+    // ✅ Lấy từ meta và description mặc định
     const cateThumbnail = meta.thumbnail || "";
-    const shortDesc = meta.short_desc || "";
-    const cateTitle = cate.title?.rendered || "No title";
+    const shortDesc = cate.description || "";  // ✅ Description mặc định WP
+    const cateTitle = cate.name || "No title";  // ✅ Dùng .name thay vì .title.rendered
 
+    // ✅ Filter posts theo categories array
     const catePosts = posts
       .filter((p) => {
-        const ids = p.meta?.id_cate_post;
-        return Array.isArray(ids) && ids.includes(cateId);
+        const cats = p.categories || [];  // ✅ Array term IDs có sẵn
+        return cats.includes(cateId);
       })
       .sort((a, b) => (a.meta?.top || 0) - (b.meta?.top || 0));
 
@@ -198,7 +180,7 @@ function renderCategories(cates, posts) {
         <a href="${post.link}" style="text-decoration: none; color: inherit;">
     <li>
         <p class="features-list-top">${index + 1}</p>
-        <img class="features-list-logo-image" src="${post.meta?.logo || ""}" alt="${post.title.rendered}" />
+        <img class="features-list-logo-image" src="${post.logo || ""}" alt="${post.title.rendered}" />
 
         <p class="text-line features-list-name">${post.title.rendered}</p>
     </li>
@@ -215,7 +197,7 @@ function renderCategories(cates, posts) {
         (post) => `
         <a href="${post.link}" style="text-decoration: none; color: inherit;">
       <img class="footer-logo-preview"
-        src="${post.meta?.logo || ""}"
+        src="${post.logo || ""}"
         alt="${post.title.rendered}" />
         </a>
     `
@@ -355,13 +337,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (!bannerContainer) return;
 
   try {
-    // Fetch blogs data
     const res = await fetch(
       "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2/blogs?per_page=100"
     );
     const blogs = await res.json();
 
-    // Filter: Chỉ lấy blogs có _blogs_visible = "1"
     const visibleBlogs = blogs.filter((blog) => {
       const isVisible = blog.meta?._blogs_visible;
       return isVisible === "1" || isVisible === true || isVisible === 1;
@@ -369,21 +349,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     console.log("Visible blogs:", visibleBlogs);
 
-    // Lấy 3 blogs đầu tiên để hiển thị
     const displayBlogs = visibleBlogs.slice(0, 3);
 
-    // Render từng blog
     displayBlogs.forEach((blog) => {
       const meta = blog.meta || {};
       const title = blog?.title?.rendered || "No title";
       const image = meta.bg_thumbnail || "";
       const desc = meta.bg_short_desc || "No description";
       
-      // Lấy author info từ REST API response (đã được expose từ PHP)
       const author = blog.author_name || "Unknown Author";
       const author_logo = blog.author_avatar || "";
       
-      // Format date
       const date = formatDate(blog.date);
 
       const blogHTML = `

@@ -2,7 +2,7 @@
 
 require_once('../../../wp-load.php');
 
-echo "<h2>🔄 Import CATEGORY → CPT: cate_post</h2>";
+echo "<h2>🔄 Import CATEGORY → Taxonomy: category (WordPress Default)</h2>";
 echo "<style>body{font-family:Arial;padding:20px;} pre{background:#f5f5f5;padding:15px;border-radius:5px;overflow-x:auto;}</style>";
 echo "<pre>";
 
@@ -14,7 +14,7 @@ if (!file_exists($csv_file)) {
 }
 
 $handle = fopen($csv_file, 'r');
-$header = fgetcsv($handle); // đọc dòng header
+$header = fgetcsv($handle);
 
 if (!$header) {
     die("❌ CSV không có header");
@@ -48,35 +48,31 @@ while (($row = fgetcsv($handle)) !== false) {
         if ($cate === '')
             continue;
 
-        // Kiểm tra cate đã tồn tại chưa
-        $existing = get_posts([
-            'post_type' => 'cate_post',
-            'title' => $cate,
-            'posts_per_page' => 1,
-            'post_status' => 'any'
-        ]);
+        // Kiểm tra category đã tồn tại chưa
+        $term_exists = term_exists($cate, 'category');
 
-        if (!empty($existing)) {
+        if ($term_exists) {
             $count_exist++;
             echo "✔ Đã tồn tại: {$cate}\n";
             continue;
         }
 
-        // Tạo post mới
-        $post_id = wp_insert_post([
-            'post_type' => 'cate_post',
-            'post_title' => $cate,
-            'post_status' => 'publish'
-        ]);
+        // Tạo category mới
+        $result = wp_insert_term(
+            $cate,           // Tên category
+            'category'       // Taxonomy
+        );
 
-        if ($post_id) {
+        if (!is_wp_error($result)) {
             $count_created++;
-            echo "➕ Tạo mới: {$cate}\n";
+            echo "➕ Tạo mới: {$cate} (ID: {$result['term_id']})\n";
         } else {
-            echo "❌ Lỗi tạo post: {$cate}\n";
+            echo "❌ Lỗi tạo category: {$cate} - " . $result->get_error_message() . "\n";
         }
     }
 }
+
+fclose($handle);
 
 echo "\n====================\n";
 echo "TẠO MỚI: {$count_created}\n";

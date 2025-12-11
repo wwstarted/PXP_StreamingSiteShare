@@ -204,7 +204,6 @@ if (sidebarV2) {
     }
   }
 });
-
 // =========================== generate TOC ======================
 function generateTableOfContents() {
   const content = document.getElementById("article-content");

@@ -30,7 +30,6 @@
         <div class="left_content">
             <h2>Related</h2>
             <!-- fetch data here -->
-
         </div>
     </section>
 

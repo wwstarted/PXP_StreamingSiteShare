@@ -33,22 +33,22 @@ foreach ($data as $row) {
         continue;
 
     // ==========================
-    // 1. TÌM HOẶC TẠO post_item
+    // 1. TÌM HOẶC TẠO POST (mặc định)
     // ==========================
 
-    $existing = get_page_by_title($brand, OBJECT, 'post_item');
+    $existing = get_page_by_title($brand, OBJECT, 'post');
 
     if ($existing) {
         $post_id = $existing->ID;
-        echo "UPDATE post_item: $brand (ID $post_id)\n";
+        echo "UPDATE post: $brand (ID $post_id)\n";
     } else {
         $post_id = wp_insert_post([
             'post_title' => $brand,
-            'post_type' => 'post_item',
+            'post_type' => 'post',
             'post_status' => 'publish'
         ]);
 
-        echo "ADD post_item: $brand (ID $post_id)\n";
+        echo "ADD post: $brand (ID $post_id)\n";
     }
 
     // ==========================
@@ -61,26 +61,36 @@ foreach ($data as $row) {
     // 3. XỬ LÝ DANH SÁCH CATEGORY
     // ==========================
     $cate_titles = array_map('trim', explode(',', $merge));
-    $cate_ids = [];
+    $term_ids = [];
 
     foreach ($cate_titles as $cate_name) {
         if ($cate_name == '')
             continue;
 
-        // tìm cate_post (đã import trước đó)
-        $cate_exist = get_page_by_title($cate_name, OBJECT, 'cate_post');
+        // Tìm category trong taxonomy
+        $term = get_term_by('name', $cate_name, 'category');
 
-        if ($cate_exist) {
-            $cate_ids[] = $cate_exist->ID;
+        if ($term) {
+            $term_ids[] = $term->term_id;
+            echo "  ✔ Category tồn tại: $cate_name (ID: {$term->term_id})\n";
         } else {
-            echo "⚠ Category không tồn tại: $cate_name — bỏ qua\n";
+            // Tạo category mới tự động
+            $new_term = wp_insert_term($cate_name, 'category');
+
+            if (!is_wp_error($new_term)) {
+                $term_ids[] = $new_term['term_id'];
+                echo "  ➕ Tạo category mới: $cate_name (ID: {$new_term['term_id']})\n";
+            } else {
+                echo "  ❌ Lỗi tạo category: $cate_name - " . $new_term->get_error_message() . "\n";
+            }
         }
     }
 
-    // Ghi đè id_cate_post
-    update_post_meta($post_id, 'id_cate_post', $cate_ids);
-
-    echo "→ Set id_cate_post = [" . implode(',', $cate_ids) . "]\n\n";
+    // Gán categories cho post (MERGE với categories cũ)
+    if (!empty($term_ids)) {
+        wp_set_object_terms($post_id, $term_ids, 'category', true); // true = append/merge
+        echo "→ MERGE categories: [" . implode(',', $term_ids) . "]\n\n";
+    }
 }
 
 echo "</pre>";

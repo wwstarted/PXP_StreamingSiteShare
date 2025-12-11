@@ -1,7 +1,3 @@
-// ============================================
-// STREAMING SITES SEARCH SYSTEM
-// ============================================
-
 class StreamingSearch {
   constructor() {
     // WordPress REST API Endpoints
@@ -29,7 +25,6 @@ class StreamingSearch {
     this.init();
   }
 
-  // Khởi tạo
   async init() {
     this.cacheElements();
     if (!this.searchInput) {
@@ -40,7 +35,6 @@ class StreamingSearch {
     await this.fetchAllData();
   }
 
-  // Cache các DOM elements
   cacheElements() {
     this.searchContainer = document.querySelector('.input-search-icon');
     this.searchInput = this.searchContainer?.querySelector('input[type="text"]');
@@ -51,7 +45,6 @@ class StreamingSearch {
     }
   }
 
-  // Tạo dropdown HTML
   createDropdown() {
     const dropdown = document.createElement('div');
     dropdown.className = 'search-dropdown';
@@ -102,7 +95,6 @@ class StreamingSearch {
     this.blogSection = dropdown.querySelector('#blog-section');
   }
 
-  // Fetch tất cả data từ 2 APIs
   async fetchAllData() {
     try {
       const [postItemsRes, blogsRes] = await Promise.all([
@@ -125,7 +117,6 @@ class StreamingSearch {
     }
   }
 
-  // Attach event listeners
   attachEvents() {
     this.searchInput.addEventListener('input', (e) => this.handleInput(e));
     this.searchInput.addEventListener('focus', () => this.handleFocus());
@@ -133,7 +124,6 @@ class StreamingSearch {
     document.addEventListener('click', (e) => this.handleClickOutside(e));
   }
 
-  // Xử lý input
   handleInput(e) {
     const query = e.target.value.trim();
     this.state.query = query;
@@ -227,7 +217,6 @@ class StreamingSearch {
     }
   }
 
-  // Perform search
   performSearch(query) {
     const cacheKey = query.toLowerCase();
     
@@ -242,14 +231,12 @@ class StreamingSearch {
 
     const queryLower = query.toLowerCase();
     
-    // Filter post items (streaming sites)
     const filteredPostItems = this.state.allPostItems.filter(item => {
       const title = item.title?.rendered?.toLowerCase() || '';
       const desc = item.meta?.desc?.toLowerCase() || '';
       return title.includes(queryLower) || desc.includes(queryLower);
     }).slice(0, this.MAX_RESULTS_PER_SECTION);
 
-    // Filter blogs
     const filteredBlogs = this.state.allBlogs.filter(blog => {
       const title = blog.title?.rendered?.toLowerCase() || '';
       const desc = blog.meta?.bg_short_desc?.toLowerCase() || '';
@@ -258,8 +245,7 @@ class StreamingSearch {
 
     this.state.postItemResults = filteredPostItems;
     this.state.blogResults = filteredBlogs;
-    
-    // Cache results
+
     this.state.cache[cacheKey] = {
       postItems: filteredPostItems,
       blogs: filteredBlogs
@@ -268,7 +254,7 @@ class StreamingSearch {
     this.renderResults();
   }
 
-  // Render results
+
   renderResults() {
     this.state.isLoading = false;
     const hasPostItems = this.state.postItemResults.length > 0;
@@ -284,7 +270,6 @@ class StreamingSearch {
     this.hideEmpty();
     this.hideError();
 
-    // Render streaming sites
     if (hasPostItems) {
       this.streamingSection.style.display = 'block';
       this.renderStreamingSites();
@@ -292,7 +277,6 @@ class StreamingSearch {
       this.streamingSection.style.display = 'none';
     }
 
-    // Render blogs
     if (hasBlogs) {
       this.blogSection.style.display = 'block';
       this.renderBlogs();
@@ -301,7 +285,6 @@ class StreamingSearch {
     }
   }
 
-  // Render streaming sites
   renderStreamingSites() {
     const html = this.state.postItemResults.map((item, index) => {
       const title = item.title?.rendered || 'Untitled';
@@ -334,7 +317,6 @@ class StreamingSearch {
     this.attachClickEvents(this.streamingContainer);
   }
 
-  // Render blogs
   renderBlogs() {
     const html = this.state.blogResults.map((blog, index) => {
       const title = blog.title?.rendered || 'Untitled';
@@ -378,7 +360,6 @@ class StreamingSearch {
     });
   }
 
-  // Highlight text
   highlightText(text, query) {
     if (!query) return text;
     const regex = new RegExp(`(${this.escapeRegex(query)})`, 'gi');
@@ -399,7 +380,6 @@ class StreamingSearch {
     return text.length > length ? text.substring(0, length) + '...' : text;
   }
 
-  // Show/Hide states
   showLoading() {
     this.state.isLoading = true;
     this.openDropdown();

@@ -41,13 +41,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-
-
-    /* ================================
-       PHẦN 2 — MOBILE DROPDOWN MENU
-       (Dùng cho menu có submenu)
-    ================================= */
-
     const menuParents = document.querySelectorAll('.mobile-nav .menu-item-has-children');
 
     menuParents.forEach(parent => {

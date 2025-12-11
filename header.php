@@ -10,7 +10,7 @@
 <body <?php body_class(); ?>>
 
     <?php
-    $is_post_item_detail = is_singular('post_item');
+    $is_post_item_detail = is_singular('post');
 
     $logo_url = get_option('site_logo_url', '');
     $has_custom_logo = !empty($logo_url);

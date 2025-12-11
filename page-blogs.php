@@ -1,64 +1,109 @@
 <?php get_header() ?>
 
+<!-- ========================================
+     BLOG ARCHIVE - MODERN MAGAZINE STYLE
+     Complete HTML Structure
+======================================== -->
+
 <!-- Breadcrumb -->
 <div class="container">
     <div class="breadcrumb">
-        <a href="<?php echo home_url() ?>"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-        <a href="<?php echo home_url("/blog") ?>">Blog</a>
+        <a href="<?php echo home_url() ?>">
+            <i class="fa-solid fa-house"></i> Home
+        </a>
+        <span>/</span>
+        <span>Blog</span>
     </div>
 </div>
 
 
 
 <main class="container">
-    <!-- Hero Section -->
-    <section class="hero-section">
-        <!-- fetch data here  -->
+
+    <!-- ========================================
+         HERO SLIDER SECTION
+    ======================================== -->
+    <section class="hero-slider-section">
+        <!-- JS will render slider here -->
     </section>
 
-    <!-- Blog Section -->
-    <section class="blog-section">
-        <!-- fetch data here-->
+    <!-- ========================================
+         BLOG SECTION - TABS & GRID
+    ======================================== -->
+    <section class="blog-main-section">
+
+        <!-- Controls: Search & Sort -->
+        <div class="blog-controls">
+            <div class="blog-search-sort">
+                <div class="blog-search-wrapper">
+                    <i class="fa-solid fa-search blog-search-icon"></i>
+                    <input type="text" class="blog-search-input" placeholder="Search articles..." />
+                </div>
+                <select class="blog-sort-select">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="popular">Most Popular</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="blog-tabs-wrapper">
+            <div class="blog-tabs">
+                <!-- JS will render tabs here -->
+            </div>
+        </div>
+
+        <!-- Blog Grid -->
+        <div class="blog-grid-modern">
+            <!-- JS will render blog cards here -->
+        </div>
+
+        <!-- Load More Button -->
+        <div class="blog-load-more">
+            <button class="load-more-btn">
+                <span>Load More Articles</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </button>
+        </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="cta-section">
-        <div class="cta-left">
-            <h2>StreamingSites.com</h2>
-            <div class="cta-title">Watch</div>
-            <p>Reviews The Best Streaming Sites Of 2025.</p>
-            <div class="cta-features">
-                <div class="cta-feature">
-                    <div class="cta-feature-icon">🎬</div>
-                    <div class="cta-feature-text">Free Movies</div>
+    <!-- ========================================
+         CTA SECTION - NEWSLETTER
+    ======================================== -->
+    <section class="cta-newsletter-section">
+        <div class="cta-newsletter-content">
+            <div class="cta-newsletter-icon">
+                📧
+            </div>
+            <h2 class="cta-newsletter-title">Stay Updated!</h2>
+            <p class="cta-newsletter-text">
+                Subscribe to our newsletter and never miss the latest streaming site reviews,
+                guides, and exclusive content delivered straight to your inbox.
+            </p>
+            <form class="cta-newsletter-form" action="<?php echo home_url('/404notfound') ?>" method="get">
+                <input type="email" class="cta-newsletter-input" placeholder="Enter your email address" required />
+                <button type="submit" class="cta-newsletter-btn">
+                    Subscribe Now
+                </button>
+            </form>
+            <div class="cta-newsletter-stats">
+                <div class="cta-stat">
+                    <span class="cta-stat-number">10K+</span>
+                    <span class="cta-stat-label">Subscribers</span>
                 </div>
-                <div class="cta-feature">
-                    <div class="cta-feature-icon">📺</div>
-                    <div>Live TV</div>
+                <div class="cta-stat">
+                    <span class="cta-stat-number">500+</span>
+                    <span class="cta-stat-label">Articles</span>
                 </div>
-                <div class="cta-feature">
-                    <div class="cta-feature-icon">🌐</div>
-                    <div>Websites</div>
+                <div class="cta-stat">
+                    <span class="cta-stat-number">50+</span>
+                    <span class="cta-stat-label">Reviews</span>
                 </div>
             </div>
-            <p style="margin-top: 30px; font-size: 18px; font-weight: bold">
-                On The Most Popular<br />Streaming Sites
-            </p>
-            <p>
-                All the top streaming sites are sorted by quality, virus-free, and
-                100% safe.
-            </p>
-        </div>
-        <div class="cta-right">
-            <img src="https://plus.unsplash.com/premium_photo-1721225464894-46e7bb29e446?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8c3RyZWFtaW5nJTIwc2l0ZXN8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&q=60&w=600"
-                alt="" style="
-              width: 100%;
-              height: 100%;
-              object-fit: cover;
-              object-position: center;
-            " />
         </div>
     </section>
+
 </main>
 
 <?php get_footer() ?>

@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const WP_HOME = window.WP_HOME;
   let sharedPostId = null;
 
-  // ---------- Helpers ----------
   function parseMaybeJson(val) {
     if (val === undefined || val === null) return null;
     if (Array.isArray(val)) return val;
@@ -47,7 +46,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return arrB.some(b => setA.has(String(b)));
   }
 
-  // ---------- Get slug & post id ----------
   async function getSlugFromPath() {
     const parts = location.pathname.split("/").filter(Boolean);
     return parts[parts.length - 1] || null;
@@ -76,7 +74,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // ---------- Reading Progress Bar ----------
   function initReadingProgress() {
     const contentLeft = document.querySelector(".left-content");
     if (!contentLeft) return;
@@ -89,7 +86,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // ---------- UI events ----------
   const container = document.querySelector(".brand-container");
   const nextBtn = document.querySelector(".next-btn");
   const prevBtn = document.querySelector(".prev-btn");
@@ -103,14 +99,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // ---------- Main ----------
   const postId = await getSharedPostId();
   if (!postId) {
     console.error("Không thể lấy Post ID. Dừng render.");
     return;
   }
 
-  // Fetch current post ONCE and reuse
+  //  ================ current post =============
   let currentPost = null;
   try {
     const res = await fetch(`${API_BASE}/post_item/${postId}`);
@@ -120,7 +115,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     return;
   }
 
-  // ---------- SECTION 1: Top Content ----------
+// top content
   try {
     const topContentSection = document.querySelector("#top-content-section");
     if (topContentSection) {
@@ -144,7 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Lỗi khi render top content:", err);
   }
 
-  // ---------- SECTION 2: Background ----------
+// =================== background ====================
   try {
     const bgImage = currentPost?.meta?.bgr_image ||
       "http://localhost/PXP_SSW/wordpress/wp-content/themes/yourtheme/images/image_bgr.jpeg";
@@ -157,7 +152,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Lỗi khi render background:", err);
   }
 
-  // ---------- SECTION 3: Left Content - PREMIUM STYLE ----------
+  // ================= left-content =========================
   try {
     const contentleft = document.querySelector("#content-left");
     if (contentleft) {
@@ -168,17 +163,14 @@ document.addEventListener("DOMContentLoaded", async () => {
       const likes = parseMaybeJson(likesRaw) || [];
       const hates = parseMaybeJson(hatesRaw) || [];
 
-      // Build likes HTML
       const likeHTML = Array.isArray(likes) && likes.length > 0
         ? likes.map(item => `<li>${item}</li>`).join("")
         : "<li>No likes listed.</li>";
 
-      // Build hates HTML
       const hateHTML = Array.isArray(hates) && hates.length > 0
         ? hates.map(item => `<li>${item}</li>`).join("")
         : "<li>No dislikes listed.</li>";
 
-      // Premium layout with inner wrapper
       contentleft.innerHTML = `
         <div class="left-content-inner">
           <h3>${postTitle}</h3>
@@ -197,14 +189,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
       `;
 
-      // Initialize reading progress after content is rendered
       setTimeout(initReadingProgress, 100);
     }
   } catch (err) {
     console.error("Lỗi khi render left content:", err);
   }
 
-  // ---------- SECTION 4: Good & Bad (Right Sidebar) ----------
+//  ==================== right slidebar =======================
  try {
   const contentgb = document.querySelector("#goodabad");
   if (contentgb) {
@@ -277,11 +268,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.error("Lỗi when render user reviews:", err);
 }
 
-// ---------- SECTION 5: Comment Box Enhancement ----------
+// ======================= comment box ==============================
 try {
   const commentBox = document.querySelector(".comment-box");
   if (commentBox) {
-    // Replace entire comment box with new structure
     commentBox.innerHTML = `
       <h4>Leave a Review</h4>
       
@@ -307,7 +297,6 @@ try {
       </a>
     `;
 
-    // Initialize star rating functionality
     setTimeout(() => {
       const starsContainer = document.getElementById('starsInput');
       const starBtns = starsContainer?.querySelectorAll('.star-btn');
@@ -315,11 +304,9 @@ try {
 
       if (starBtns) {
         starBtns.forEach(btn => {
-          // Click handler
           btn.addEventListener('click', function() {
             selectedRating = parseInt(this.dataset.rating);
             
-            // Update visual state
             starBtns.forEach((star, index) => {
               if (index < selectedRating) {
                 star.classList.add('active');
@@ -329,7 +316,6 @@ try {
             });
           });
 
-          // Hover effect
           btn.addEventListener('mouseenter', function() {
             const hoverRating = parseInt(this.dataset.rating);
             starBtns.forEach((star, index) => {
@@ -351,7 +337,6 @@ try {
         });
       }
 
-      // Submit validation
       const submitBtn = document.getElementById('submitBtn');
       const textarea = document.getElementById('commentTextarea');
       
@@ -377,7 +362,6 @@ try {
             return;
           }
           
-          // If validation passes, link will work normally
           console.log('Rating:', selectedRating);
           console.log('Comment:', comment);
         });
@@ -388,7 +372,7 @@ try {
   console.error("Lỗi when render comment box:", err);
 }
 
-  // ---------- SECTION 5: Related Posts ----------
+// /============== related posts ====================
 try {
   const detailsContainer = document.querySelector("#details-container");
   if (!detailsContainer) {
@@ -485,7 +469,7 @@ try {
 }
 
 
-  // ---------- SECTION 6: Breadcrumb ----------
+// ======================== breakcrumb=================================
   try {
     const breadcrumb = document.querySelector(".breadcrumb");
     if (breadcrumb) {
@@ -514,7 +498,6 @@ document.addEventListener('DOMContentLoaded', function() {
       btn.addEventListener('click', function() {
         selectedRating = parseInt(this.dataset.rating);
         
-        // Update visual state
         starBtns.forEach((star, index) => {
           if (index < selectedRating) {
             star.classList.add('active');
@@ -524,7 +507,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       });
 
-      // Hover effect
       btn.addEventListener('mouseenter', function() {
         const hoverRating = parseInt(this.dataset.rating);
         starBtns.forEach((star, index) => {
@@ -546,7 +528,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Optional: Handle submit button click
   const submitBtn = document.getElementById('submitBtn');
   const textarea = document.getElementById('commentTextarea');
   
@@ -566,7 +547,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return;
       }
       
-      // If validation passes, link will work normally
       console.log('Rating:', selectedRating);
       console.log('Comment:', comment);
     });

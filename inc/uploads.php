@@ -211,6 +211,10 @@ function enqueue_post_item_media_uploader($hook)
             wp_enqueue_media();
         }
     }
+
+    if ($hook == 'post-new.php' || $hook == 'post.php') {
+
+    }
 }
 
 // 4. SAVE META DATA
@@ -581,7 +585,6 @@ function register_post_item_meta_in_rest()
     ]);
 }
 add_action('rest_api_init', 'register_post_item_meta_in_rest');
-
 
 // ====================================metabox content =============================
 // ==================== METABOX - MAIN CONTENT ====================

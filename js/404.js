@@ -6,17 +6,16 @@ const searchForm = document.getElementById("google-search-form");
     const query = searchInput.value.trim();
     if (query) {
       const googleURL = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-      window.open(googleURL, "_blank"); // mở tab mới
+      window.open(googleURL, "_blank"); 
     }
   }
 
-  // Khi bấm Enter trong input
   searchForm.addEventListener("submit", function (e) {
     e.preventDefault();
     handleSearch();
   });
 
-  // Khi bấm icon search
+  // click search icon
   searchBtn.addEventListener("click", function () {
     handleSearch();
   });

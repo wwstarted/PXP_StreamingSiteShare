@@ -2,25 +2,21 @@ document.addEventListener("DOMContentLoaded", async () => {
   const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
   const WP_HOME = window.WP_HOME;
 
-// fetch data
   const [allCate, allPosts] = await Promise.all([
     fetch(`${API_BASE}/cate_post?per_page=100`).then(r => r.json()),
     fetch(`${API_BASE}/post_item?per_page=100`).then(r => r.json()),
   ]);
 
-// get categories
   const slug = location.pathname.split('/').filter(Boolean).pop();
   let currentCate = allCate.find(c => c.slug === slug) || allCate[0];
   let currentCateId = currentCate.id;
 
-// render top
 
   async function renderBannerSection() {
     const cateMeta = currentCate.meta || {};
     const cateThumbnail = cateMeta.thumbnail || "";
     const cateShortDesc = cateMeta.short_desc || "";
 
-    // get banner of cate
     const bannerRes = await fetch(`${API_BASE}/small_banners?per_page=100`);
     const banners = await bannerRes.json();
 
@@ -54,7 +50,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     `;
   }
 
-// content top*/
+// ===================================== content top =======================================
 
   async function renderContentTop() {
     document
@@ -77,7 +73,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
   }
 
-// content bottom
+// ======================================= content bottom =======================
  async function renderContentBottom() {
   const rightContent = document.querySelector("#right_content_bottom");
 
@@ -126,7 +122,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   rightContent.insertAdjacentHTML("beforeend", rows);
 }
 
-// related cate
+// =================================== related cate =======================
 
 async function renderRelatedCate() {
   const wrap = document.querySelector(".left_content");
@@ -139,7 +135,7 @@ async function renderRelatedCate() {
     const categoryTitle = c.title.rendered;
     const categoryLink = c.link;
 
-    // Lấy posts thuộc category này
+    //==================== get posts same category ==================
     const posts = allPosts.filter(
       p =>
         Array.isArray(p.meta?.id_cate_post) &&
@@ -150,7 +146,7 @@ async function renderRelatedCate() {
     const top5 = posts.slice(0, 5);
     const remain = totalPosts - top5.length;
 
-    // Render mini logos (top 5)
+    // mini logo (limit 5)
     const logosHTML = top5
       .map(p => `<img src="${p.meta?.logo || 'https://via.placeholder.com/26'}" alt="${p.title.rendered}" />`)
       .join("");

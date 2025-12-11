@@ -37,39 +37,14 @@ require_once get_theme_file_path('/inc/reviews.php');
 require_once get_theme_file_path('/inc/cate_status.php');
 require_once get_theme_file_path('/inc/cate_checkbox.php');
 require_once get_theme_file_path('/inc/blog_metafield.php');
+require_once get_theme_file_path('inc/metabox_posts.php');
+require_once get_theme_file_path('inc/metabox_cate_posts.php');
 
 
 
 
 
 /** ============= Register CPT ============== */
-
-/** CPT BANNER */
-function create_banner_cpt()
-{
-  $labels = array(
-    'name' => 'Banners',
-    'singular_name' => 'Banner',
-    'menu_name' => 'Banners',
-    'all_items' => 'All Banners',
-    'add_new_item' => 'Add New Banner',
-    'edit_item' => 'Edit Banner'
-  );
-
-  $args = array(
-    'labels' => $labels,
-    'public' => true,
-    'has_archive' => false,
-    'menu_position' => 20,
-    'menu_icon' => 'dashicons-images-alt2',
-    'supports' => array('title', 'thumbnail', 'custom-fields'),
-    'show_in_rest' => true // quan trọng: enable REST API
-  );
-
-  register_post_type('banner', $args);
-}
-add_action('init', 'create_banner_cpt');
-
 
 /** CPT BLOGS */
 
@@ -263,101 +238,14 @@ function create_post_item_type()
 add_action('init', 'create_post_item_type');
 
 
-/** CPT Car Blog */
-function create_cars_blogs_item_type()
-{
-  register_post_type('cars_blog', [
-    'labels' => [
-      'name' => 'Cars Blogs',
-      'singular_name' => 'Cars Blog',
-      'menu_name' => 'Cars Blogs',
-      'all_items' => 'All Cars Blogs',
-      'add_new_item' => 'Add Cars Blogs',
-      'edit_item' => 'Edit Cars Blogs'
-    ],
-    'public' => true,
-    'show_in_rest' => true,
-    'supports' => ['title', 'custom-fields'],
-  ]);
-}
-add_action('init', 'create_cars_blogs_item_type');
 
-/** CPT Categories Banner */
 
-function create_small_banners_post_type()
-{
-  register_post_type('small_banners', [
-    'labels' => [
-      'name' => 'Small Banners',
-      'singular_name' => 'Small Banner',
-      'menu_name' => 'Small Banners',
-      'all_items' => 'All Small Banners',
-      'add_new_item' => 'Add New Small Banners',
-      'edit_item' => 'Edit Small Banners'
-    ],
-    'public' => true,
-    'show_in_rest' => true,
-    'supports' => ['title', 'thumbnail', 'custom-fields'],
-  ]);
-}
-add_action('init', 'create_small_banners_post_type');
+
+
 
 
 /** ================== CUSTOM FIELD===================== */
 
-/** CF Banner */
-function register_small_banner_meta_fields()
-{
-  // Ảnh
-  register_post_meta('small_banners', 'sbanner_image', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-
-  // Link
-  register_post_meta('small_banners', 'sbanner_link', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-
-  // ID category (array)
-  register_post_meta('small_banners', 'id_cate_post', [
-    'type' => 'array',
-    'single' => true,
-    'show_in_rest' => [
-      'schema' => [
-        'type' => 'array',
-        'items' => [
-          'type' => 'integer',
-        ],
-      ],
-    ],
-  ]);
-}
-add_action('init', 'register_small_banner_meta_fields');
-
-
-function register_banner_meta_fields()
-{
-  register_post_meta('banner', 'image', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('banner', 'link', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('banner', 'title', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-}
-add_action('init', 'register_banner_meta_fields');
 
 /** CF Categories */
 function register_cate_item_meta_fields()
@@ -421,17 +309,6 @@ add_action('init', 'register_cate_item_meta_fields');
 // add_action('init', 'register_blogs_meta_fields');
 
 
-
-/** CF Car Blog */
-function register_carsblogs_item_meta_fields()
-{
-  register_post_meta('cars_blog', 'blog_desc', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-}
-add_action('init', 'register_carsblogs_item_meta_fields');
 
 
 /** Custom Field cho post_item ===== */
@@ -553,19 +430,7 @@ add_action('init', 'register_post_item_meta_fields');
 // add_action('save_post_post_item', 'save_post_item_cate_meta');
 
 
-/** BOX selected Cate Banner */
-function add_multi_category_metabox_for_small_banners()
-{
-  add_meta_box(
-    'small_banner_multi_cate_box',
-    'Select Categories',
-    'render_small_banner_multi_cate_box',
-    'small_banners',
-    'side',
-    'default'
-  );
-}
-add_action('add_meta_boxes', 'add_multi_category_metabox_for_small_banners');
+
 
 function render_small_banner_multi_cate_box($post)
 {
@@ -599,23 +464,7 @@ function render_small_banner_multi_cate_box($post)
 }
 
 
-function save_small_banner_multi_cate_meta($post_id)
-{
-  if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE)
-    return;
 
-  if (!current_user_can('edit_post', $post_id))
-    return;
-
-  // Xử lý checkbox
-  if (isset($_POST['id_cate_post'])) {
-    $selected_cates = array_map('intval', (array) $_POST['id_cate_post']);
-    update_post_meta($post_id, 'id_cate_post', $selected_cates);
-  } else {
-    delete_post_meta($post_id, 'id_cate_post');
-  }
-}
-add_action('save_post_small_banners', 'save_small_banner_multi_cate_meta');
 
 function filter_features_group_rest_query($args, $request)
 {

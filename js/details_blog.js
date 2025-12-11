@@ -1,16 +1,14 @@
 document.addEventListener("DOMContentLoaded", async () => {
   const API_BASE = "http://localhost/PXP_SSW/wordpress/wp-json/wp/v2";
 
-  // Lấy slug từ pathname
   function getSlugFromPath() {
     const parts = location.pathname.split("/").filter(Boolean);
     return parts[parts.length - 1] || null;
   }
 
   const blogId = getSlugFromPath();
-  console.log("✅ Post ID dùng chung:", blogId);
+  console.log(" Post ID dùng chung:", blogId);
 
-  // Helper function: Format date
   function formatDate(dateString) {
     if (!dateString) return "No date";
     const date = new Date(dateString);
@@ -18,94 +16,86 @@ document.addEventListener("DOMContentLoaded", async () => {
     return date.toLocaleDateString("en-US", options);
   }
 
-  // ========================================
-  // 1. FETCH RELATED BLOGS
-  // ========================================
-  const relatedBlogs = document.querySelector(".blog-grid");
-  if (relatedBlogs) {
-    try {
-      const res = await fetch(`${API_BASE}/blogs?per_page=100`);
-      const blogs = await res.json();
+//==================== fetch related blog ==============================
+  const relatedBlogsRP = document.querySelector(".blog-grid-rp");
+if (relatedBlogsRP) {
+  try {
+    const res = await fetch(`${API_BASE}/blogs?per_page=100`);
+    const blogs = await res.json();
 
-      blogs.forEach((blog) => {
-        const meta = blog.meta || {};
-        const shortDesc = meta.bg_short_desc || "";
-        const title = blog?.title?.rendered || "Untitled";
-        const featuredImage = meta.bg_thumbnail || "";
-        
-        // ✅ Lấy author từ custom fields
-        const authorName = blog.author_name || "Unknown Author";
-        const authorAvatar = blog.author_avatar || "";
-        const postDate = formatDate(blog.date);
+    blogs.forEach((blog) => {
+      const meta = blog.meta || {};
+      const shortDesc = meta.bg_short_desc || "";
+      const title = blog?.title?.rendered || "Untitled";
+      const featuredImage = meta.bg_thumbnail || "";
+      
+      const authorName = blog.author_name || "Unknown Author";
+      const authorAvatar = blog.author_avatar || "";
+      const postDate = formatDate(blog.date);
 
-        const bannerHTML = `
-          <div class="blog-card">
-            <div class="blog-image">
-              <img src="${featuredImage}" alt="${title}" />
+      const bannerHTML = `
+        <div class="blog-card-rp">
+          <div class="blog-image-rp">
+            <img src="${featuredImage}" alt="${title}" />
+          </div>
+          <div class="blog-content-rp">
+            <h3 class="blog-title-rp">${title}</h3>
+            <p class="blog-description-rp">${shortDesc}</p>
+            <div class="blog-meta-rp">
+              <img class="blog-meta-avatar-rp" src="${authorAvatar}" alt="${authorName}" />
+              <span>${authorName} | ${postDate}</span>
             </div>
-            <div class="blog-content">
-              <h3 class="text-line blog-title">${title}</h3>
-              <p class="text-line blog-description">${shortDesc}</p>
-              <div class="blog-meta">
-                <img class="blog-meta-avatar" src="${authorAvatar}" alt="${authorName}" />
-                <span>${authorName} | ${postDate}</span>
-              </div>
-              <a href="${blog.link || "#"}" class="read-more">
-                <span>Read more</span>
-                <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i>
-              </a>
+            <a href="${blog.link || "#"}" class="read-more-rp">
+              <span>Read more</span>
+              <i style="font-size: 10px" class="fa-solid fa-chevron-right"></i>
+            </a>
+          </div>
+        </div>
+      `;
+
+      relatedBlogsRP.insertAdjacentHTML("beforeend", bannerHTML);
+    });
+  } catch (error) {
+    console.error("Lỗi khi tải related blogs:", error);
+  }
+}
+
+  const sidebarV2 = document.querySelector(".posts-container-v2");
+if (sidebarV2) {
+  try {
+    const res = await fetch(`${API_BASE}/blogs?per_page=100`);
+    const blogs = await res.json();
+
+    blogs.forEach((blog) => {
+      const meta = blog.meta || {};
+      const featuredImage = meta.bg_thumbnail || "";
+      const title = blog?.title?.rendered || "Untitled";
+      const postDate = formatDate(blog.date);
+
+      const bannerHTML = `
+        <div class="post-item-v2">
+          <div class="post-thumbnail-v2">
+            <img src="${featuredImage}" alt="${title}" />
+          </div>
+          <div class="post-info-v2">
+            <h4>
+              <a class="text-blog-title-v2" href="${blog.link || "#"}">${title}</a>
+            </h4>
+            <div class="post-date-v2">
+              <i class="fa-regular fa-clock"></i> ${postDate}
             </div>
           </div>
-        `;
+        </div>
+      `;
 
-        relatedBlogs.insertAdjacentHTML("beforeend", bannerHTML);
-      });
-    } catch (error) {
-      console.error("Lỗi khi tải related blogs:", error);
-    }
+      sidebarV2.insertAdjacentHTML("beforeend", bannerHTML);
+    });
+  } catch (error) {
+    console.error("Lỗi khi tải sidebar v2:", error);
   }
+}
 
-  // ========================================
-  // 2. FETCH SIDEBAR POSTS
-  // ========================================
-  const sidebar = document.querySelector(".sidebar-widget");
-  if (sidebar) {
-    try {
-      const res = await fetch(`${API_BASE}/blogs?per_page=100`);
-      const blogs = await res.json();
-
-      blogs.forEach((blog) => {
-        const meta = blog.meta || {};
-        const featuredImage = meta.bg_thumbnail || "";
-        const title = blog?.title?.rendered || "Untitled";
-        const postDate = formatDate(blog.date);
-
-        const bannerHTML = `
-          <div class="post-item">
-            <div class="post-thumbnail">
-              <img src="${featuredImage}" alt="${title}" />
-            </div>
-            <div class="post-info">
-              <h4>
-                <a class="text-line text-blog-tilte" href="${blog.link || "#"}">${title}</a>
-              </h4>
-              <div class="post-date">
-                <i class="fa-regular fa-clock"></i> ${postDate}
-              </div>
-            </div>
-          </div>
-        `;
-
-        sidebar.insertAdjacentHTML("beforeend", bannerHTML);
-      });
-    } catch (error) {
-      console.error("Lỗi khi tải sidebar:", error);
-    }
-  }
-
-  // ========================================
-  // 3. FETCH ARTICLE HEADER
-  // ========================================
+//  ================== fetch article header  =================
   const blog_header = document.querySelector(".article-header");
   if (blog_header) {
     try {
@@ -114,14 +104,12 @@ document.addEventListener("DOMContentLoaded", async () => {
       );
       const blogs = await res.json();
       const blog = blogs[0];
-
-      // ✅ Lấy author từ custom fields
+      
       const authorName = blog.author_name || "Unknown Author";
       const authorAvatar = blog.author_avatar || "";
       const postDate = formatDate(blog.date);
       const title = blog?.title?.rendered || "Untitled";
-
-      // Lấy tags
+      
       const tagIds = blog.blog_tag || [];
       let tagsHTML = "";
 
@@ -166,9 +154,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // ========================================
-  // 4. FETCH ARTICLE CONTENT & GENERATE TOC
-  // ========================================
+// ===================== generate toc =============================
   const blogDesc = document.querySelector("#article-content");
   if (blogDesc) {
     try {
@@ -194,9 +180,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  // ========================================
-  // 5. FETCH BREADCRUMB
-  // ========================================
+//  ================= fetch breakcrumb ========================
   const breadcrumb = document.querySelector(".breadcrumb_blog");
   if (breadcrumb) {
     try {
@@ -221,9 +205,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// ========================================
-// GENERATE TABLE OF CONTENTS
-// ========================================
+// =========================== generate TOC ======================
 function generateTableOfContents() {
   const content = document.getElementById("article-content");
   if (!content) return;

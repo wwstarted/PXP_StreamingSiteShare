@@ -20,35 +20,42 @@
         </article>
 
         <!-- Sidebar -->
-        <aside class="sidebar">
-            <!-- Popular Posts -->
-            <div class="sidebar-widget">
-                <h3>TIN ĐỌC NHIỀU</h3>
-                <!-- fetch date here-->
+        <aside class="sidebar-v2">
+            <!-- Popular Posts Widget -->
+            <div class="sidebar-widget-v2">
+                <h3 class="widget-title-v2">TIN ĐỌC NHIỀU</h3>
+                <div class="posts-container-v2">
+                    <!-- JS sẽ render posts vào đây -->
+                </div>
+                <div class="see-more-posts-v2">
+                    <a href="<?php echo home_url('/blog/') ?>">
+                        Xem tất cả <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
 
             <!-- Ad Banner -->
-            <div class="ad-banner">
+            <div class="ad-banner-v2">
                 <h3>SEO</h3>
                 <p>YOU CAN BE HERE!</p>
-                <a href="<?php echo home_url("/404notfound") ?>" class="primary-button">Contact Us</a>
+                <a href="<?php echo home_url('/404notfound') ?>" class="primary-button-v2">Contact Us</a>
             </div>
         </aside>
     </div>
     <!-- Related Posts -->
-    <section class="related-posts">
+    <section class="related-posts-rp">
         <div style="text-align: center">
-            <h2 style="
-              display: inline-block;
-              border-bottom: 2px solid #fff;
-              width: 360px;
-              padding-bottom: 4px;
-           ">
+            <h2 class="related-title-rp" style="
+            display: inline-block;
+            border-bottom: 2px solid #fff;
+            width: 360px;
+            padding-bottom: 4px;
+        ">
                 Các bài viết liên quan
             </h2>
         </div>
-        <div class="blog-grid">
-            <!-- fetch data here-->
+        <div class="blog-grid-rp">
+            <!-- JS sẽ render blog cards vào đây -->
         </div>
     </section>
 </main>

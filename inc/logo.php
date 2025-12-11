@@ -29,84 +29,85 @@ function render_site_options_page()
     $logo_url = get_option('site_logo_url', '');
 
     ?>
-    <div class="wrap">
-        <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+<div class="wrap">
+    <h1><?php echo esc_html(get_admin_page_title()); ?></h1>
 
-        <form method="post" action="options.php">
-            <?php
+    <form method="post" action="options.php">
+        <?php
             settings_fields('site_options_group');
             do_settings_sections('site-options');
             ?>
 
-            <table class="form-table">
-                <tr>
-                    <th scope="row">
-                        <label for="site_logo_url">Logo Header</label>
-                    </th>
-                    <td>
-                        <input type="text" id="site_logo_url" name="site_logo_url" value="<?php echo esc_url($logo_url); ?>"
-                            class="regular-text" placeholder="https://example.com/logo.png" />
-                        <button type="button" class="button" id="upload_logo_button">
-                            Upload Logo
-                        </button>
+        <table class="form-table">
+            <tr>
+                <th scope="row">
+                    <label for="site_logo_url">Logo Header</label>
+                </th>
+                <td>
+                    <input type="text" id="site_logo_url" name="site_logo_url" value="<?php echo esc_url($logo_url); ?>"
+                        class="regular-text" placeholder="https://example.com/logo.png" />
+                    <button type="button" class="button" id="upload_logo_button">
+                        Upload Logo
+                    </button>
 
-                        <p class="description">
-                            Upload ảnh hoặc nhập URL trực tiếp
-                        </p>
+                    <p class="description">
+                        Upload ảnh hoặc nhập URL trực tiếp
+                    </p>
 
-                        <?php if ($logo_url): ?>
-                            <div style="margin-top: 10px;">
-                                <img src="<?php echo esc_url($logo_url); ?>"
-                                    style="max-width: 200px; height: auto; border: 1px solid #ddd; padding: 5px;">
-                            </div>
-                        <?php endif; ?>
-                    </td>
-                </tr>
-            </table>
+                    <?php if ($logo_url): ?>
+                    <div style="margin-top: 10px;">
+                        <img src="<?php echo esc_url($logo_url); ?>"
+                            style="max-width: 200px; height: auto; border: 1px solid #ddd; padding: 5px;">
+                    </div>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        </table>
 
-            <?php submit_button('Save Settings'); ?>
-        </form>
-    </div>
+        <?php submit_button('Save Settings'); ?>
+    </form>
+</div>
 
-    <script>
-        jQuery(document).ready(function ($) {
-            var mediaUploader;
+<script>
+jQuery(document).ready(function($) {
+    var mediaUploader;
 
-            $('#upload_logo_button').on('click', function (e) {
-                e.preventDefault();
+    $('#upload_logo_button').on('click', function(e) {
+        e.preventDefault();
 
-                // Nếu media uploader đã tồn tại, mở lại
-                if (mediaUploader) {
-                    mediaUploader.open();
-                    return;
-                }
+        // Nếu media uploader đã tồn tại, mở lại
+        if (mediaUploader) {
+            mediaUploader.open();
+            return;
+        }
 
-                // Tạo media uploader mới
-                mediaUploader = wp.media({
-                    title: 'Choose Logo',
-                    button: {
-                        text: 'Use this image'
-                    },
-                    multiple: false
-                });
-
-                // Khi chọn ảnh
-                mediaUploader.on('select', function () {
-                    var attachment = mediaUploader.state().get('selection').first().toJSON();
-                    $('#site_logo_url').val(attachment.url);
-
-                    // Hiển thị preview
-                    var preview = '<div style="margin-top: 10px;"><img src="' + attachment.url +
-                        '" style="max-width: 200px; height: auto; border: 1px solid #ddd; padding: 5px;"></div>';
-                    $('#site_logo_url').parent().find('div').remove();
-                    $('#site_logo_url').parent().append(preview);
-                });
-
-                mediaUploader.open();
-            });
+        // Tạo media uploader mới
+        mediaUploader = wp.media({
+            title: 'Choose Logo',
+            button: {
+                text: 'Use this image'
+            },
+            multiple: false
         });
-    </script>
-    <?php
+
+
+        // Khi chọn ảnh
+        mediaUploader.on('select', function() {
+            var attachment = mediaUploader.state().get('selection').first().toJSON();
+            $('#site_logo_url').val(attachment.url);
+
+            // Hiển thị preview
+            var preview = '<div style="margin-top: 10px;"><img src="' + attachment.url +
+                '" style="max-width: 200px; height: auto; border: 1px solid #ddd; padding: 5px;"></div>';
+            $('#site_logo_url').parent().find('div').remove();
+            $('#site_logo_url').parent().append(preview);
+        });
+
+        mediaUploader.open();
+    });
+});
+</script>
+<?php
 }
 
 

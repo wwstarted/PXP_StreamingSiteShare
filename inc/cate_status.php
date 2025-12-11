@@ -1,10 +1,5 @@
 <?php
-/**
- * Thêm Meta Box Visibility cho CPT cate_post
- * Đặt code này vào functions.php
- */
 
-// QUAN TRỌNG: Register meta field để expose ra REST API
 add_action('init', 'register_cate_post_visibility_meta');
 function register_cate_post_visibility_meta()
 {
@@ -12,7 +7,7 @@ function register_cate_post_visibility_meta()
         'type' => 'string',
         'single' => true,
         'show_in_rest' => true,  // Expose ra REST API
-        'default' => '1',         // Mặc định là hiển thị
+        'default' => '1',
         'sanitize_callback' => 'sanitize_text_field',
         'auth_callback' => function () {
             return current_user_can('edit_posts');
@@ -49,18 +44,18 @@ function render_cate_post_visibility_box($post)
     wp_nonce_field('cate_post_visibility_nonce', 'cate_post_visibility_nonce_field');
     ?>
 
-    <div style="padding: 10px 0;">
-        <label style="display: flex; align-items: center; cursor: pointer;">
-            <input type="checkbox" name="cate_post_visible" value="1" <?php checked($is_visible, '1'); ?>
-                style="margin-right: 8px;" />
-            <span>Show in homepage</span>
-        </label>
-        <p class="description" style="margin-top: 8px; color: #666;">
-            Tick để hiển thị category
-        </p>
-    </div>
+<div style="padding: 10px 0;">
+    <label style="display: flex; align-items: center; cursor: pointer;">
+        <input type="checkbox" name="cate_post_visible" value="1" <?php checked($is_visible, '1'); ?>
+            style="margin-right: 8px;" />
+        <span>Show in homepage</span>
+    </label>
+    <p class="description" style="margin-top: 8px; color: #666;">
+        Tick để hiển thị category
+    </p>
+</div>
 
-    <?php
+<?php
 }
 
 // Lưu giá trị khi save post

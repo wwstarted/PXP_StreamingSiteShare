@@ -53,7 +53,6 @@ function edit_category_custom_fields($term)
     $thumbnail = get_term_meta($term->term_id, 'thumbnail', true);
     $is_visible = get_term_meta($term->term_id, '_cate_visible', true);
 
-
     if ($is_visible === '') {
         $is_visible = '1';
     }
@@ -117,7 +116,6 @@ function save_category_custom_fields($term_id)
 add_filter('manage_edit-category_columns', 'add_category_custom_columns');
 function add_category_custom_columns($columns)
 {
-
     $new_columns = array();
     foreach ($columns as $key => $value) {
         $new_columns[$key] = $value;
@@ -156,15 +154,21 @@ function show_category_custom_columns($content, $column_name, $term_id)
 add_action('admin_enqueue_scripts', 'enqueue_category_media_uploader');
 function enqueue_category_media_uploader($hook)
 {
+    global $pagenow, $taxnow;
 
-    if ($hook === 'term.php' || $hook === 'edit-tags.php') {
+    if (($pagenow === 'term.php' || $pagenow === 'edit-tags.php') && $taxnow === 'category') {
         wp_enqueue_media();
-        ?>
-<script>
+        add_action('admin_footer', 'category_thumbnail_inline_script');
+    }
+}
+
+function category_thumbnail_inline_script()
+{
+    ?>
+<script type="text/javascript">
 jQuery(document).ready(function($) {
     var mediaUploader;
-
-    $('#upload_category_thumbnail').on('click', function(e) {
+    $(document).on('click', '#upload_category_thumbnail', function(e) {
         e.preventDefault();
 
         if (mediaUploader) {
@@ -173,17 +177,20 @@ jQuery(document).ready(function($) {
         }
 
         mediaUploader = wp.media({
-            title: 'Choose Category Thumbnail',
+            title: 'Chọn ảnh đại diện cho Category',
             button: {
-                text: 'Use this image'
+                text: 'Sử dụng ảnh này'
             },
-            multiple: false
+            multiple: false,
+            library: {
+                type: 'image'
+            }
         });
 
         mediaUploader.on('select', function() {
             var attachment = mediaUploader.state().get('selection').first().toJSON();
-            $('#category_thumbnail').val(attachment.url);
 
+            $('#category_thumbnail').val(attachment.url);
 
             $('#category-thumbnail-preview').show();
             $('#category-thumbnail-preview img').attr('src', attachment.url);
@@ -192,7 +199,7 @@ jQuery(document).ready(function($) {
         mediaUploader.open();
     });
 
-    $('#category_thumbnail').on('input', function() {
+    $(document).on('input', '#category_thumbnail', function() {
         var url = $(this).val();
         if (url) {
             $('#category-thumbnail-preview').show();
@@ -204,8 +211,8 @@ jQuery(document).ready(function($) {
 });
 </script>
 <?php
-    }
 }
+
 function get_visible_categories($args = array())
 {
     $default_args = array(
@@ -224,4 +231,8 @@ function get_visible_categories($args = array())
             )
         )
     );
+
+    $args = wp_parse_args($args, $default_args);
+
+    return get_terms($args);
 }

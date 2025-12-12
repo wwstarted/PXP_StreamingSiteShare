@@ -3,18 +3,14 @@
 
     <div class="breadcrumb">
         <?php
-        // Separator icon
         $sep = ' <span class="breadcrumb-separator"><i class="fa-solid fa-chevron-right"></i></span> ';
 
-        // Home with house icon
         echo '<a href="' . home_url() . '"><i class="fa-solid fa-house"></i> Home</a>';
 
-        // Category archive page
         if (is_category()) {
             echo $sep . '<span>' . single_cat_title('', false) . '</span>';
         }
 
-        // Single blog post
         if (is_single()) {
             $categories = get_the_category();
             if (!empty($categories)) {
@@ -24,7 +20,6 @@
             echo $sep . '<span>' . get_the_title() . '</span>';
         }
 
-        // Normal page (not front page)
         if (is_page() && !is_front_page()) {
             echo $sep . '<span>' . get_the_title() . '</span>';
         }

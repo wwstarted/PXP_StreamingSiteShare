@@ -35,11 +35,32 @@
             </div>
 
             <!-- Ad Banner -->
-            <div class="ad-banner-v2">
-                <h3>SEO</h3>
-                <p>YOU CAN BE HERE!</p>
-                <a href="<?php echo home_url('/404notfound') ?>" class="primary-button-v2">Contact Us</a>
-            </div>
+            <a href="<?php echo home_url('/404notfound') ?>" class="premium-ad-sidebar">
+                <div class="premium-ad-sidebar-content">
+                    <!-- Shine Effect -->
+                    <div class="premium-ad-sidebar-shine"></div>
+
+                    <!-- Image Section -->
+                    <div class="premium-ad-sidebar-image">
+                        <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=500&fit=crop"
+                            alt="Advertising Space">
+                        <div class="premium-ad-sidebar-overlay"></div>
+                        <span class="premium-ad-sidebar-label">Sponsored</span>
+                    </div>
+
+                    <!-- Info Section -->
+                    <div class="premium-ad-sidebar-info">
+                        <h3 class="premium-ad-sidebar-title">SEO</h3>
+                        <p class="premium-ad-sidebar-description">
+                            YOU CAN BE HERE!
+                        </p>
+                        <span class="premium-ad-sidebar-btn">
+                            Contact Us
+                            <span class="premium-ad-sidebar-btn-icon">→</span>
+                        </span>
+                    </div>
+                </div>
+            </a>
         </aside>
     </div>
     <!-- Related Posts -->

@@ -3,7 +3,6 @@ class StreamingSearch {
     // WordPress REST API Endpoints
     this.API_POST_ITEMS = window.location.origin + '/PXP_SSW/wordpress/wp-json/wp/v2/posts';
     this.API_BLOGS = window.location.origin + '/PXP_SSW/wordpress/wp-json/wp/v2/blogs';
-    
     this.state = {
       query: '',
       postItemResults: [],

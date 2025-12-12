@@ -324,8 +324,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }).join('');
 
     gridContainer.innerHTML = cardsHTML;
-
-    // Update load more button
     updateLoadMoreButton(blogsToShow.length < filteredBlogs.length);
   }
 
@@ -339,10 +337,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       loadMoreSection.style.display = 'none';
     }
   }
-
-
-  // search & sort
-  
   function initSearchAndSort() {
     const searchInput = document.querySelector('.blog-search-input');
     const sortSelect = document.querySelector('.blog-sort-select');
@@ -357,7 +351,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, 500);
       });
     }
-
+    
     if (sortSelect) {
       sortSelect.addEventListener('change', (e) => {
         currentSort = e.target.value;

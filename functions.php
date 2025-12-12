@@ -33,9 +33,9 @@ add_action('wp_enqueue_scripts', 'load_assets');
 
 require_once get_theme_file_path('/inc/uploads.php');
 require_once get_theme_file_path('/inc/logo.php');
-require_once get_theme_file_path('/inc/reviews.php');
-require_once get_theme_file_path('/inc/cate_status.php');
-require_once get_theme_file_path('/inc/cate_checkbox.php');
+// require_once get_theme_file_path('/inc/reviews.php');
+// require_once get_theme_file_path('/inc/cate_status.php');
+// require_once get_theme_file_path('/inc/cate_checkbox.php');
 require_once get_theme_file_path('/inc/blog_metafield.php');
 require_once get_theme_file_path('inc/metabox_posts.php');
 require_once get_theme_file_path('inc/metabox_cate_posts.php');
@@ -191,51 +191,51 @@ function create_blog_tags_taxonomy()
 add_action('init', 'create_blog_tags_taxonomy');
 
 
-function create_cate_post_type()
-{
-  register_post_type('cate_post', [
-    'labels' => [
-      'name' => 'Categories',
-      'singular_name' => 'Category',
-      'menu_name' => 'Categories',
-      'all_items' => 'All Categories',
-      'add_new_item' => 'Add New Category',
-      'edit_item' => 'Edit Category'
-    ],
-    'public' => true,
-    'show_in_rest' => true,
-    'supports' => ['title', 'thumbnail', 'custom-fields'],
-    'has_archive' => true,
-    'rewrite' => [
-      'slug' => 'reviews',
-      'with_front' => false
-    ],
-  ]);
-}
-add_action('init', 'create_cate_post_type');
+// function create_cate_post_type()
+// {
+//   register_post_type('cate_post', [
+//     'labels' => [
+//       'name' => 'Categories',
+//       'singular_name' => 'Category',
+//       'menu_name' => 'Categories',
+//       'all_items' => 'All Categories',
+//       'add_new_item' => 'Add New Category',
+//       'edit_item' => 'Edit Category'
+//     ],
+//     'public' => true,
+//     'show_in_rest' => true,
+//     'supports' => ['title', 'thumbnail', 'custom-fields'],
+//     'has_archive' => true,
+//     'rewrite' => [
+//       'slug' => 'reviews',
+//       'with_front' => false
+//     ],
+//   ]);
+// }
+// add_action('init', 'create_cate_post_type');
 
 /** CPT POST */
-function create_post_item_type()
-{
-  register_post_type('post_item', [
-    'labels' => [
-      'name' => 'Brand',
-      'singular_name' => 'Brand',
-      'menu_name' => 'Brand',
-      'all_items' => 'All Brand',
-      'add_new_item' => 'Add New Brand',
-      'edit_item' => 'Edit Brand'
-    ],
-    'public' => true,
-    'show_in_rest' => true,
-    'supports' => ['title', 'custom-fields'],
-    'rewrite' => [
-      'slug' => 'info',
-      'with_front' => false
-    ],
-  ]);
-}
-add_action('init', 'create_post_item_type');
+// function create_post_item_type()
+// {
+//   register_post_type('post_item', [
+//     'labels' => [
+//       'name' => 'Brand',
+//       'singular_name' => 'Brand',
+//       'menu_name' => 'Brand',
+//       'all_items' => 'All Brand',
+//       'add_new_item' => 'Add New Brand',
+//       'edit_item' => 'Edit Brand'
+//     ],
+//     'public' => true,
+//     'show_in_rest' => true,
+//     'supports' => ['title', 'custom-fields'],
+//     'rewrite' => [
+//       'slug' => 'info',
+//       'with_front' => false
+//     ],
+//   ]);
+// }
+// add_action('init', 'create_post_item_type');
 
 
 
@@ -247,22 +247,22 @@ add_action('init', 'create_post_item_type');
 /** ================== CUSTOM FIELD===================== */
 
 
-/** CF Categories */
-function register_cate_item_meta_fields()
-{
-  register_post_meta('cate_post', 'short_desc', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
+// /** CF Categories */
+// function register_cate_item_meta_fields()
+// {
+//   register_post_meta('cate_post', 'short_desc', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
 
-  register_post_meta('cate_post', 'thumbnail', [
-    'type' => 'string', // kiểu đường dẫn ảnh nên để string
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-}
-add_action('init', 'register_cate_item_meta_fields');
+//   register_post_meta('cate_post', 'thumbnail', [
+//     'type' => 'string', // kiểu đường dẫn ảnh nên để string
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+// }
+// add_action('init', 'register_cate_item_meta_fields');
 
 
 /** CF Blogs */
@@ -311,78 +311,78 @@ add_action('init', 'register_cate_item_meta_fields');
 
 
 
-/** Custom Field cho post_item ===== */
-function register_post_item_meta_fields()
-{
-  register_post_meta('post_item', 'logo', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
+// /** Custom Field cho post_item ===== */
+// function register_post_item_meta_fields()
+// {
+//   register_post_meta('post_item', 'logo', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
 
-  register_post_meta('post_item', 'top', [
-    'type' => 'number',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
+//   register_post_meta('post_item', 'top', [
+//     'type' => 'number',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
 
-  register_post_meta('post_item', 'id_cate', [
-    'type' => 'number',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'image', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'desc', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'date', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'author', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'author_logo', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'popularity', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'post_link', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'likes', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'hates', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-  register_post_meta('post_item', 'bgr_image', [
-    'type' => 'string',
-    'single' => true,
-    'show_in_rest' => true,
-  ]);
-}
-add_action('init', 'register_post_item_meta_fields');
+//   register_post_meta('post_item', 'id_cate', [
+//     'type' => 'number',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'image', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'desc', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'date', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'author', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'author_logo', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'popularity', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'post_link', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'likes', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'hates', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+//   register_post_meta('post_item', 'bgr_image', [
+//     'type' => 'string',
+//     'single' => true,
+//     'show_in_rest' => true,
+//   ]);
+// }
+// add_action('init', 'register_post_item_meta_fields');
 
 
 
@@ -432,43 +432,42 @@ add_action('init', 'register_post_item_meta_fields');
 
 
 
-function render_small_banner_multi_cate_box($post)
-{
-  // Lấy danh sách category hiện tại (array hoặc rỗng)
-  $current_cates = get_post_meta($post->ID, 'id_cate_post', true);
-  if (!is_array($current_cates)) {
-    $current_cates = [];
-  }
+// function render_small_banner_multi_cate_box($post)
+// {
+//   // Lấy danh sách category hiện tại (array hoặc rỗng)
+//   $current_cates = get_post_meta($post->ID, 'id_cate_post', true);
+//   if (!is_array($current_cates)) {
+//     $current_cates = [];
+//   }
 
-  // Lấy tất cả category từ CPT cate_post
-  $categories = get_posts([
-    'post_type' => 'cate_post',
-    'numberposts' => -1,
-    'post_status' => 'publish'
-  ]);
+//   // Lấy tất cả category từ CPT cate_post
+//   $categories = get_posts([
+//     'post_type' => 'cate_post',
+//     'numberposts' => -1,
+//     'post_status' => 'publish'
+//   ]);
 
-  echo '<p><strong>Assign this banner to categories:</strong></p>';
-  echo '<div style="max-height:180px; overflow-y:auto; border:1px solid #ccc; padding:8px; border-radius:6px;">';
+//   echo '<p><strong>Assign this banner to categories:</strong></p>';
+//   echo '<div style="max-height:180px; overflow-y:auto; border:1px solid #ccc; padding:8px; border-radius:6px;">';
 
-  foreach ($categories as $cate) {
-    $checked = in_array($cate->ID, $current_cates) ? 'checked' : '';
-    echo '
-            <label style="display:block; margin-bottom:4px;">
-                <input type="checkbox" name="id_cate_post[]" value="' . esc_attr($cate->ID) . '" ' . $checked . '>
-                ' . esc_html($cate->post_title) . '
-            </label>
-        ';
-  }
+//   foreach ($categories as $cate) {
+//     $checked = in_array($cate->ID, $current_cates) ? 'checked' : '';
+//     echo '
+//             <label style="display:block; margin-bottom:4px;">
+//                 <input type="checkbox" name="id_cate_post[]" value="' . esc_attr($cate->ID) . '" ' . $checked . '>
+//                 ' . esc_html($cate->post_title) . '
+//             </label>
+//         ';
+//   }
 
-  echo '</div>';
-}
+//   echo '</div>';
+// }
 
 
 
 
 function filter_features_group_rest_query($args, $request)
 {
-
   if (isset($request['meta_key']) && isset($request['meta_value'])) {
     $args['meta_query'] = [
       [

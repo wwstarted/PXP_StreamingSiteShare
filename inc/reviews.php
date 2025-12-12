@@ -118,14 +118,11 @@ jQuery(document).ready(function($) {
 
     $('#upload_thumbnail_button').on('click', function(e) {
         e.preventDefault();
-
-        // Nếu media uploader đã tồn tại, mở lại
         if (mediaUploader) {
             mediaUploader.open();
             return;
         }
 
-        // Tạo media uploader mới
         mediaUploader = wp.media({
             title: 'Choose Thumbnail',
             button: {
@@ -134,12 +131,10 @@ jQuery(document).ready(function($) {
             multiple: false
         });
 
-        // Khi chọn ảnh
         mediaUploader.on('select', function() {
             var attachment = mediaUploader.state().get('selection').first().toJSON();
             $('#cate_post_thumbnail').val(attachment.url);
 
-            // Hiển thị preview
             $('#thumbnail-preview').show();
             $('#thumbnail-preview img').attr('src', attachment.url);
         });
@@ -147,7 +142,6 @@ jQuery(document).ready(function($) {
         mediaUploader.open();
     });
 
-    // Preview khi nhập URL thủ công
     $('#cate_post_thumbnail').on('input', function() {
         var url = $(this).val();
         if (url) {
@@ -162,10 +156,6 @@ jQuery(document).ready(function($) {
 <?php
 }
 
-
-// ============================================
-// 3. LƯU DỮ LIỆU METABOX
-// ============================================
 function save_cate_post_metabox($post_id)
 {
     // Kiểm tra nonce

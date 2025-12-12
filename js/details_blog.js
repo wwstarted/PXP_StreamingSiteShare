@@ -181,28 +181,37 @@ if (sidebarV2) {
   }
 
 //  ================= fetch breakcrumb ========================
-  const breadcrumb = document.querySelector(".breadcrumb_blog");
-  if (breadcrumb) {
-    try {
-      const res = await fetch(
-        `${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`
-      );
-      const blogs = await res.json();
-      const blog = blogs[0];
+ // ================= fetch breadcrumb ========================
+const breadcrumb = document.querySelector(".breadcrumb_blog");
 
-      const title = blog?.title?.rendered || "Untitled";
+if (breadcrumb) {
+  try {
+    const res = await fetch(`${API_BASE}/blogs?slug=${encodeURIComponent(blogId)}`);
+    const blogs = await res.json();
+    const blog = blogs[0];
 
-      const bannerHTML = `
-        <a href="${WP_HOME}"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-        <a href="${WP_HOME}/blog/">Blog</a> /
-        <span>${title}</span>
-      `;
+    const title = blog?.title?.rendered || "Untitled";
 
-      breadcrumb.insertAdjacentHTML("beforeend", bannerHTML);
-    } catch (error) {
-      console.error("Lỗi khi tải breadcrumb:", error);
-    }
+    const sep = `<i class="fa-solid fa-angle-right"></i>`;
+
+    const html = `
+      <a href="${WP_HOME}">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+      ${sep}
+      <a href="${WP_HOME}/blog">
+        Blog
+      </a>
+      ${sep}
+      <span>${title}</span>
+    `;
+
+    breadcrumb.innerHTML = html;
+  } catch (error) {
+    console.error("Lỗi khi tải breadcrumb:", error);
   }
+}
+
 });
 // =========================== generate TOC ======================
 function generateTableOfContents() {

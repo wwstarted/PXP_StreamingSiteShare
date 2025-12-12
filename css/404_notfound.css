@@ -1,16 +1,4 @@
 /* ================ 404 NOT FOUND =============== */
-
-/* *,
-*::before,
-*::after { box-sizing: border-box; margin: 0; padding: 0; } */
-
-/* html, body {
-  height: 100%;
-  font-family: "Poppins", -apple-system, BlinkMacSystemFont, sans-serif;
-  background: #2e3742;
-  overflow: hidden; 
-} */
-
 .page-404 {
   height: 100vh;
   height: 100dvh; 

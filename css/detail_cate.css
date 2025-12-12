@@ -433,6 +433,9 @@ header {
   text-transform: uppercase;
   letter-spacing: 0.5px;
   z-index: 2;
+  /* width: fit-content;
+  height: fit-content;
+  display: inline-block; */
 }
 
 .ad-banner:hover {
@@ -2490,3 +2493,357 @@ html {
   padding: 40px 20px;
   font-size: 16px;
 }
+
+.premium-ad-banner {
+  text-decoration: none;
+            position: relative;
+            border-radius: 24px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeInUp 0.8s ease;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        }
+
+        /* Gradient Border Animation */
+        .premium-ad-banner::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 24px;
+            padding: 3px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0.6;
+            transition: opacity 0.4s ease;
+            z-index: 1;
+        }
+
+        .premium-ad-banner:hover::before {
+            opacity: 1;
+            animation: borderRotate 3s linear infinite;
+        }
+
+        /* Glow Effect */
+        .premium-ad-banner::after {
+            content: "";
+            position: absolute;
+            inset: -50px;
+            background: radial-gradient(circle at center, rgba(102, 126, 234, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .premium-ad-banner:hover::after {
+            opacity: 1;
+        }
+
+        /* Ad Content Wrapper */
+        .premium-ad-content {
+            position: relative;
+            z-index: 2;
+            border-radius: 24px;
+            overflow: hidden;
+            background: rgba(30, 41, 82, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        /* Image Container */
+        .premium-ad-image-wrapper {
+            position: relative;
+            width: 100%;
+            height: 280px;
+            overflow: hidden;
+        }
+
+        .premium-ad-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .premium-ad-banner:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Gradient Overlay on Image */
+        .premium-ad-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.3) 60%, rgba(0, 0, 0, 0.7) 100%);
+            z-index: 1;
+            transition: opacity 0.4s ease;
+        }
+
+        .premium-ad-banner:hover .premium-ad-overlay {
+            background: linear-gradient(to bottom, transparent 0%, rgba(102, 126, 234, 0.2) 60%, rgba(118, 75, 162, 0.6) 100%);
+        }
+
+        /* Sponsored Label */
+        .premium-ad-label {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            color: rgba(255, 255, 255, 0.9);
+            padding: 6px 16px;
+            border-radius: 25px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            z-index: 3;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+            transition: all 0.3s ease;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .premium-ad-banner:hover .premium-ad-label {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+        }
+
+        /* Ad Info Section */
+        .premium-ad-info {
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(30, 41, 82, 0.98) 0%, rgba(20, 30, 60, 0.98) 100%);
+            position: relative;
+            z-index: 2;
+        }
+
+        .premium-ad-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+
+        .premium-ad-banner:hover .premium-ad-title {
+            background: linear-gradient(135deg, #f093fb 0%, #667eea 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .premium-ad-description {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        /* CTA Button */
+        .premium-ad-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-ad-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .premium-ad-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.6);
+            background: linear-gradient(135deg, #764ba2 0%, #f093fb 100%);
+        }
+
+        .premium-ad-cta:hover::before {
+            left: 100%;
+        }
+
+        .premium-ad-cta-icon {
+            font-size: 16px;
+            transition: transform 0.3s ease;
+        }
+
+        .premium-ad-cta:hover .premium-ad-cta-icon {
+            transform: translateX(4px);
+        }
+
+        /* Shine Effect */
+        .premium-ad-shine {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transform: skewX(-25deg);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .premium-ad-banner:hover .premium-ad-shine {
+            animation: shine 1.5s ease-in-out;
+        }
+
+        /* ========================================
+           ANIMATIONS
+        ======================================== */
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes borderRotate {
+            0% {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            }
+            25% {
+                background: linear-gradient(225deg, #764ba2 0%, #f093fb 50%, #667eea 100%);
+            }
+            50% {
+                background: linear-gradient(315deg, #f093fb 0%, #667eea 50%, #764ba2 100%);
+            }
+            75% {
+                background: linear-gradient(45deg, #667eea 0%, #f093fb 50%, #764ba2 100%);
+            }
+            100% {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes shine {
+            0% {
+                left: -50%;
+            }
+            100% {
+                left: 150%;
+            }
+        }
+
+        /* ========================================
+           RESPONSIVE
+        ======================================== */
+        
+        @media (max-width: 768px) {
+            .premium-ad-image-wrapper {
+                height: 200px;
+            }
+
+            .premium-ad-label {
+                top: 12px;
+                right: 12px;
+                font-size: 10px;
+                padding: 5px 12px;
+            }
+
+            .premium-ad-info {
+                padding: 16px;
+            }
+
+            .premium-ad-title {
+                font-size: 16px;
+            }
+
+            .premium-ad-description {
+                font-size: 12px;
+            }
+
+            .premium-ad-cta {
+                padding: 9px 20px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 389px) {
+            .premium-ad-banner {
+                border-radius: 20px;
+            }
+
+            .premium-ad-content {
+                border-radius: 20px;
+            }
+
+            .premium-ad-image-wrapper {
+                height: 180px;
+            }
+
+            .premium-ad-info {
+                padding: 14px;
+            }
+
+            .premium-ad-title {
+                font-size: 15px;
+            }
+
+            .premium-ad-cta {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Demo Info */
+        .demo-info {
+            text-align: center;
+            margin-bottom: 30px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .demo-info h1 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .demo-info p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+        }

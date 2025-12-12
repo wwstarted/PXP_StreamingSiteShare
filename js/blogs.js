@@ -278,9 +278,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const meta = blog.meta || {};
       const title = blog.title?.rendered || "No Title";
       const desc = meta.bg_short_desc || "No description available.";
-      const image = meta.bg_avatar || "https://via.placeholder.com/400x300";
+      const image = meta.bg_thumbnail || "https://via.placeholder.com/400x300";
       
-      // ✅ SỬA: Dùng author mặc định của WP
       const authorName = blog.author_name || "Unknown Author";
       const authorAvatar = blog.author_avatar || "";
       

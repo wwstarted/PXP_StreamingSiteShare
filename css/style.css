@@ -383,7 +383,7 @@ i.icon-down-menu.fa-solid.fa-chevron-down {
 
 .social-icons {
   display: flex;
-  gap: 10px;
+  gap: 0px;
 }
 
 .social-icons span {
@@ -671,7 +671,7 @@ header {
 
 .social-icons {
     display: flex;
-    gap: 10px;
+    gap: 0px;
 }
 
 .social-icons span {
@@ -945,7 +945,7 @@ header {
 .social-icons {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 0px;
 }
 
 .social-icons i {
@@ -1174,3 +1174,186 @@ header {
     .mobile-menu-header .site-logo {
         max-height: 40px;
     }
+
+    /* ==================================fix header sticky================================= */
+    /* ============================
+   FORCE: Disable sticky header
+   ============================ */
+
+/* Áp dụng cho mọi selector header có thể dùng trong theme */
+header,
+header.site-header,
+.site-header,
+.header {
+  position: relative !important; /* Hoặc static cũng được */
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+  z-index: 100 !important; /* Giữ z-index hợp lý để menu mobile/overlay vẫn hiển thị đúng */
+  background-clip: padding-box; /* đề phòng border/overlay gây lỗi */
+}
+
+/* Nếu có rule .hero-wrapper > header hoặc header nằm trong wrapper */
+.hero-wrapper header,
+.hero-wrapper .site-header {
+  position: relative !important;
+}
+
+/* Hủy mọi rule sticky được đặt trong media queries */
+@media (max-width: 1200px) {
+  header,
+  header.site-header,
+  .site-header,
+  .header {
+    position: relative !important;
+    top: auto !important;
+  }
+}
+
+/* Đảm bảo overlay / drawer vẫn chồng lên header khi mở menu */
+.mobile-menu-drawer {
+  z-index: 9999; /* cao hơn header */
+}
+
+/* Overlay hiển thị đúng */
+.mobile-overlay {
+  z-index: 9998;
+}
+
+/* Nếu bạn dùng class .scrolled để đổi background khi cuộn, bỏ effect không cần thiết */
+/* (nếu có JS thêm class scrolled, header vẫn không dính vì position đã bị override) */
+.site-header.scrolled {
+  /* không thay đổi vị trí — chỉ giữ style nếu cần */
+}
+
+footer {
+  background: #111726;
+  color: #e5e7eb;
+  padding: 60px 0 30px;
+  margin-top: 60px;
+  font-family: Arial, sans-serif;
+}
+
+footer .footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/* TOP */
+.footer-content-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-content-top .logo {
+  display: flex;
+  align-items: center;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.footer-content-top .logo-icon {
+  margin-right: 8px;
+  color: #3b82f6;
+}
+
+.social-icons span {
+  margin-right: 12px;
+  font-size: 22px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.social-icons span:hover {
+  color: #3b82f6;
+}
+
+/* GRID LAYOUT */
+.footer-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 40px;
+}
+
+.footer-col h3 {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: #ffffff;
+}
+
+.footer-col ul li {
+  margin: 8px 0;
+}
+
+.footer-col ul li a {
+  color: #d1d5db;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.footer-col ul li a:hover {
+  color: #3b82f6;
+}
+
+/* NEWSLETTER */
+.newsletter-form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.newsletter-form input {
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  outline: none;
+}
+
+.newsletter-form button {
+  padding: 12px;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.newsletter-form button:hover {
+  background: #2563eb;
+}
+
+/* MID INFO BAR */
+.footer-mid-info {
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+}
+
+/* BOTTOM */
+.footer-content-end {
+  text-align: center;
+  color: #6b7280;
+  font-size: 14px;
+  border-top: 1px solid #1f2535;
+  padding-top: 20px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 500px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+}
+

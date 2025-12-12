@@ -469,20 +469,46 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ======================== breakcrumb=================================
-  try {
-    const breadcrumb = document.querySelector(".breadcrumb");
-    if (breadcrumb) {
-      const title = currentPost?.title?.rendered || "Banner";
-      const bannerHTML = `
-        <a href="${WP_HOME}"><i class="fa-solid fa-house"></i> Streaming Sites</a> /
-        <a href="${WP_HOME}/categories/">Category</a> /
-        <span>${title}</span>
-      `;
-      breadcrumb.insertAdjacentHTML("beforeend", bannerHTML);
+try {
+  const breadcrumbEl = document.querySelector(".breadcrumb");
+  if (breadcrumbEl && currentPost) {
+    
+    // separator icon
+    const sep = `<span class="breadcrumb-sep"><i class="fa-solid fa-chevron-right"></i></span>`;
+
+    // Lấy category đầu tiên của bài viết
+    const cateId = currentPost.categories?.[0] || null;
+    let cateName = "";
+    let cateSlug = "";
+
+    if (cateId) {
+      const resCate = await fetch(`${API_BASE}/categories/${cateId}`);
+      const cateData = await resCate.json();
+      cateName = cateData?.name || "";
+      cateSlug = cateData?.slug || "";
     }
-  } catch (err) {
-    console.error("Lỗi khi tải breadcrumb:", err);
+
+    // Build HTML
+    breadcrumbEl.innerHTML = `
+      <a href="${WP_HOME}">
+        <i class="fa-solid fa-house"></i> Home
+      </a>
+
+      ${sep}
+
+      <a href="${WP_HOME}/${cateSlug}">
+        ${cateName}
+      </a>
+
+      ${sep}
+
+      <span>${currentPost.title.rendered}</span>
+    `;
   }
+} catch (err) {
+  console.error("Breadcrumb lỗi:", err);
+}
+
 });
 
 document.addEventListener('DOMContentLoaded', function() {

@@ -1,35 +1,36 @@
 <?php get_header() ?>
 
-<!-- ========================================
-     BLOG ARCHIVE - MODERN MAGAZINE STYLE
-     Complete HTML Structure
-======================================== -->
-
 <!-- Breadcrumb -->
 <div class="container">
-    <div class="breadcrumb">
-        <a href="<?php echo home_url() ?>">
-            <i class="fa-solid fa-house"></i> Home
-        </a>
-        <span>/</span>
-        <span>Blog</span>
+    <div class="container">
+        <div class="container">
+            <div class="breadcrumb">
+                <!-- Home -->
+                <a href="<?php echo home_url() ?>">
+                    <i class="fa-solid fa-house"></i>
+                    Home
+                </a>
+
+                <!-- Separator -->
+                <span class="breadcrumb-separator">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </span>
+
+                <!-- Current page -->
+                <span>Blog</span>
+            </div>
+        </div>
+
     </div>
+
 </div>
-
-
 
 <main class="container">
 
-    <!-- ========================================
-         HERO SLIDER SECTION
-    ======================================== -->
     <section class="hero-slider-section">
         <!-- JS will render slider here -->
     </section>
 
-    <!-- ========================================
-         BLOG SECTION - TABS & GRID
-    ======================================== -->
     <section class="blog-main-section">
 
         <!-- Controls: Search & Sort -->
@@ -68,9 +69,6 @@
         </div>
     </section>
 
-    <!-- ========================================
-         CTA SECTION - NEWSLETTER
-    ======================================== -->
     <section class="cta-newsletter-section">
         <div class="cta-newsletter-content">
             <div class="cta-newsletter-icon">

@@ -103,11 +103,33 @@
                 </div> -->
             </div>
 
-            <!-- 2. AD BANNER - REDESIGNED -->
-            <div class="ad-banner">
-                <img src="https://tse4.mm.bing.net/th/id/OIP.GnITgT3eFRmwzqyVn4zUagHaDp?pid=Api&P=0&h=220"
-                    alt="Ad banner" />
-            </div>
+            <!-- 2. PREMIUM AD BANNER -->
+            <a href="<?php echo home_url('/your-ad-link') ?>" class="premium-ad-banner">
+                <div class="premium-ad-content">
+                    <!-- Shine Effect -->
+                    <div class="premium-ad-shine"></div>
+
+                    <!-- Image Section -->
+                    <div class="premium-ad-image-wrapper">
+                        <img src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?w=800&h=400&fit=crop"
+                            alt="Premium Service">
+                        <div class="premium-ad-overlay"></div>
+                        <span class="premium-ad-label">Sponsored</span>
+                    </div>
+
+                    <!-- Info Section -->
+                    <div class="premium-ad-info">
+                        <h3 class="premium-ad-title">Premium Streaming Service</h3>
+                        <p class="premium-ad-description">
+                            Experience unlimited entertainment with 4K quality and no ads. Start your free trial today!
+                        </p>
+                        <span class="premium-ad-cta">
+                            Learn More
+                            <span class="premium-ad-cta-icon">→</span>
+                        </span>
+                    </div>
+                </div>
+            </a>
 
             <!-- 3. COMMENT BOX - PREMIUM REDESIGN -->
             <div class="comment-box">

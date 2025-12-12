@@ -1,7 +1,7 @@
 class StreamingSearch {
   constructor() {
     // WordPress REST API Endpoints
-    this.API_POST_ITEMS = window.location.origin + '/PXP_SSW/wordpress/wp-json/wp/v2/post_item';
+    this.API_POST_ITEMS = window.location.origin + '/PXP_SSW/wordpress/wp-json/wp/v2/posts';
     this.API_BLOGS = window.location.origin + '/PXP_SSW/wordpress/wp-json/wp/v2/blogs';
     
     this.state = {
@@ -288,10 +288,10 @@ class StreamingSearch {
   renderStreamingSites() {
     const html = this.state.postItemResults.map((item, index) => {
       const title = item.title?.rendered || 'Untitled';
-      const desc = item.meta?.desc || '';
+      const desc = item.desc || 'Esta canción quería dedicársela a alguien pero al final no lo merece así q mejor no, ya llegará alguien a mi vida q si merezca que le dedique esta hermosa canción';
       const link = item.link || '#';
-      const logo = item.meta?.logo || '';
-      const popularity = item.meta?.popularity || 0;
+      const logo = item.logo || '';
+      const popularity = item.popularity || 0;
       const highlightedTitle = this.highlightText(title, this.state.query);
 
       return `

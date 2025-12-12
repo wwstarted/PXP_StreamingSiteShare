@@ -37,20 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       <div class="banner-right">
         <h1>${currentCate.name}</h1>
         <p>${cateShortDesc}</p>
-        <div class="platforms">
-          ${
-            relatedBanners.length
-              ? relatedBanners
-                  .map(
-                    b => `
-            <a href="${b.link || "#"}" target="_blank">
-              <img src="${b.bgr_image || ""}" />
-            </a>`
-                  )
-                  .join("")
-              : "<p>No banners found.</p>"
-          }
-        </div>
+        
       </div>
     `;
   }
@@ -162,26 +149,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       // Button text
       const buttonText = remain > 0 ? `+${remain} sites` : '';
 
-      wrap.insertAdjacentHTML(
-        "beforeend",
-        `
-      <a href="${categoryLink}" class="related-item">
-        <img src="${cThumb}" class="related-icon" alt="${categoryTitle}" />
-        
-        <div class="info">
-          <div class="category-header">
-            <h3>${categoryTitle}</h3>
-            <span class="count-badge">${totalPosts}</span>
-          </div>
-          
-          <div class="mini-logos">
-            ${logosHTML}
-            ${remain > 0 ? `<a href="${categoryLink}" class="visit-btn-cate" onclick="event.stopPropagation()">${buttonText}</a>` : ''}
-          </div>
-        </div>
-      </a>
-      `
-      );
+      // ✅ CODE ĐÚNG:
+wrap.insertAdjacentHTML(
+  "beforeend",
+  `
+  <a href="${categoryLink}" class="related-item">
+    <img src="${cThumb}" class="related-icon" alt="${categoryTitle}" />
+    
+    <div class="info">
+      <div class="category-header">
+        <h3>${categoryTitle}</h3>
+        <span class="count-badge">${totalPosts}</span>
+      </div>
+      
+      <div class="mini-logos">
+        ${logosHTML}
+        ${remain > 0 ? `<span class="visit-btn-cate">${buttonText}</span>` : ''}
+      </div>
+    </div>
+  </a>
+  `
+);
     });
   }
 
@@ -241,12 +229,150 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+async function renderStatsInsights() {
+  // Get posts for current category
+  const posts = allPosts
+    .filter(p => {
+      const cats = p.categories || [];
+      return cats.includes(currentCateId);
+    })
+    .sort((a, b) => (b.popularity || 0) - (a.popularity || 0));
 
+  if (!posts.length) {
+    document.querySelector(".stats-insights-section").style.display = "none";
+    return;
+  }
 
+  // Calculate statistics
+  const totalPosts = posts.length;
+  const avgPopularity = Math.round(
+    posts.reduce((sum, p) => sum + (p.popularity || 0), 0) / totalPosts
+  );
+  const trendingCount = posts.filter(p => (p.popularity || 0) >= 70).length;
 
+  // Update stat cards with animation
+  animateNumber("total-posts", totalPosts);
+  animateNumber("avg-popularity", avgPopularity, "%");
+  animateNumber("trending-count", trendingCount);
+
+  // Render Top 3 Podium
+  const top3 = posts.slice(0, 3);
+  renderPodium(top3);
+
+  // Render Popularity Chart
+  renderPopularityChart(posts);
+}
+
+// Animate numbers counting up
+function animateNumber(elementId, target, suffix = "") {
+  const element = document.getElementById(elementId);
+  let current = 0;
+  const increment = target / 30;
+  const duration = 1000;
+  const stepTime = duration / 30;
+
+  const timer = setInterval(() => {
+    current += increment;
+    if (current >= target) {
+      current = target;
+      clearInterval(timer);
+    }
+    element.textContent = Math.floor(current) + suffix;
+  }, stepTime);
+}
+
+// Render Top 3 Podium
+function renderPodium(top3) {
+  const podiumContainer = document.getElementById("podium-container");
+  
+  // Order: 2nd, 1st, 3rd (for visual layout)
+  const order = [
+    top3[1], // 2nd place
+    top3[0], // 1st place  
+    top3[2]  // 3rd place
+  ];
+
+  order.forEach((post, index) => {
+    if (!post) return;
+
+    const positions = ['second-place', 'first-place', 'third-place'];
+    const podiumItem = podiumContainer.querySelector(`.${positions[index]}`);
+    
+    const logo = post.logo || "https://via.placeholder.com/80";
+    const title = post.title.rendered;
+    const popularity = post.popularity || 0;
+    const link = post.link;
+
+    podiumItem.querySelector('.podium-logo').src = logo;
+    podiumItem.querySelector('.podium-logo').alt = title;
+    podiumItem.querySelector('.podium-name').textContent = title;
+    podiumItem.querySelector('.podium-fill').style.width = popularity + '%';
+    podiumItem.querySelector('.podium-percent').textContent = popularity + '%';
+    
+    // Make clickable
+    podiumItem.style.cursor = 'pointer';
+    podiumItem.onclick = () => window.location.href = link;
+
+    // Animate bars
+    setTimeout(() => {
+      podiumItem.querySelector('.podium-fill').style.width = popularity + '%';
+    }, 100 * (index + 1));
+  });
+}
+
+// Render Popularity Distribution Chart
+function renderPopularityChart(posts) {
+  const chartContainer = document.getElementById("chart-container");
+  
+  // Create ranges: 0-20, 21-40, 41-60, 61-80, 81-100
+  const ranges = [
+    { label: "0-20%", min: 0, max: 20, count: 0 },
+    { label: "21-40%", min: 21, max: 40, count: 0 },
+    { label: "41-60%", min: 41, max: 60, count: 0 },
+    { label: "61-80%", min: 61, max: 80, count: 0 },
+    { label: "81-100%", min: 81, max: 100, count: 0 }
+  ];
+
+  // Count posts in each range
+  posts.forEach(p => {
+    const pop = p.popularity || 0;
+    const range = ranges.find(r => pop >= r.min && pop <= r.max);
+    if (range) range.count++;
+  });
+
+  // Find max count for scaling
+  const maxCount = Math.max(...ranges.map(r => r.count), 1);
+
+  // Generate chart bars
+  const barsHTML = ranges
+    .map(r => {
+      const heightPercent = (r.count / maxCount) * 100;
+      return `
+        <div class="chart-bar-wrapper">
+          <div class="chart-bar" style="height: ${heightPercent}%">
+            <span class="bar-count">${r.count}</span>
+          </div>
+          <span class="bar-label">${r.label}</span>
+        </div>
+      `;
+    })
+    .join("");
+
+  chartContainer.innerHTML = barsHTML;
+
+  // Animate bars
+  setTimeout(() => {
+    document.querySelectorAll('.chart-bar').forEach((bar, i) => {
+      setTimeout(() => {
+        bar.style.opacity = '1';
+        bar.style.transform = 'scaleY(1)';
+      }, i * 100);
+    });
+  }, 200);
+}
   renderBannerSection();
   renderContentTop();
   renderContentBottom();
   renderRelatedCate();
-  renderBrandSection();
+  renderStatsInsights();
 });

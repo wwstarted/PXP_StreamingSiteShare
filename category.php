@@ -56,24 +56,6 @@
         </div>
     </section>
 
-    <!--  Slider Section -->
-    <!-- <section class="brand-section">
-        <div class="brand-header">
-            <h2 style="font-weight: 900">Our Posts</h2>
-            <a href="#" class="show-all">SHOW ALL</a>
-        </div>
-
-        <div class="brand-slider">
-            <button class="slide-btn prev-btn">&#10094;</button>
-
-            <div class="brand-container" id="brand-container">
-                
-            </div>
-
-            <button class="slide-btn next-btn">&#10095;</button>
-        </div>
-    </section> -->
-
     <section class="stats-insights-section">
         <div class="stats-header">
             <h2>Category Insights</h2>

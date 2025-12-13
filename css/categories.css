@@ -66,7 +66,7 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s ease;
 } */
- .right_content {
+.right_content {
   flex: 3;
   background: rgba(30, 41, 82, 0.8);
   border-radius: 20px;
@@ -130,7 +130,7 @@
 
 .table-header::before {
   border-radius: 15px;
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -180,7 +180,6 @@
   position: relative;
 }
 
-
 .table-row:hover {
   background: rgba(102, 126, 234, 0.15);
   padding-left: 14px;
@@ -201,7 +200,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.15), rgba(118, 75, 162, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.15),
+    rgba(118, 75, 162, 0.15)
+  );
   border: 1px solid rgba(102, 126, 234, 0.3);
   border-radius: 50%;
   color: #667eea;
@@ -213,7 +216,11 @@
 
 .table-row:hover > span:first-child,
 .table-row:hover > .rank-badge {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.3),
+    rgba(118, 75, 162, 0.3)
+  );
   border-color: rgba(102, 126, 234, 0.6);
   color: #764ba2;
   transform: scale(1.15);
@@ -231,7 +238,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 
 .table-row:hover > span:nth-child(3),
 .table-row:hover > .post-title {
@@ -291,20 +297,24 @@
 }
 
 .fill::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.6s ease;
 }
 
 .table-row:hover .fill::after {
   left: 100%;
 }
-
 
 .table-row:hover .fill {
   background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
@@ -315,7 +325,6 @@
   text-align: center;
   margin: 20px 0;
 }
-
 
 .popularity-percent {
   font-size: 13px;
@@ -411,7 +420,7 @@
 
 .left_content h2::before {
   opacity: 0;
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -491,8 +500,6 @@
   gap: 8px;
 }
 
-
-
 .related-item h3 {
   font-size: 15px;
   margin: 0;
@@ -505,8 +512,6 @@
   flex: 1;
   min-width: 0;
 }
-
-
 
 .related-item:hover h3 {
   color: white;
@@ -526,7 +531,11 @@
   min-width: 26px;
   height: 20px;
   padding: 0 7px;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.2),
+    rgba(118, 75, 162, 0.2)
+  );
   border: 1px solid rgba(102, 126, 234, 0.4);
   border-radius: 10px;
   color: #667eea;
@@ -537,14 +546,16 @@
 }
 
 .related-item:hover .count-badge {
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.35), rgba(118, 75, 162, 0.35));
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.35),
+    rgba(118, 75, 162, 0.35)
+  );
   border-color: rgba(102, 126, 234, 0.6);
   color: #764ba2;
   transform: scale(1.1);
   box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
-
-
 
 .mini-logos {
   display: flex;
@@ -565,7 +576,7 @@
   cursor: pointer;
   position: relative;
   flex-shrink: 0;
-  margin:0 0 0 5px;
+  margin: 0 0 0 5px;
 }
 
 .mini-logos img:first-child {
@@ -607,13 +618,18 @@
 
 /* Shine effect */
 .visit-btn-cate::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.6s ease;
 }
 
@@ -647,8 +663,6 @@
 .ads-side img:hover {
   transform: scale(1.02);
 }
-
-
 
 /* Slider Section */
 .brand-section {
@@ -1189,14 +1203,13 @@ html {
   border: 2px solid rgba(147, 51, 234, 0.2);
 }
 
-
 .banner-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 50px rgba(102, 126, 234, 0.4);
   border-color: rgba(147, 51, 234, 0.6);
 }
 
- .banner-card-image {
+.banner-card-image {
   position: absolute;
   top: 0;
   left: 0;
@@ -1301,13 +1314,18 @@ html {
 }
 
 .banner-card-btn::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.3),
+    transparent
+  );
   transition: left 0.6s ease;
 }
 
@@ -1341,7 +1359,6 @@ html {
   transform: translateX(4px);
 }
 
-
 .banner-card-info {
   position: absolute;
   bottom: -100%;
@@ -1368,7 +1385,6 @@ html {
   opacity: 1;
   transition-delay: 0.2s;
 }
-
 
 .banner-card-info {
   position: absolute;
@@ -1449,7 +1465,6 @@ html {
   max-width: 100%;
 }
 
-
 .brand-tags {
   display: flex;
   gap: 8px;
@@ -1478,7 +1493,6 @@ html {
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
 }
-
 
 @keyframes pulse {
   0%,
@@ -1663,7 +1677,6 @@ p.info-content-tiltle {
 }
 
 /* ============================================= slider card ==================================== */
-
 
 /* ========================================
    RESPONSIVE - TABLET (1024px)
@@ -2000,8 +2013,8 @@ p.info-content-tiltle {
   }
 
   .mini-logos img {
-    width: 24px;
-    height: 24px;
+    width: 30px;
+    height: 30px;
     margin-left: -8px;
   }
 
@@ -2045,8 +2058,9 @@ p.info-content-tiltle {
   }
 
   .mini-logos img {
-    width: 22px;
-    height: 22px;
+    width: 30px;
+    height: 30px;
+    margin-right: 16px;
   }
 
   .visit-btn-cate {
@@ -2158,7 +2172,7 @@ p.info-content-tiltle {
 }
 
 .stat-card::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -2739,5 +2753,3 @@ p.info-content-tiltle {
     min-height: 44px;
   }
 }
-
-

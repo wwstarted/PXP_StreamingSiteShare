@@ -53,7 +53,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         const desc = meta.bg_short_desc || "No description available.";
         const image = meta.bg_thumbnail || "https://via.placeholder.com/1200x600";
         
-        // ✅ SỬA: Dùng author mặc định của WP
         const authorName = blog.author_name || "Unknown Author";
         const authorAvatar = blog.author_avatar || "";
         
@@ -177,19 +176,18 @@ document.addEventListener("DOMContentLoaded", async () => {
   
   async function fetchAllData() {
     try {
-      // Fetch categories
       const cateRes = await fetch(`${API_BASE}/blog_category`);
       allCategories = await cateRes.json();
 
-      // Fetch all blogs
       const blogRes = await fetch(`${API_BASE}/blogs?per_page=100`);
       allBlogs = await blogRes.json();
 
-      // Filter visible blogs
       allBlogs = allBlogs.filter(blog => {
         const isVisible = blog.meta?._blogs_visible;
         return isVisible === "1" || isVisible === true || isVisible === 1;
       });
+
+      allBlogs = await blogRes.json();
 
       renderCategoryTabs();
       renderBlogGrid();
@@ -210,7 +208,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     tabsWrapper.innerHTML = allTabHTML + categoryTabsHTML;
 
-    // Add click events
     document.querySelectorAll('.blog-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.blog-tab').forEach(t => t.classList.remove('active'));
@@ -225,7 +222,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   function getFilteredAndSortedBlogs() {
     let filtered = [...allBlogs];
 
-    // Filter by category
     if (currentCategory !== 'all') {
       filtered = filtered.filter(blog => {
         const categories = blog.blog_category || [];
@@ -233,7 +229,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-    // Filter by search
     const searchInput = document.querySelector('.blog-search-input');
     if (searchInput && searchInput.value.trim()) {
       const searchTerm = searchInput.value.toLowerCase();
@@ -337,6 +332,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       loadMoreSection.style.display = 'none';
     }
   }
+  
   function initSearchAndSort() {
     const searchInput = document.querySelector('.blog-search-input');
     const sortSelect = document.querySelector('.blog-sort-select');
@@ -351,7 +347,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }, 500);
       });
     }
-    
+
     if (sortSelect) {
       sortSelect.addEventListener('change', (e) => {
         currentSort = e.target.value;

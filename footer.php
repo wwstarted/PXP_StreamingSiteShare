@@ -23,13 +23,13 @@
                     <h3>Quick Links</h3>
                     <ul id="footerMenu">
                         <?php
-            wp_nav_menu(array(
-              'theme_location' => 'footer-menu',
-              'container' => false,
-              'menu_class' => '',
-              'items_wrap' => '%3$s'
-            ));
-            ?>
+                        wp_nav_menu(array(
+                            'theme_location' => 'footer-menu',
+                            'container' => false,
+                            'menu_class' => '',
+                            'items_wrap' => '%3$s'
+                        ));
+                        ?>
                     </ul>
                 </div>
 
@@ -38,16 +38,16 @@
                     <h3>Popular Categories</h3>
                     <ul>
                         <?php
-            $popular_cates = get_categories(array(
-              'orderby' => 'count',
-              'order' => 'DESC',
-              'number' => 5,
-              'exclude' => get_cat_ID('chua-phan-loai')
-            ));
-            foreach ($popular_cates as $cate) {
-              echo '<li><a href="' . get_category_link($cate->term_id) . '">' . $cate->name . '</a></li>';
-            }
-            ?>
+                        $popular_cates = get_categories(array(
+                            'orderby' => 'count',
+                            'order' => 'DESC',
+                            'number' => 5,
+                            'exclude' => get_cat_ID('chua-phan-loai')
+                        ));
+                        foreach ($popular_cates as $cate) {
+                            echo '<li><a href="' . get_category_link($cate->term_id) . '">' . $cate->name . '</a></li>';
+                        }
+                        ?>
                     </ul>
                 </div>
 

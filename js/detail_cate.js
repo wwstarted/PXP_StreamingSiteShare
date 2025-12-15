@@ -107,7 +107,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let currentPost = null;
   try {
-    // ✅ Chuyển sang endpoint posts
     const res = await fetch(`${API_BASE}/posts/${postId}`);
     currentPost = await res.json();
   } catch (err) {
@@ -120,7 +119,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const topContentSection = document.querySelector("#top-content-section");
     if (topContentSection) {
       const postTitle = currentPost?.title?.rendered || "No title";
-      // ✅ Lấy từ root level
       const postLogo = currentPost?.logo || "";
       const postLink = currentPost?.post_link || "";
 
@@ -157,9 +155,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const contentleft = document.querySelector("#content-left");
     if (contentleft) {
       const postTitle = currentPost?.title?.rendered || "No title";
-      // ✅ Dùng content mặc định của WP
       const postDesc = currentPost?.content?.rendered || "No description available.";
-      // ✅ Lấy từ root level
       const likesRaw = currentPost?.likes || "[]";
       const hatesRaw = currentPost?.hates || "[]";
       const likes = parseMaybeJson(likesRaw) || [];
@@ -380,7 +376,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!detailsContainer) {
       console.warn("Không tìm thấy #details-container");
     } else {
-      // ✅ Get current post's category IDs từ root level
       const currentCateIds = currentPost?.categories || [];
       
       if (!currentCateIds.length) {
@@ -390,12 +385,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           </p>
         `;
       } else {
-        // ✅ Fetch all posts từ endpoint mới
         const perPage = 100;
         const allRes = await fetch(`${API_BASE}/posts?per_page=${perPage}`);
         const allPosts = await allRes.json();
 
-        // ✅ Filter related posts (same category, exclude current post)
         const relatedPosts = (Array.isArray(allPosts) ? allPosts : [])
           .filter(p => {
             const pCateIds = p?.categories || [];
@@ -412,21 +405,18 @@ document.addEventListener("DOMContentLoaded", async () => {
         } else {
           // Render each related post as detail stream card
           relatedPosts.forEach(post => {
-            // ✅ Lấy data từ root level
             const image = post?.image || post?.bgr_image || "https://via.placeholder.com/400x200";
             const logo = post?.logo || "";
             const title = post?.title?.rendered || "No Title";
             const link = post?.link || "#";
             const popularity = post?.popularity || "";
             
-            // Logo HTML - placeholder if no logo
             const logoHTML = logo 
               ? `<img class="detail-card-logo" src="${logo}" alt="${title}" />` 
               : `<div class="detail-card-logo-placeholder">
                    <i class="fa-solid fa-fire"></i>
                  </div>`;
             
-            // Tags HTML
             const tagsHTML = `
               <div class="detail-card-tags">
                 <span class="detail-tag">Similar</span>
@@ -434,7 +424,6 @@ document.addEventListener("DOMContentLoaded", async () => {
               </div>
             `;
             
-            // Build detail stream card
             const cardHTML = `
               <div class="detail-stream-card">
                 <!-- Background Image -->
@@ -472,11 +461,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 try {
   const breadcrumbEl = document.querySelector(".breadcrumb");
   if (breadcrumbEl && currentPost) {
-    
-    // separator icon
     const sep = `<span class="breadcrumb-sep"><i class="fa-solid fa-chevron-right"></i></span>`;
 
-    // Lấy category đầu tiên của bài viết
     const cateId = currentPost.categories?.[0] || null;
     let cateName = "";
     let cateSlug = "";
@@ -576,15 +562,94 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-const detailContainer = document.querySelector(".detail-cards-wrapper");
-const detailNextBtn = document.querySelector(".detail-next-btn");
-const detailPrevBtn = document.querySelector(".detail-prev-btn");
+document.addEventListener("DOMContentLoaded", () => {
+  const container = document.querySelector(".detail-cards-wrapper");
+  const prevBtn = document.querySelector(".detail-prev-btn");
+  const nextBtn = document.querySelector(".detail-next-btn");
 
-if (detailNextBtn && detailPrevBtn && detailContainer) {
-  detailNextBtn.addEventListener("click", () => {
-    detailContainer.scrollBy({ left: 340, behavior: "smooth" });
-  });
-  detailPrevBtn.addEventListener("click", () => {
-    detailContainer.scrollBy({ left: -340, behavior: "smooth" });
+  if (!container || !prevBtn || !nextBtn) return;
+
+  function getCardsPerScroll() {
+    const width = window.innerWidth;
+    if (width < 768) return 1;     
+    return 3;                    
+  }
+
+  function getCardFullWidth() {
+    const card = container.querySelector(".detail-stream-card");
+    if (!card) return 0;
+
+    const cardWidth = card.offsetWidth;
+    const gap = parseInt(getComputedStyle(container).gap) || 0;
+
+    return cardWidth + gap;
+  }
+
+  function updateButtons() {
+    const maxScrollLeft =
+      container.scrollWidth - container.clientWidth - 1;
+
+    prevBtn.classList.toggle("is-disabled", container.scrollLeft <= 0);
+    nextBtn.classList.toggle(
+      "is-disabled",
+      container.scrollLeft >= maxScrollLeft
+    );
+  }
+
+  /* ===== Improve mobile scroll snap smoothness ===== */
+let snapTimeout;
+
+container.addEventListener("scroll", () => {
+  if (window.innerWidth >= 768) return;
+
+  clearTimeout(snapTimeout);
+
+  snapTimeout = setTimeout(() => {
+    const cardWidth = getCardFullWidth();
+    if (!cardWidth) return;
+
+    const index = Math.round(container.scrollLeft / cardWidth);
+
+    container.scrollTo({
+      left: index * cardWidth,
+      behavior: "smooth",
+    });
+  }, 80); 
+});
+
+
+  function scrollSlider(direction) {
+    const cardsPerScroll = getCardsPerScroll();
+    const scrollAmount = getCardFullWidth() * cardsPerScroll;
+
+    container.scrollBy({
+      left: direction * scrollAmount,
+      behavior: "smooth",
+    });
+  }
+
+  prevBtn.addEventListener("click", () => scrollSlider(-1));
+  nextBtn.addEventListener("click", () => scrollSlider(1));
+
+  container.addEventListener("scroll", updateButtons);
+  window.addEventListener("resize", updateButtons);
+
+  // Init
+  updateButtons();
+
+  /* ===== FORCE BUTTON STATE AFTER LAYOUT READY ===== */
+function initSliderState() {
+  updateButtons();
+
+  requestAnimationFrame(() => {
+    updateButtons();
   });
 }
+
+setTimeout(initSliderState, 60);
+
+window.addEventListener("load", initSliderState);
+
+});
+
+

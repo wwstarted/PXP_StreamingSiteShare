@@ -157,15 +157,13 @@ function renderCategories(cates, posts) {
     const cateId = cate.id;
     const meta = cate.meta || {};
 
-    // ✅ Lấy từ meta và description mặc định
     const cateThumbnail = meta.thumbnail || "";
-    const shortDesc = cate.description || "";  // ✅ Description mặc định WP
-    const cateTitle = cate.name || "No title";  // ✅ Dùng .name thay vì .title.rendered
+    const shortDesc = cate.description || "";  
+    const cateTitle = cate.name || "No title"; 
 
-    // ✅ Filter posts theo categories array
     const catePosts = posts
       .filter((p) => {
-        const cats = p.categories || [];  // ✅ Array term IDs có sẵn
+        const cats = p.categories || [];
         return cats.includes(cateId);
       })
       .sort((a, b) => (a.meta?.top || 0) - (b.meta?.top || 0));

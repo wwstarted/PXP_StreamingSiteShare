@@ -180,7 +180,6 @@ if (sidebarV2) {
     }
   }
 
-//  ================= fetch breakcrumb ========================
  // ================= fetch breadcrumb ========================
 const breadcrumb = document.querySelector(".breadcrumb_blog");
 

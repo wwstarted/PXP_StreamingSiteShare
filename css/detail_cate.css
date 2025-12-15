@@ -101,8 +101,8 @@ header {
 /*  .outline Content */
 .outline {
   display: grid;
-  grid-template-columns: 70% 30%;
-  gap: 30px;
+  grid-template-columns: 68% 30%;
+  gap: 26px;
 }
 
 /* Left Content */
@@ -2027,7 +2027,7 @@ html {
 ======================================== */
 
 .detail-stream-card {
-  min-width: 320px;
+  min-width: 318px;
   height: 240px;
   border-radius: 20px;
   display: flex;
@@ -2649,7 +2649,7 @@ html {
 
 /* Ad Info Section */
 .premium-ad-info {
-  padding: 25px;
+  padding: 20px;
   background: linear-gradient(
     135deg,
     rgba(30, 41, 82, 0.98) 0%,
@@ -2894,4 +2894,50 @@ html {
 .demo-info p {
   font-size: 14px;
   color: rgba(255, 255, 255, 0.6);
+}
+
+/* ===== Slider Scroll Snap ===== */
+.detail-cards-wrapper {
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+}
+
+.detail-stream-card {
+  scroll-snap-align: start;
+}
+
+/* Disable button state */
+.detail-slider-btn.is-disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .detail-cards-wrapper {
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 20px; /* align đẹp card đầu */
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+  }
+
+  .detail-stream-card {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    min-width: 85vw; /* peek card kế bên */
+  }
+}
+
+@media (max-width: 768px) {
+  .detail-cards-wrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .detail-stream-card {
+    min-width: calc(85vw - 40px); /* trừ padding wrapper */
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
 }

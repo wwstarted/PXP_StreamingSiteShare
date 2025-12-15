@@ -21,11 +21,9 @@
 
         <!-- Sidebar -->
         <aside class="sidebar-v2">
-            <!-- Popular Posts Widget -->
             <div class="sidebar-widget-v2">
                 <h3 class="widget-title-v2">TIN ĐỌC NHIỀU</h3>
                 <div class="posts-container-v2">
-                    <!-- JS sẽ render posts vào đây -->
                 </div>
                 <div class="see-more-posts-v2">
                     <a href="<?php echo home_url('/blog/') ?>">

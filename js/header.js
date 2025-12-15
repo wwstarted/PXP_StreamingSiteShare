@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!link || !subMenu) return;
 
-        // Tạo nút toggle
         const toggleBtn = document.createElement("span");
         toggleBtn.className = "dropdown-toggle";
         toggleBtn.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
@@ -59,10 +58,8 @@ document.addEventListener('DOMContentLoaded', function () {
         toggleBtn.addEventListener("click", function (e) {
             e.preventDefault();
 
-            // Toggle mũi tên
             this.classList.toggle("active");
 
-            // Toggle submenu
             subMenu.classList.toggle("open");
         });
     });

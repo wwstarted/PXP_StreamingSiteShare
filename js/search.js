@@ -220,7 +220,7 @@ class StreamingSearch {
     const cacheKey = query.toLowerCase();
     
     if (this.state.cache[cacheKey]) {
-      console.log('📦 Using cached results');
+      console.log('Using cached results');
       const cached = this.state.cache[cacheKey];
       this.state.postItemResults = cached.postItems;
       this.state.blogResults = cached.blogs;
